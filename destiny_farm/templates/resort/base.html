@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+
+    <!-- 1️⃣ Charset FIRST -->
+    <meta charset="UTF-8">
+
+    <!-- 2️⃣ Viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 3️⃣ Title -->
+    <title>
+    {% block title %}
+    {{ seo_title|default:"Vivaan Farmhouse – Elkatta, Hyderabad" }}
+    {% endblock %}
+    </title>
+
+    <!-- 4️⃣ SEO Meta -->
+    <meta name="description"
+          content="{{ seo_description|default:'Luxury farmhouse stay in Hyderabad with valley views, private stay and peaceful nature.' }}">
+
+    <meta name="keywords"
+          content="{{ seo_keywords|default:'farmhouse in hyderabad, luxury farmhouse, weekend stay hyderabad' }}">
+
+    <meta name="robots" content="index, follow">
+
+    <!-- 5️⃣ Canonical -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    <!-- 6️⃣ Google Site Verification -->
+    <meta name="google-site-verification" content="google897de87a6140d20a" />
+
+    <!-- 7️⃣ Favicon -->
+    <link rel="icon" href="{% static 'images/vivaan_favicon.jpeg' %}">
+
+    <!-- 8️⃣ Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- 9️⃣ Tailwind CDN (IMPORTANT: early load) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 🔟 External CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- 1️⃣1️⃣ Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+          rel="stylesheet">
+
+    <!-- 1️⃣2️⃣ Google Analytics (LAST in head) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-54HFYP7FG7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-54HFYP7FG7');
+    </script>
+   <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+
+    {% comment %} <meta name="robots" content="noindex, nofollow"> {% endcomment %}
+
+
+
+
+
+
+
+{% comment %} <meta name="google-site-verification" content="google897de87a6140d20a" /> {% endcomment %}
+
+{% comment %} {% block robots %}
+<meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
+
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-54HFYP7FG7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-54HFYP7FG7');
+</script>
+
+  {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>
+{% block title %}
+{{ seo_title|default:"Vivaan Farmhouse – Elkatta, Hyderabad" }}
+{% endblock %}
+</title>
+
+<meta name="description"
+      content="{{ seo_description|default:'Luxury farmhouse stay in Hyderabad with valley views, private stay and peaceful nature.' }}">
+
+<meta name="keywords"
+      content="{{ seo_keywords|default:'farmhouse in hyderabad, luxury farmhouse, weekend stay hyderabad' }}">
+
+
+
+{% block canonical %}
+<link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+{% endblock %}
+
+
+  
+    <link rel="icon" type="image/x-icon" href="{% static 'images/vivaan_favicon.jpeg' %}" type="image/png" >
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+/>
+
+    
+    <script src="https://cdn.tailwindcss.com" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" as="style">
+
+        <link
+  href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+  rel="stylesheet">
+
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> {% endcomment %}
+
+
+    {% block meta %}{% endblock %}
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="bg-white-50">
+   
+    <!-- Navigation -->
+    <nav class="navbar-glass bg-[#0D47A1] md:px-14 px-4 sticky top-0 z-50 shadow-md">
+        <div class=" px-4">
+            <div class="flex justify-between items-center py-2">
+                {% comment %} <a href="{% url 'home' %}" class="text-3xl font-bold text-red-900">
+                  Resort
+                </a> {% endcomment %}
+{% load static %}
+
+     <a href="{% url 'home' %}">
+                <img src="{% static 'images/vihaan-logo.webp' %}"
+                     alt="Vivaan Farmhouse"
+                     class="h-16">
+            </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-white hover:text-amber-400 font-medium transition">Home</a>
+                    {% comment %} <a href="{% url 'home' %}#about"
+                        class="text-white hover:text-amber-400 font-medium transition">About</a>
+                    <a href="{% url 'home' %}#rooms"
+                        class="text-white hover:text-amber-400 font-medium transition">Rooms</a>
+                    <a href="{% url 'home' %}#amenities"
+                        class="text-white hover:text-amber-400 font-medium transition">Amenities</a>
+                   
+                    <a href="{% url 'home' %}#gallery"
+                        class="text-white hover:text-amber-400 font-medium transition">Gallery</a> 
+                    {% endcomment %}
+                    {% comment %} <a onclick="scrollToSection('about')" class="text-white cursor-pointer">About</a> {% endcomment %}
+                    <a href="{% url 'home' %}" onclick="setScroll('about')" class="text-white cursor-pointer">About</a>
+                     <a href="{% url 'home' %}" onclick="setScroll('rooms')" class="text-white cursor-pointer">Rooms</a>
+                    {% comment %} <a onclick="scrollToSection('rooms')" class="text-white cursor-pointer">Rooms</a> {% endcomment %}
+                    <a href="{% url 'home' %}" onclick="setScroll('amenities')" class="text-white cursor-pointer">Amenities</a>
+                    <a href="{% url 'home' %}" onclick="setScroll('gallery')" class="text-white cursor-pointer">Gallery</a>
+                  
+                    
+                                    {% comment %} <a href="{% url 'home' %}#reviews" class="text-white hover:text-amber-400 font-medium transition"
+                onclick="toggleMobileMenu()">Review</a>
+            <a href="{% url 'home' %}#contact" class="text-white hover:text-amber-400 font-medium transition"
+                onclick="toggleMobileMenu()">Contact</a> {% endcomment %}
+                <!-- MORE DROPDOWN -->
+
+
+                <!-- MORE DROPDOWN (HOVER BASED) -->
+<div class="relative group">
+  <button
+    class="text-white hover:text-amber-400 font-medium flex items-center gap-1 transition">
+    More
+    <i class="fas fa-chevron-down text-xs transition-transform duration-300 group-hover:rotate-180"></i>
+  </button>
+
+  <!-- Dropdown Menu -->
+  <ul
+    class="
+      absolute right-0 mt-3 w-52
+      bg-white rounded-xl shadow-xl
+      opacity-0 invisible
+      group-hover:opacity-100 group-hover:visible
+      transform translate-y-2 group-hover:translate-y-0
+      transition-all duration-[1000ms] ease-out
+      z-50
+      divide-y divide-gray-100
+    ">
+
+    <li>
+      <a onclick="setScroll('reviews')" href="{% url 'home' %}"
+         class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:bg-[#64B5F6] hover:text-[#0D47A1] transition cursor-pointer">
+        <i class="fas fa-star text-[#0D47A1]"></i>
+        Reviews
+      </a> 
+
+       {% comment %} <a onclick="scrollToSection('reviews')" class="text-white cursor-pointer">Reviews</a> {% endcomment %}
+
+    </li>
+
+    <li>
+
+        {% comment %} <a onclick="scrollToSection('contact')" class="text-white cursor-pointer">Contact</a> {% endcomment %}
+
+      <a onclick="setScroll('contact')" href="{% url 'home' %}"
+         class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:bg-[#64B5F6] hover:text-[#0D47A1] transition cursor-pointer">
+        <i class="fas fa-phone-alt text-[#0D47A1]"></i>
+        Contact
+      </a>
+    </li>
+       <li>
+    <a href="{% url 'blog:blog_list' %}" 
+       class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:bg-[#64B5F6] hover:text-[#0D47A1] transition cursor-pointer">
+       <i class="fas fa-newspaper text-[#0D47A1]"></i>
+        Blog
+    </a>
+</li>
+    <li>
+      <a onclick="setScroll('location')" href="{% url 'home' %}"
+         class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:bg-[#64B5F6] hover:text-[#0D47A1] transition cursor-pointer">
+        <i class="fas fa-map-marker-alt text-[#0D47A1]"></i>
+        Location
+      </a>
+    </li>
+
+  </ul>
+</div>
+
+
+             
+
+                    <a href="{% url 'home' %}#rooms" class="bg-white text-gray-900 px-6 py-2 rounded-full font-semibold">
+                        Book Now
+                    </a> 
+                </div>
+
+              
+                <!-- <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button> -->
+<button class="md:hidden text-white" onclick="openOffcanvas()">
+  <i class="fas fa-bars text-2xl"></i>
+</button>
+
+                
+            </div>
+<!-- Overlay -->
+<!-- Overlay -->
+<div id="offcanvasOverlay"
+     onclick="closeOffcanvas()"
+     class="fixed inset-0 bg-black/50 z-40 hidden transition-opacity"></div>
+
+<!-- Offcanvas Menu -->
+<div id="offcanvasMenu"
+     class="fixed top-0 left-0 h-full w-72 bg-emerald-800 z-50
+            transform -translate-x-full transition-transform duration-300 ease-in-out">
+
+  <!-- Header -->
+  <div class="flex justify-between items-center px-6 py-5 border-b border-emerald-600">
+    <span class="text-white text-xl font-bold">Menu</span>
+    <button onclick="closeOffcanvas()" class="text-white text-2xl">&times;</button>
+  </div>
+
+  <!-- Menu List -->
+  <ul class="px-6 py-6 space-y-4 text-white text-lg">
+   <li><a href="{% url 'home' %}" onclick="setScroll('home')" class="off-link">Home</a></li>
+    <li><a href="{% url 'home' %}" onclick="setScroll('about')" class="off-link">About</a></li>
+    <li><a href="{% url 'home' %}" onclick="setScroll('rooms')" class="off-link">Rooms</a></li>
+    <li><a href="{% url 'home' %}" onclick="setScroll('amenities')" class="off-link">Amenities</a></li>
+    <li><a href="{% url 'home' %}" onclick="setScroll('gallery')" class="off-link">Gallery</a></li>
+    <li><a href="{% url 'home' %}" onclick="setScroll('reviews')" class="off-link">Reviews</a></li>
+    <li><a href="{% url 'home' %}" onclick="setScroll('contact')" class="off-link">Contact</a></li> 
+
+
+    <!-- CTA -->
+    <li class="pt-4">
+      <a href="#rooms"
+         class="block bg-white text-emerald-800 text-center py-3 rounded-full font-semibold">
+        Book Now
+      </a>
+    </li>
+  </ul>
+</div>
+
+        </div>
+    </nav>
+
+
+    <!-- Main Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class=" bg-[#0D47A1] text-white mt-0">
+            
+
+        <div class=" container mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    {% comment %} <h3 class="text-2xl font-bold mb-4 text-amber-400">Vivaan Farmhouse</h3> {% endcomment %}
+                        <a href="{% url 'home' %}">
+                <img src="{% static 'images/vihaan-logo.webp' %}"
+                     alt="Vivaan Farmhouse"
+                     class="h-16 mb-4">
+            </a>
+
+
+                    <p class="text-white  mb-4">
+                        Experience the charm of countryside living with modern comfort. 
+                        Our farmhouse blends natural beauty, spacious interiors, and a relaxing atmosphere for an unforgettable stay
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" aria-label="Visit our Instagram" class="text-white hover:text-amber-400 transition"><i
+                                class="fab fa-facebook fa-lg"></i></a>
+                        {% comment %} <a href="#" aria-label="Visit our facebook" class="text-white hover:text-amber-400 transition"><i
+                                class="fab fa- fa-lg"></i></a> {% endcomment %}
+                        <a href="#" aria-label="Visit our twitter" class="text-white hover:text-amber-400 transition"><i
+                                class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" aria-label="Visit our youtube" class="text-white hover:text-amber-400 transition"><i
+                                class="fab fa-youtube fa-lg"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-xl font-semibold mb-4">Quick Links</p>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'home' %}" onclick="setScroll('about')" class="text-white hover:text-amber-400 transition">About
+                                Us</a></li>
+                        <li><a href="{% url 'home' %}" onclick="setScroll('rooms')" class="text-white hover:text-amber-400 transition">Rooms</a></li>
+
+                        <li><a href="{% url 'home' %}" onclick="setScroll('amenities')"
+                                class="text-white hover:text-amber-400 transition">Amenities</a></li>
+                        {% comment %} <li><a href="{% url 'home' %}#offers" class="text-white hover:text-amber-400 transition">
+                                Offers</a></li> {% endcomment %}
+                        <li><a href="{% url 'home' %}" onclick="setScroll('gallery')"
+                                class="text-white hover:text-amber-400 transition">Gallery</a></li>
+                                  <li><a href="{% url 'home' %}" onclick="setScroll('contact')"
+                                class="text-white hover:text-amber-400 transition">Contact</a></li>
+                                  <li><a href="{% url 'home' %}" onclick="setScroll('location')"
+                                class="text-white hover:text-amber-400 transition">Location</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <p  class="text-xl font-semibold mb-4">Policies</p>
+                    <ul class="space-y-2">
+
+                               <li>
+    <a href="{% url 'blog:blog_list' %}"
+       class="text-white hover:text-amber-400 transition">
+        Blog
+    </a>
+</li>
+
+                                                <li><a href="{% url 'leave_review' %}"
+                                class="text-white hover:text-amber-400 transition">Rating</a>
+                        </li>
+                                                                         <li><a href="{% url 'cancel_booking' %}"
+                                class="text-white hover:text-amber-400 transition">Manage Booking</a>
+                        </li>           
+                        <li><a href="{% url 'home' %}" onclick="setScroll('policy')"  class="text-white hover:text-amber-400 transition">Privacy Policy</a></li>
+                        <li><a href="{% url 'home' %}" onclick="setScroll('terms')"  class="text-white hover:text-amber-400 transition">Terms & Conditions</a>
+                        </li>
+
+                        {% comment %} <li><a href="#" class="text-white hover:text-amber-400 transition">House Rules</a></li> {% endcomment %}
+                    </ul>
+
+                </div>
+
+                <div>
+                    <p class="text-xl font-semibold mb-4">Contact Info</p>
+                    <ul class="space-y-3 text-white">
+                        <li><i class="fas fa-map-marker-alt mr-2 text-white-900"></i>Elkatta, Hyderabad, India
+                        </li>
+                        <li><i class="fas fa-phone mr-2 text-white-900"></i>+91 96668 58675</li>
+                        <li><i class="fas fa-envelope mr-2 text-white-900"></i>info@vivaanfarmhouse.com</li>
+
+                        <li><i class="fas fa-clock mr-2 text-white-900"></i>24/7 Available</li>
+                    </ul>
+                </div>
+            </div>
+
+
+            {% comment %} <div class="border-t border-white-800 mt-8 pt-8 text-center text-white">
+<p>&copy; 2026 Vivaan Farmhouse. All rights reserved. Powered by Laxminarayan Infotech.</p>
+laxminarayaninfotech.com
+            </div> {% endcomment %}
+            <div class="border-t border-white-800 mt-8 pt-8 text-center text-white">
+    <p>
+        &copy; 2026 Vivaan Farmhouse. All rights reserved. 
+        Powered by 
+        <a href="https://laxminarayaninfotech.com"
+           target="_blank"
+           class="text-white hover:text-orange-500 font-semibold transition">
+            Laxminarayan Infotech
+        </a>.
+    </p>
+</div>
+
+        </div>
+    </footer>
+<script>
+function setScroll(section) {
+    sessionStorage.setItem("scrollTo", section);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const section = sessionStorage.getItem("scrollTo");
+
+    if (section) {
+        // small delay so page sections are ready
+        setTimeout(function () {
+            const el = document.getElementById(section);
+            if (el) {
+                el.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            }
+            sessionStorage.removeItem("scrollTo");
+        }, 300);
+    }
+});
+</script>
+
+<script>
+function openOffcanvas() {
+  document.getElementById("offcanvasMenu").classList.remove("-translate-x-full");
+  document.getElementById("offcanvasOverlay").classList.remove("hidden");
+}
+
+function closeOffcanvas() {
+  document.getElementById("offcanvasMenu").classList.add("-translate-x-full");
+  document.getElementById("offcanvasOverlay").classList.add("hidden");
+}
+
+/* Auto close when clicking a link */
+document.querySelectorAll('#offcanvasMenu a').forEach(link => {
+  link.addEventListener('click', closeOffcanvas);
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const elements = document.querySelectorAll(".scroll-animate");
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const animation = el.dataset.animate || "animate__fadeInUp";
+        const delay = el.dataset.delay || "0s";
+
+        el.style.setProperty("--animate-delay", delay);
+        el.classList.add("animate__animated", animation);
+
+        observer.unobserve(el); // animate only once
+      }
+    });
+  }, { threshold: 0.2 });
+
+  elements.forEach(el => observer.observe(el));
+});
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

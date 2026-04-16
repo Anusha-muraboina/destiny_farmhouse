@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import os
 
 from pathlib import Path
 
@@ -37,9 +38,29 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'resort',
+    'destiny_farm',
+    
+    'ckeditor',
+    'ckeditor_uploader',
+    "blog",
+
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
+    
+    'rest_framework',
+    'django_celery_beat',
+    
+    'corsheaders',
 ]
 
+
+SITE_ID = 1
+
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,7 +75,7 @@ ROOT_URLCONF = 'destiny_farm.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,10 +93,22 @@ WSGI_APPLICATION = 'destiny_farm.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'destiny_farmhouse',
+        'USER': 'destiny_user',
+        'PASSWORD': 'destiny@123',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -114,8 +147,83 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
 
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# # Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
+
+# ===============================
+# CELERY BEAT SCHEDULE (AUTO SYNC ICAL)
+# ===============================
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'sync-ical-every-10-minutes': {
+        'task': 'resort.tasks.sync_all_calendars',
+        'schedule': 600.0,  # every 10 minutes
+    },
+}
+
+
+#razorpay 
+
+RAZORPAY_KEY_ID = "rzp_live_S1nrNOPM5cqDLt"
+RAZORPAY_KEY_SECRET = "iF3FGjKTlinQO0N2xbiKDGrG"
+RAZORPAY_WEBHOOK_SECRET = "dajnf2h9hfkjbary23u38547y3shdgkjhiuhtnsdty43oh9@$($^"
+
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'laxminarayaninfotech1@gmail.com'
+EMAIL_HOST_PASSWORD = 'odcqvzvymjixrlha'
+DEFAULT_FROM_EMAIL = 'laxminarayaninfotech1@gmail.com'
+ADMIN_EMAIL = 'laxminarayaninfotech1@gmail.com' 
+
+# FRONTEND_URL = 'http://127.0.0.1:9000'  
+
+CC_EMAIL = [
+    'anushamuraboina9@gmail.com',
+    'laxminarayaninfotech1@gmail.com',
+]
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = True
+
+
+
+# Django allauth (if you are using it)
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = True
+
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:9000",
+
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

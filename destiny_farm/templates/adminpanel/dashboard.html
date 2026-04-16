@@ -1,0 +1,315 @@
+{% extends 'adminpanel/base.html' %}
+
+{% block title %}Dashboard | Vivaan Admin{% endblock %}
+{% block header %}Dashboard Overview{% endblock %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+/* ===== GRID ===== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* ===== CARD ===== */
+.stat-card {
+    background: #fff;
+    padding: 16px;
+    border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+/* TEXT */
+.stat-info h3 {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.stat-info p {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* ICON */
+.stat-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* COLORS */
+.bg-green-light { background: #dcfce7; color: #16a34a; }
+.bg-blue-light { background: #e0f2fe; color: #0284c7; }
+.bg-yellow-light { background: #fef3c7; color: #d97706; }
+.bg-purple-light { background: #f3e8ff; color: #9333ea; }
+
+/* ===== CHARTS ===== */
+.charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    background: #fff;
+    padding: 12px;
+    border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.08);
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* ===== TABLE ===== */
+.card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.08);
+    padding: 14px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.btn-action {
+    background: #034012;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    /* ===== CARDS ===== */
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 14px;
+    }
+
+    .stat-info p {
+        font-size: 18px;
+    }
+
+    /* ===== CHART ===== */
+    .charts-row {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-container {
+        height: 240px;
+    }
+
+    /* ===== TABLE → CARD STYLE ===== */
+    table thead {
+        display: none;
+    }
+
+    table,
+    table tbody,
+    table tr,
+    table td {
+        display: block;
+        width: 100%;
+    }
+
+    table tr {
+        background: #fff;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        padding: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        font-size: 14px;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #555;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .btn-action {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+</style>
+
+<!-- ===== STATS ===== -->
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-info">
+            <h3>Overall Revenue</h3>
+            <p>₹{{ overall_revenue }}</p>
+        </div>
+        <div class="stat-icon bg-green-light">₹</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-info">
+            <h3>Monthly Revenue</h3>
+            <p>₹{{ monthly_revenue }}</p>
+        </div>
+        <div class="stat-icon bg-green-light">₹</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-info">
+            <h3>Weekly Revenue</h3>
+            <p>₹{{ weekly_revenue }}</p>
+        </div>
+        <div class="stat-icon bg-green-light">₹</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-info">
+            <h3>Today Revenue</h3>
+            <p>₹{{ today_revenue }}</p>
+        </div>
+        <div class="stat-icon bg-green-light">₹</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-info">
+            <h3>Weekly Bookings</h3>
+            <p>{{ weekly_bookings }}</p>
+        </div>
+        <div class="stat-icon bg-blue-light">📅</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-info">
+            <h3>Pending</h3>
+            <p>{{ pending_bookings }}</p>
+        </div>
+        <div class="stat-icon bg-yellow-light">⏳</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-info">
+            <h3>Total Guests</h3>
+            <p>{{ total_guests }}</p>
+        </div>
+        <div class="stat-icon bg-purple-light">👥</div>
+    </div>
+
+</div>
+
+<!-- ===== CHARTS ===== -->
+<div class="charts-row">
+    <div class="chart-container">
+        <canvas id="bookingsChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="statusChart"></canvas>
+    </div>
+</div>
+
+<!-- ===== TABLE ===== -->
+<div class="card">
+    <div class="card-header">
+        <h2>Recent Bookings</h2>
+        <a href="{% url 'vivaan_admin:booking_list' %}" class="btn-action">View All</a>
+    </div>
+
+    <table>
+        <tbody>
+            {% for booking in recent_bookings %}
+            <tr>
+                <td data-label="ID">#{{ booking.booking_id }}</td>
+                <td data-label="Guest">{{ booking.guest_name }}</td>
+                <td data-label="Check-in">{{ booking.check_in }}</td>
+                <td data-label="Status">{{ booking.status }}</td>
+                <td data-label="Action">
+                    <a href="{% url 'vivaan_admin:booking_edit' booking.id %}">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- ===== CHART JS FIX ===== -->
+<script>
+new Chart(document.getElementById("bookingsChart"), {
+    type: "line",
+    data: {
+        labels: {{ chart_labels|safe }},
+        datasets: [{
+            data: {{ chart_data|safe }},
+            borderColor: "#8B0000",
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+
+new Chart(document.getElementById("statusChart"), {
+    type: "doughnut",
+    data: {
+        labels: ["Confirmed","Pending","Cancelled","Completed"],
+        datasets: [{
+            data: {{ status_data|safe }}
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+</script>
+
+{% endblock %}

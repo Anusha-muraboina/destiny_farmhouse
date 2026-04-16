@@ -1,0 +1,357 @@
+{% extends "adminpanel/base.html" %}
+{% block title %}Offer{% endblock %}
+{% block header %}Offer{% endblock %}
+
+{% block content %}
+
+<!-- FLATPICKR -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<style>
+
+/* ===== CARD ===== */
+.form-card {
+    max-width: 780px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+/* ===== HEADER ===== */
+.card-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid #eee;
+    background: #fafafa;
+}
+
+.card-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* ===== FORM ===== */
+.admin-form {
+    padding: 24px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #374151;
+}
+
+.form-group input {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    border-color: #64cc8a;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(22,163,74,0.1);
+}
+
+/* CHECKBOX */
+.checkbox {
+    grid-column: span 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* BUTTONS */
+.form-actions {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-primary {
+    background: #16a34a;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background: #15803d;
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+    padding: 12px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #374151;
+}
+
+/* ================= CALENDAR UI ================= */
+
+/* FIX CALENDAR */
+.flatpickr-calendar {
+    border-radius: 14px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    padding: 8px;
+    width: 300px !important;
+    height: auto !important;
+}
+
+/* FIX GRID */
+.flatpickr-days,
+.flatpickr-innerContainer {
+    overflow: visible !important;
+}
+
+.dayContainer {
+    display: flex;
+    flex-wrap: wrap;
+    height: auto !important;
+}
+
+/* FIX DAY */
+.flatpickr-day {
+    height: 42px !important;
+    line-height: 22px !important;
+    font-size: 13px;
+    position: relative;
+}
+
+/* PRICE */
+.price-tag {
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    color: #16a34a;
+    font-weight: 600;
+}
+
+/* OFFER */
+.offer-day {
+    background: #ecfdf5 !important;
+    border-radius: 8px;
+}
+
+/* Price text */
+.price-tag {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: #16a34a;
+    font-weight: 500;
+}
+
+/* Disabled */
+.flatpickr-day.flatpickr-disabled {
+    color: #ccc !important;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-card {
+        margin: 10px;
+    }
+}
+
+.dayContainer{
+    gap:0px !important;
+}
+
+</style>
+
+<div class="form-card">
+    <div class="card-header">
+        <h2>{% if offer %}Edit{% else %}Create{% endif %} Offer</h2>
+    </div>
+
+    <form method="POST" class="admin-form">
+        {% csrf_token %}
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Title</label>
+                {{ form.title }}
+            </div>
+
+            <div class="form-group">
+                <label>Offer Price (₹)</label>
+                {{ form.offer_price }}
+            </div>
+
+            <div class="form-group">
+                <label>Valid From</label>
+                {{ form.valid_from }}
+            </div>
+
+            <div class="form-group">
+                <label>Valid Until</label>
+                {{ form.valid_until }}
+            </div>
+
+            <div class="form-group checkbox">
+                {{ form.is_active }}
+                <label>Active</label>
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Save Offer</button>
+            <a href="{% url 'vivaan_admin:offerlist' %}" class="btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+
+
+{{ offer_dates|json_script:"offer-data" }}
+
+<script>
+const offerData = JSON.parse(document.getElementById("offer-data").textContent);
+
+// Format date properly (IMPORTANT)
+function formatDate(dateObj) {
+    let year = dateObj.getFullYear();
+    let month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    let day = String(dateObj.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function initCalendar(selector) {
+
+    flatpickr(selector, {
+        dateFormat: "Y-m-d",
+        minDate: "today",
+
+        onDayCreate: function(dObj, dStr, fp, dayElem) {
+
+            let date = formatDate(dayElem.dateObj);
+
+            // ✅ USE BACKEND DATA (DB + API)
+            if (offerData[date]) {
+
+                // remove old
+                let old = dayElem.querySelector(".price-tag");
+                if (old) old.remove();
+
+                // create price tag
+                let span = document.createElement("span");
+                span.className = "price-tag";
+                span.innerText = "₹" + Number(offerData[date]).toLocaleString("en-IN");
+
+                dayElem.appendChild(span);
+
+                // highlight
+                dayElem.classList.add("offer-day");
+            }
+        }
+    });
+}
+
+// INIT
+initCalendar('[name="valid_from"]');
+initCalendar('[name="valid_until"]');
+</script>
+
+{% comment %} {{ offer_dates|json_script:"offer-data" }}
+<script>
+function getValues() {
+    return {
+        price: document.querySelector('[name="offer_price"]').value,
+        start: document.querySelector('[name="valid_from"]').value,
+        end: document.querySelector('[name="valid_until"]').value
+    };
+}
+
+function parseDate(d) {
+    if (!d) return null;
+    const [y, m, day] = d.split("-");
+    return new Date(y, m - 1, day);
+}
+
+function normalize(d) {
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
+function initCalendar(selector) {
+
+    flatpickr(selector, {
+        dateFormat: "Y-m-d",
+        minDate: "today",
+
+        onDayCreate: function(dObj, dStr, fp, dayElem) {
+
+            let { price, start, end } = getValues();
+
+            // ❌ if missing → do nothing
+            if (!price || !start || !end) return;
+
+            let current = normalize(dayElem.dateObj);
+            let s = normalize(parseDate(start));
+            let e = normalize(parseDate(end));
+
+            // ✅ ONLY OFFER RANGE
+            if (current >= s && current <= e) {
+
+                // remove old
+                let old = dayElem.querySelector(".price-tag");
+                if (old) old.remove();
+
+                // add price
+                let span = document.createElement("span");
+                span.className = "price-tag";
+                span.innerText = Number(price).toLocaleString("en-IN");
+
+                dayElem.appendChild(span);
+
+                // highlight
+                dayElem.classList.add("offer-day");
+            }
+        }
+    });
+}
+
+// INIT
+initCalendar('[name="valid_from"]');
+initCalendar('[name="valid_until"]');
+
+// LIVE UPDATE
+document.querySelectorAll('[name="offer_price"], [name="valid_from"], [name="valid_until"]')
+.forEach(el => {
+    el.addEventListener("change", () => {
+        document.querySelectorAll(".flatpickr-calendar").forEach(cal => {
+            if (cal._flatpickr) cal._flatpickr.redraw();
+        });
+    });
+});
+</script> {% endcomment %}
+
+{% endblock %}

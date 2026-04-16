@@ -1,0 +1,2144 @@
+{% extends 'resort/base.html' %}
+
+{% comment %} {% block title %}{{ room_category.name }} - Vivaan Farmhouse{% endblock %}
+{% block meta_description %}
+Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premium amenities, peaceful environment, and affordable pricing. Perfect for families and groups.
+{% endblock %} {% endcomment %}
+
+{% csrf_token %}
+{% load static %}
+{% block content %}
+
+
+
+<style>
+
+    /* 📱 Mobile only */
+@media (max-width: 768px) {
+    .step-heading {
+        position: sticky;
+        top: 0;
+        background: #fff;
+        z-index: 20;
+        padding: 14px;
+        border-bottom: 1px solid #0D47A1;
+    }
+}
+/* ===============================
+   MOBILE FLATPICKR FIX
+================================ */
+@media (max-width: 768px) {
+
+    .flatpickr-calendar {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+
+        width: 90vw !important;
+        max-width: 360px;
+
+        z-index: 99999 !important;
+    }
+}
+
+
+    /* 🔴 Booked dates */
+  {% comment %} .flatpickr-day.booked-date {
+        background: #f57e7eff !important;
+       
+        color: white !important;
+        border: 1px solid #fb8282ff !important;
+        cursor: pointer;
+    }  {% endcomment %}
+
+    /* 🟠 Admin blocked dates */
+    .flatpickr-day.blocked-date {
+        background: rgba(233, 146, 84, 1) !important;
+        /* orange-500 */
+        color: white !important;
+        border: 1px solid #f8a970ff !important;
+        cursor: not-allowed;
+    }
+
+    /* 🟢 Selected range */
+    {% comment %} .flatpickr-day.inRange,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+        background: #c9f5d9ff !important;
+        /* green-500 */
+        color: white !important;
+        border: 1px solid #b7fbcfff !important;
+    }
+
+    /* 🔵 Today */
+    .flatpickr-day.today {
+        border-color: #011637ff !important;
+        /* blue-500 */
+    } {% endcomment %}
+
+    /* Disabled look */
+    {% comment %} .flatpickr-day.disabled {
+        opacity: 0.6;
+    } {% endcomment %}
+</style>
+
+
+<style>
+.collapse-header {
+    cursor: pointer;
+    padding: 16px;
+    background: white; /* emerald-900 */
+    color: #0D47A1;
+    font-weight: 600;
+    border-radius: 12px;
+    border: 2px solid #0D47A1;
+}
+</style>
+
+
+<style>
+.collapse-header {
+    pointer-events: none;
+}
+
+
+/* ===============================
+   REMOVE ALL FLATPICKR COLORS
+   (CHECK-IN + CHECK-OUT)
+================================ */
+
+/* Selected day */
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover,
+.flatpickr-day.selected:focus {
+    background: transparent !important;
+    color: #222 !important;
+    border: none !important;
+}
+
+/* Range styles (auto added by flatpickr) */
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.inRange {
+    background: transparent !important;
+    color: #222 !important;
+    border: none !important;
+}
+
+/* Hover effect (mobile tap highlight) */
+.flatpickr-day:hover {
+    background: #f3f4f6 !important; /* light grey */
+    color: #111 !important;
+}
+
+/* Today highlight */
+.flatpickr-day.today {
+    border: none !important;
+}
+
+/* Disabled dates (keep default greyed) */
+.flatpickr-day.disabled {
+    opacity: 0.4 !important;
+}
+
+
+
+{% comment %} 
+.time-dropdown {
+    position: relative;
+}
+
+.time-btn {
+    width: 100%;
+    height: 46px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0 10px;
+    background: white;
+    text-align: left;
+    font-size: 15px;
+      font-weight: 500;
+
+    cursor: pointer;
+    color: #0c0c0ccb; 
+} {% endcomment %}
+
+{% comment %} .time-list {
+    position: absolute;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: white;
+    margin-top: 4px;
+    z-index: 50;
+} {% endcomment %}
+
+/* 🔥 EXACT 30px OPTION HEIGHT */
+{% comment %} .time-option {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.time-option:hover {
+    background-color: #0D47A1;
+    color: white;
+}
+
+/* Scrollbar */
+.time-list::-webkit-scrollbar {
+    width: 6px;
+}
+.time-list::-webkit-scrollbar-thumb {
+    background: #0D47A1;
+    border-radius: 4px;
+} {% endcomment %}
+
+
+
+/* 🔥 Fix calendar cell layout */
+.flatpickr-day {
+    position: relative;
+    height: 50px !important;   /* increase height */
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 6px;
+        border: 1px solid #e5e7eb;   /* 🔥 ADD BORDER */
+    border-radius: 6px;
+}
+
+/* 🔥 Price at bottom */
+.price-tag {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: #444;
+    pointer-events: none;
+}
+
+.flatpickr-day{
+    line-height: 25px;
+}
+</style>
+
+<div class="fixed inset-0 -z-10">
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{% static 'images/vihan-group1.webp' %}');">
+    </div>
+    <div class="absolute inset-0 bg-white/90"></div>
+</div>
+
+<!-- Room Header -->
+{% comment %} <section class="relative h-96 flex items-center justify-center text-white overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-black/40 z-10"></div>
+        {% if room_category.image %}
+        <div class="absolute inset-0 bg-cover bg-center"
+            style="background-image: url('{{ room_category.image.url }}');"></div>
+        {% else %}
+        <div class="absolute inset-0 bg-gradient-to-br from-red-600 to-red-800"></div>
+        {% endif %}
+    </div>
+
+    <div class="container mx-auto px-4 z-20">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">{{ room_category.name }}</h1>
+        <div class="flex flex-wrap gap-4 text-lg">
+            <span><i class="fas fa-ruler-combined mr-2"></i>{{ room_category.size_sqft }} sq ft</span>
+            <span><i class="fas fa-users mr-2"></i>Up to {{ room_category.max_occupancy }} Guests</span>
+            <span><i class="fas fa-building mr-2"></i>{{ room_category.floor }}</span>
+        </div>
+    </div>
+</section> {% endcomment %}
+
+<!-- Room Details & Booking -->
+
+
+<section class=" py-4 md:py-16 md:px-16 px-2  ">
+    <div class="mx-auto px-4">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+            <!-- Booking Form -->
+            <div class="">
+                <div class="bg-white rounded-2xl shadow-xl p-2  md:p-8 sticky top-32">
+                    <div class="text-center mb-6">
+                        <div class="space-y-2">
+                            <h1 class="md:text-3xl text-xl font-bold text-gray-800">Entire Farmhouse Booking</h1>
+                            <div class="flex justify-between text-sm text-gray-600 ">
+                                <span>Monday-Friday (Week days)</span>
+                                <span class="font-bold text-[#0D47A1]">₹{{ pricing.weekday_price }}</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-600  pb-2">
+                                <span>Saturday-Sunday (Weekends)</span>
+                                <span class="font-bold text-[#0D47A1]">₹{{ pricing.weekend_price }}</span>
+                            </div>
+
+
+                            {% comment %} <div class="flex justify-between text-sm text-gray-600 ">
+                                <span>Check-In Time</span>
+                                <span class="font-bold text-emerald-600">12:00 PM</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-600 border-b pb-2">
+                                <span>Check-Out Time</span>
+                                <span class="font-bold text-emerald-600">11:00 AM</span>
+                            </div> {% endcomment %}
+
+               
+
+                        </div>
+
+                
+
+                    </div>
+
+
+                    <form method="post" class="space-y-4">
+                        {% csrf_token %}
+                        <input type="hidden" id="discountedTotal" value="{{ calculated_total }}">
+
+
+
+
+
+
+                        {% if form.errors %}
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                            {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                            <p>{{ error }}</p>
+                            {% endfor %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+
+<!-- =========================== -->
+<div class="border rounded-xl" id="step1-wrapper">
+    <div class="collapse-header step-heading" onclick="toggleCollapse('step1')">
+        1. Stay Details & Dates
+    </div>
+
+         <div  id="step1" class="collapse-body  p-6 space-y-4">
+
+
+
+                        <div class="flex flex-wrap gap-4 text-sm mt-3">
+                            {% comment %} <div class="flex items-center gap-2">
+                                <span class="w-4 h-4 bg-green-300 rounded"></span> Selected
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-4 h-4 bg-[#f57e7eff] rounded"></span> Booked
+                            </div> {% endcomment %}
+                            <div class="flex items-center gap-2">
+                                <span class="w-4 h-4 bg-[#f8a970ff] rounded"></span> Blocked by Admin
+                            </div>
+                        </div>
+             <p class="text-sm text-gray-800">
+    Check-In is at <span class="font-bold text-[#0D47A1]">2:00 PM</span>
+    and Check-Out is at <span class="font-bold text-[#0D47A1]">11:00 AM</span>.
+</p>
+                        <div class="grid  grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Check-in Date</label>
+                                <input type="text" name="check_in"    id="check_in"  readonly
+    inputmode="none"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                    placeholder="Select Date" required>
+                            </div>
+
+   <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Check-out Date</label>
+                                <input type="text" name="check_out" id="check_out"      readonly
+    inputmode="none"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                    placeholder="Select Date" required>
+                            </div>
+
+
+                            <!-- <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Time</label>
+                                <input type="text" name="check_in_time"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                    placeholder="Select Time">
+                            </div> -->
+                        </div>
+
+
+                        {% comment %} <div class="grid grid-cols-1 md:grid-cols-2 gap-4"> {% endcomment %}
+<!-- Check-in Time -->
+{% comment %} <div>
+    <label class="block text-gray-700 font-semibold mb-2">Check-In Time</label>
+
+    <input type="hidden" name="check_in_time" id="checkInTime">
+
+    <div class="time-dropdown">
+        <button type="button" class="time-btn" onclick="toggleTime('in')">
+            Select Check-In Time
+        </button>
+
+        <div id="timeListIn" class="time-list hidden"></div>
+    </div>
+</div> {% endcomment %}
+
+<!-- Check-out Time -->
+{% comment %} <div>
+    <label class="block text-gray-700 font-semibold mb-2">Check-Out Time</label>
+
+    <input type="hidden" name="check_out_time" id="checkOutTime">
+
+    <div class="time-dropdown">
+        <button type="button" class="time-btn" onclick="toggleTime('out')">
+            Select Check-Out Time
+        </button>
+
+        <div id="timeListOut" class="time-list hidden"></div>
+    </div>
+</div> {% endcomment %}
+
+<!-- CHECK-IN TIME -->
+{% comment %} <div>
+    <label class="block text-gray-700 font-semibold mb-2">Check-In Time</label>
+
+    <input type="hidden" name="check_in_time" id="checkInTime">
+
+    <div class="time-dropdown">
+        <button type="button" class="time-btn" onclick="toggleTime('in')">
+            Select Check-In Time
+        </button>
+        <div id="timeListIn" class="time-list hidden"></div>
+    </div>
+</div>
+
+<!-- CHECK-OUT TIME -->
+<div>
+    <label class="block text-gray-700 font-semibold mb-2">Check-Out Time</label>
+
+    <input type="hidden" name="check_out_time" id="checkOutTime">
+
+    <div class="time-dropdown">
+        <button type="button" class="time-btn" onclick="toggleTime('out')">
+            Select Check-Out Time
+        </button>
+        <div id="timeListOut" class="time-list hidden"></div>
+    </div>
+</div> {% endcomment %}
+
+<!-- <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Check-In Time</label>
+                                <input type="text" name="check_in_time"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                    placeholder="Select Check In Time">
+                            </div>
+
+
+
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Check-Out Time</label>
+                                <input type="text" name="check_out_time"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                    placeholder="Select Check Out Time">
+                            </div> -->
+                        {% comment %} </div> {% endcomment %}
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" >
+
+                                   <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Number of Guests</label>
+                                {{ form.guest_count }}
+                            </div>
+
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Number of Extra Guests
+                                    Count</label>
+                                {{ form.extra_guest_count }}
+                            </div>
+
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Special Requests</label>
+                            {{ form.special_requests }}
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Coupon Code</label>
+                            {{ form.coupon_code }}
+                        </div>
+
+
+
+                        <div id="dateNotification"
+                            class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+                            <div class="flex items-center">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                <span id="dateNotificationText"></span>
+                            </div>
+                        </div>
+
+
+
+
+
+
+                         <div class="flex justify-end pt-4">
+    <button type="button"
+        onclick="validateStep1()"
+        class="bg-[#0D47A1] text-white px-6 py-2 rounded-lg font-semibold">
+        Next →
+    </button>
+</div>
+
+
+
+ </div>
+
+
+
+ </div>
+<!-- ======================================== -->
+
+
+
+                        <!-- ============================= -->
+
+                        
+<div class="border rounded-xl" id="step2-wrapper">
+    <div class="collapse-header step-heading" onclick="toggleCollapse('step2')">
+        2. Guest Information
+    </div>
+
+
+    <div id="step2" class="collapse-body hidden p-6 space-y-4">
+                        <div  >
+                            <label class="block text-gray-700 font-semibold mb-2">Full Name</label>
+                            {{ form.guest_name }}
+                        </div>
+                        <!-- <div class="grid grid-cols-2 gap-4"> -->
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Phone</label>
+                                {{ form.guest_phone }}
+                            </div>
+
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Email</label>
+                                {{ form.guest_email }}
+                            </div>
+                        <!-- </div> -->
+
+
+
+
+<div class="flex justify-between pt-4">
+    <button type="button"
+        onclick="toggleCollapse('step1')"
+        class="border border-[#0D47A1] text-[#0D47A1] px-6 py-2 rounded-lg">
+        ← Previous
+    </button>
+
+    <button type="button"
+        onclick="validateStep2()"
+        class="bg-[#0D47A1] text-white px-6 py-2 rounded-lg font-semibold">
+        Next →
+    </button>
+</div>
+
+                        <!-- <div class="flex justify-between pt-4">
+    <button type="button"
+        onclick="toggleCollapse('step1')"
+        class="border border-emerald-900 text-emerald-900 px-6 py-2 rounded-lg">
+        ← Previous
+    </button>
+
+    <button type="button"
+        onclick="validateStep2()"
+        class="bg-emerald-900 text-white px-6 py-2 rounded-lg font-semibold">
+        Next →
+    </button>
+</div> -->
+</div>
+
+
+
+
+
+</div>
+<!-- ========================================= -->
+
+
+
+
+
+
+
+
+
+<!-- ========================== -->
+<!-- ========================== -->
+<!-- <div class="border rounded-2xl shadow-sm bg-white">
+   
+    <div class="collapse-header flex items-center justify-between px-6 py-4" onclick="toggleCollapse('step3')">
+        <div class="flex items-center gap-3 " >
+            {% comment %} <span class="w-9 h-9 flex items-center justify-center rounded-full bg-emerald-100 text-emerald-800 font-bold">
+                3
+            </span> {% endcomment %}
+            <span class="text-lg font-semibold">
+              3.  Review Your Booking
+            </span>
+        </div>
+    </div>
+
+    
+    <div id="step3" class="collapse-body hidden px-6 pb-6 space-y-6">
+
+       
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+               
+                <div class="space-y-2">
+                    <h4 class="font-semibold text-gray-700 border-b pb-1">
+                        Stay Details
+                    </h4>
+                    <p><span class="text-gray-500">Check-in:</span> <strong id="reviewCheckIn"></strong></p>
+                    <p><span class="text-gray-500">Check-out:</span> <strong id="reviewCheckOut"></strong></p>
+                    <p><span class="text-gray-500">Check-in Time:</span> <strong id="reviewCheckInTime"></strong></p>
+                    <p><span class="text-gray-500">Check-out Time:</span> <strong id="reviewCheckOutTime"></strong></p>
+                </div>
+
+               
+                <div class="space-y-2">
+                    <h4 class="font-semibold text-gray-700 border-b pb-1">
+                        Guest Details
+                    </h4>
+                    <p><span class="text-gray-500">Name:</span> <strong id="reviewName"></strong></p>
+                    <p><span class="text-gray-500">Phone:</span> <strong id="reviewPhone"></strong></p>
+                    <p><span class="text-gray-500">Email:</span> <strong id="reviewEmail"></strong></p>
+                </div>
+
+               
+                <div class="space-y-2">
+                    <h4 class="font-semibold text-gray-700 border-b pb-1">
+                        Occupancy
+                    </h4>
+                    <p><span class="text-gray-500">Guests:</span> <strong id="reviewGuests"></strong></p>
+                    <p><span class="text-gray-500">Extra Guests:</span> <strong id="reviewExtraGuests"></strong></p>
+                </div>
+
+               
+                <div class="space-y-2">
+                    <h4 class="font-semibold text-gray-700 border-b pb-1">
+                        Offers
+                    </h4>
+                    <p>
+                        <span class="text-gray-500">Coupon Applied:</span>
+                        <strong id="reviewCoupon">—</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+       
+        <div class="flex flex-col sm:flex-row justify-between gap-4 pt-4">
+            <button
+                type="button"
+                onclick="toggleCollapse('step2')"
+                class="border border-emerald-900 text-emerald-900 px-6 py-3 rounded-lg font-medium hover:bg-emerald-50 transition">
+                ← Previous
+            </button>
+
+            <button
+                type="button"
+                onclick="toggleCollapse('step4')"
+                class="bg-emerald-900 text-white px-8 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition">
+                Next →
+            </button>
+        </div>
+
+    </div>
+</div>
+ -->
+
+
+
+
+
+ <div class="border rounded-2xl shadow-md bg-white overflow-hidden" id="step3-wrapper">
+
+    <!-- Header -->
+    <div
+        class="collapse-header step-heading flex items-center justify-between px-6 py-5 cursor-pointer"
+        onclick="toggleCollapse('step3')"
+    >
+        <div class="flex items-center gap-3">
+            {% comment %} <span class="w-10 h-10 flex items-center justify-center rounded-full bg-emerald-100 text-emerald-800 font-bold">
+                3
+            </span> {% endcomment %}
+            <div>
+                <p class="">
+                   3. Review Your Booking
+                </p>
+                {% comment %} <p class="text-sm text-gray-500">
+                    Please verify details before payment
+                </p> {% endcomment %}
+            </div>
+        </div>
+
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+        </svg>
+    </div>
+
+    <!-- Body -->
+    <div id="step3" class="collapse-body hidden px-6 pb-6 space-y-6">
+
+        <!-- Review Card -->
+        <div class="md:p-3 p-1">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+
+                <!-- Stay Details -->
+                <div>
+                    <h4 class="flex items-center gap-2 font-semibold text-gray-900 mb-3">
+                        1. Stay Details
+                    </h4>
+                    <div class="space-y-2 text-gray-600">
+                        <p><strong class="text-gray-800">Check-in:</strong> <span id="reviewCheckIn"></span></p>
+                        <p><strong class="text-gray-800">Check-out:</strong> <span id="reviewCheckOut"></span></p>
+                        {% comment %} <p><strong class="text-gray-800">Check-in Time:</strong> <span id="reviewCheckInTime"></span></p>
+                        <p><strong class="text-gray-800">Check-out Time:</strong> <span id="reviewCheckOutTime"></span></p> {% endcomment %}
+                    </div>
+                </div>
+
+
+                <!-- Guest Details -->
+                <div>
+                    <h4 class="flex items-center gap-2 font-semibold text-gray-700 mb-3">
+                      2. Guest Details
+                    </h4>
+                    <div class="space-y-2 text-gray-600">
+                        <p><strong class="text-gray-800">Name:</strong> <span id="reviewName"></span></p>
+                        <p><strong class="text-gray-800">Phone:</strong> <span id="reviewPhone"></span></p>
+                        <p><strong class="text-gray-800">Email:</strong> <span id="reviewEmail"></span></p>
+                    </div>
+                </div>
+
+                <!-- Occupancy -->
+                <div>
+                    <h4 class="flex items-center gap-2 font-semibold text-gray-700 mb-3">
+                        3. Occupancy
+                    </h4>
+                    <div class="space-y-2 text-gray-600">
+                        <p><strong class="text-gray-800">Guests:</strong> <span id="reviewGuests"></span></p>
+                        <p><strong class="text-gray-800">Extra Guests:</strong> <span id="reviewExtraGuests"></span></p>
+                    </div>
+                </div>
+
+                <!-- Offers -->
+                <div>
+                    <h4 class="flex  items-center gap-2 font-semibold text-gray-700 mb-3">
+                        4. Offers
+                    </h4>
+                    <div class="space-y-2 text-gray-600">
+                        <p>
+                            <strong class="text-gray-800">Coupon:</strong>
+                            <span id="reviewCoupon">—</span>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row justify-between gap-4 pt-2">
+            <button
+                type="button"
+                onclick="toggleCollapse('step2')"
+                class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-[#0D47A1] text-[#0D47A1] font-medium hover:bg-emerald-50 transition"
+            >
+                ← Previous
+            </button>
+
+            <button
+                type="button"
+                onclick="toggleCollapse('step4')"
+                class="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-lg bg-[#0D47A1] text-white font-semibold hover:bg-emerald-700 transition shadow-md"
+            >
+               Next →
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ========================== -->
+
+
+<div class="border rounded-xl" id="step4-wrapper">
+    <div class="collapse-header mb-4 step-heading" onclick="toggleCollapse('step4')">
+        4. Payment Method & Summary
+    </div>
+
+  <div  id="step4" class="collapse-body hidden p-6 space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Payment Method</label>
+                            <div class="space-y-3">
+                                <label
+                                    class="flex items-center space-x-3 border p-3 rounded-lg cursor-pointer hover:border-emerald-600">
+                                    <input type="radio" name="payment_method" value="farmhouse"
+                                        class="h-5 w-5 text-emerald-600" checked>
+                                    <span class="text-gray-800 font-medium">Pay at Check-in (Cash)</span>
+                                </label>
+
+
+                                <label
+                                    class="flex items-center space-x-3 border p-3 rounded-lg cursor-pointer hover:border-emerald-600">
+                                    <input type="radio" name="payment_method" value="partial_razorpay"
+                                        class="h-5 w-5 text-emerald-600">
+                                    <span class="text-gray-800 font-medium">Pay 30% Online (Razorpay)</span>
+                                </label>
+
+
+                                <label
+                                    class="flex items-center space-x-3 border p-3 rounded-lg cursor-pointer hover:border-emerald-600">
+                                    <input type="radio" name="payment_method" value="full_razorpay"
+                                        class="h-5 w-5 text-emerald-600">
+                                    <span class="text-gray-800 font-medium">Pay Full Online (Razorpay)</span>
+                                </label>
+
+                            </div>
+                        </div>
+
+
+                        <div id="paymentSummary" class="hidden mt-5 space-y-3">
+
+                            <div class="border rounded-lg p-4 bg-gray-50">
+
+                                <p id="depositAmount" class="hidden flex justify-between text-gray-700 text-lg">
+                                    <span>Pay now (30%):</span>
+                                    <span class="font-bold text-emerald-700">₹<span id="depositValue"></span></span>
+                                </p>
+
+                                <p id="fullAmount" class="hidden flex justify-between text-gray-700 text-lg">
+                                    <span>Pay full:</span>
+                                    <span class="font-bold text-emerald-700">₹<span id="fullValue"></span></span>
+                                </p>
+
+                                <p id="remainingAmount" class="hidden text-sm text-gray-600">
+                                    Remaining at check-in:
+                                    <span class="font-semibold text-gray-800">₹<span id="remainingValue"></span></span>
+                                </p>
+
+                            </div>
+
+
+                            <div id="razorpayBox" class="hidden border p-4 rounded-xl space-y-2">
+                                <p class="font-semibold text-gray-700">Select Razorpay to complete payment</p>
+                                <div class="flex items-center space-x-3">
+                                    <input type="radio" checked class="h-5 w-5">
+                                    <img src="https://razorpay.com/favicon.png" class="h-6"  alt="razorpay icon" />
+                                    <span class="font-medium text-gray-700">Razorpay Checkout</span>
+                                </div>
+                            </div>
+
+                        </div>
+                 
+<!-- <div class="flex justify-start pt-2">
+    <button type="button"
+        onclick="toggleCollapse('step2')"
+        class="border border-emerald-900 text-emerald-900 px-6 py-2 rounded-lg">
+        ← Previous
+    </button>
+</div> -->
+
+        <div class="flex justify-between pt-4">
+            <button type="button"
+                onclick="toggleCollapse('step3')"
+                class="border border-[#0D47A1] text-[#0D47A1] px-6 py-2 rounded-lg">
+                ← Previous
+            </button>
+
+</div>
+</div>
+
+</div>
+
+                        <button type="submit"
+                            class="w-full bg-[#0D47A1] text-white py-4 rounded-lg font-bold text-lg transition duration-300 hover:bg-[#0D47A1]">
+                            <i class="fas fa-calendar-check mr-2"></i>Book Entire Villa
+                        </button>
+
+
+                    </form>
+
+                    <div class="mt-6 pt-6 border-t border-gray-200">
+                        <div class="flex items-start text-sm text-gray-600">
+                            <i class="fas fa-info-circle text-red-600 mr-2 mt-1"></i>
+                            <p>Free cancellation up to 24 hours before check-in</p>
+                        </div>
+                        {% if booked_dates %}
+                        <div class="mt-4 bg-amber-50 border border-amber-300 rounded-lg p-3">
+                            <p class="text-xs text-amber-800">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>
+                                <strong>{{ booked_dates|length }} dates</strong> are currently booked. Please avoid
+                                selecting these dates.
+                            </p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+
+<!-- ====================================================== -->
+
+
+            <!-- Room Information -->
+            <div class="">
+
+                <!-- Amenities -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">Farmhouse Amenities</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-wifi text-[#0D47A1]  mr-3"></i>
+                            <span>Free WiFi</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-tv text-[#0D47A1] mr-3"></i>
+                            <span>Smart TV</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-snowflake text-[#0D47A1] mr-3"></i>
+                            <span>Air Conditioning</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-coffee text-[#0D47A1] mr-3"></i>
+                            <span>Swimming fool</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-concierge-bell text-[#0D47A1] mr-3"></i>
+                            <span>Saving Safe</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-lock text-[#0D47A1] mr-3"></i>
+                            <span>Badminton Rackets</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-shower text-[#0D47A1] mr-3"></i>
+                            <span>On Site Staff</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-phone text-[#0D47A1] mr-3"></i>
+                            <span>Exquisite Gardens</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-wind text-[#0D47A1] mr-3"></i>
+                            <span>Room Heater</span>
+                        </div>
+                          <div class="flex items-center text-gray-700">
+                            <i class="fas fa-wind text-[#0D47A1] mr-3"></i>
+                            <span>Small Speaker</span>
+                        </div>
+                          <div class="flex items-center text-gray-700">
+                            <i class="fas fa-wind text-[#0D47A1] mr-3"></i>
+                            <span>Bonfire and Bbq</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Description -->
+                <div class=" rounded-2xl shadow-lg p-8  bg-white">
+                    {% comment %} <h2 class="text-3xl font-bold text-gray-800 mb-6">Room Description</h2> {% endcomment %}
+                    <p class="text-gray-600 text-lg leading-relaxed mb-6">{{ room_category.description|safe }}</p>
+                    {% comment %} <div class="rounded-2xl shadow-lg p-8 bg-white">
+                        {{ room_category.description|safe }}
+                    </div> {% endcomment %}
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+</section>
+
+{% block extra_js %}
+
+{% comment %} <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script> {% endcomment %}
+{% comment %} {{ booked_dates|json_script:"booked-dates-data" }} {% endcomment %}
+{{ booked_dates|json_script:"booked-dates-data" }}
+{{ booked_info|json_script:"booked-info-data" }}
+{{ blocked_dates|json_script:"blocked-dates-data" }}
+
+{{ offer_dates|json_script:"offer-dates-data" }}
+
+{% comment %}
+<script id="blocked-dates-data" type="application/json">
+    {{ blocked_dates|json_script:"blocked-dates-data" }}
+</script> {% endcomment %}
+
+
+
+
+
+
+{% comment %} <script>
+function toggleCollapse(id) {
+    document.querySelectorAll('.collapse-body').forEach(el => {
+        if (el.id === id) {
+            el.classList.toggle('hidden');
+        } else {
+            el.classList.add('hidden');
+        }
+    });
+}
+</script> {% endcomment %}
+
+<script>
+
+let checkInPicker = null;
+let checkOutPicker = null;
+
+function toggleCollapse(id) {
+
+    // close all steps
+    document.querySelectorAll('.collapse-body').forEach(el => {
+        el.classList.add('hidden');
+    });
+
+    const body = document.getElementById(id);
+    if (!body) return;
+
+    body.classList.remove('hidden');
+
+    // init calendar only once
+    if (id === "step1") {
+        setTimeout(() => {
+            initCalendarIfNeeded();
+        }, 100);
+    }
+
+    // 📱 MOBILE FIX — SHOW HEADING
+    if (window.innerWidth <= 768) {
+
+        const wrapper = document.getElementById(id + "-wrapper");
+
+        const headerOffset = 70; // height of sticky heading
+        const elementPosition = wrapper.getBoundingClientRect().top;
+        const offsetPosition =
+            elementPosition + window.pageYOffset - headerOffset;
+
+        setTimeout(() => {
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }, 150);
+    }
+}
+
+</script>
+
+
+
+
+
+<script>
+    function populateReview() {
+    document.getElementById("reviewCheckIn").innerText =
+        document.querySelector("input[name='check_in']").value;
+
+    document.getElementById("reviewCheckOut").innerText =
+        document.querySelector("input[name='check_out']").value;
+
+    document.getElementById("reviewGuests").innerText =
+        document.querySelector("input[name='guest_count']").value;
+
+    document.getElementById("reviewExtraGuests").innerText =
+        document.querySelector("input[name='extra_guest_count']").value || "0";
+
+    document.getElementById("reviewName").innerText =
+        document.querySelector("input[name='guest_name']").value;
+
+    document.getElementById("reviewPhone").innerText =
+        document.querySelector("input[name='guest_phone']").value;
+
+    document.getElementById("reviewEmail").innerText =
+        document.querySelector("input[name='guest_email']").value;
+
+    document.getElementById("reviewCoupon").innerText =
+        document.querySelector("input[name='coupon_code']").value || "—";
+}
+
+</script>
+ <script>
+const startHour = 7;   // 7 AM
+const endHour = 22;    // 10 PM
+
+function generateSlots() {
+    const slots = [];
+    for (let h = startHour; h < endHour; h++) {
+        slots.push(formatHour(h));
+    }
+    return slots;
+}
+
+function formatHour(h) {
+    const suffix = h >= 12 ? "PM" : "AM";
+    const hour = h % 12 || 12;
+    return `${hour}:00 ${suffix}`;
+}
+
+function buildDropdown(listId, inputId, button) {
+    const list = document.getElementById(listId);
+    list.innerHTML = "";
+
+    generateSlots().forEach(label => {
+        const div = document.createElement("div");
+        div.className = "time-option";
+        div.innerText = label;
+
+        div.onclick = () => {
+            // Convert 12h → 24h (DB format)
+            let hour = parseInt(label);
+            const isPM = label.includes("PM");
+
+            if (isPM && hour !== 12) hour += 12;
+            if (!isPM && hour === 12) hour = 0;
+
+            // ✅ Save to hidden input
+            document.getElementById(inputId).value =
+                String(hour).padStart(2, "0") + ":00";
+
+            // ✅ Show selected time
+            button.innerText = label;
+
+            list.classList.add("hidden");
+        };
+
+        list.appendChild(div);
+    });
+}
+
+function toggleTime(type) {
+    const list = document.getElementById(
+        type === "in" ? "timeListIn" : "timeListOut"
+    );
+    const btn = list.previousElementSibling;
+    const inputId = type === "in" ? "checkInTime" : "checkOutTime";
+
+    buildDropdown(list.id, inputId, btn);
+    list.classList.toggle("hidden");
+}
+
+// Close dropdown on outside click
+document.addEventListener("click", e => {
+    if (!e.target.closest(".time-dropdown")) {
+        document.querySelectorAll(".time-list")
+            .forEach(l => l.classList.add("hidden"));
+    }
+});
+</script>
+
+
+<script>
+/* =========================
+   STEP-1 VALIDATION
+   ========================= */
+function validateStep1() {
+    const checkInDate = document.querySelector("input[name='check_in']").value;
+    const checkOutDate = document.querySelector("input[name='check_out']").value;
+
+    if (!checkInDate) {
+        alert("Please select check-in date");
+        return;
+    }
+
+    if (!checkOutDate) {
+        alert("Please select check-out date");
+        return;
+    }
+
+    if (new Date(checkOutDate) <= new Date(checkInDate)) {
+        alert("Check-out must be after check-in");
+        return;
+    }
+
+    // ✅ SAME-DAY TIME VALIDATION
+
+    // ✅ MOVE TO STEP-2
+    toggleCollapse("step2");
+}
+
+/* =========================
+   STEP-2 VALIDATION
+   ========================= */
+function validateStep2() {
+    const name = document.querySelector("input[name='guest_name']").value.trim();
+    const phone = document.querySelector("input[name='guest_phone']").value.trim();
+    const email = document.querySelector("input[name='guest_email']").value.trim();
+
+    if (!name) {
+        alert("Please enter full name");
+        return;
+    }
+
+    if (!phone || phone.length < 10) {
+        alert("Please enter valid phone number");
+        return;
+    }
+
+    if (!email || !email.includes("@")) {
+        alert("Please enter valid email address");
+        return;
+    }
+
+    // ✅ STEP-2 COMPLETED → OPEN STEP-3
+    populateReview();          // 🔥 REQUIRED
+    toggleCollapse("step3");   // 🔥 REVIEW STEP
+}
+
+/* =========================
+   INITIAL STATE
+   ========================= */
+document.addEventListener("DOMContentLoaded", function () {
+    toggleCollapse("step1"); // open only step-1 on load
+});
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // ✅ DECLARE ONCE (FIX)
+        let couponDiscount = 0;
+        let couponTimer = null;
+        // Form inputs
+        let checkIn = document.querySelector("input[name='check_in']");
+        let checkOut = document.querySelector("input[name='check_out']");
+        let guestCount = document.querySelector("input[name='guest_count']");
+        let extraGuest = document.querySelector("input[name='extra_guest_count']");
+        let radios = document.querySelectorAll("input[name='payment_method']");
+
+        let couponInput = document.querySelector("input[name='coupon_code']");
+
+
+        // Payment display elements
+        const paymentSummary = document.getElementById("paymentSummary");
+        const depositAmount = document.getElementById("depositAmount");
+        const fullAmount = document.getElementById("fullAmount");
+        const remainingAmount = document.getElementById("remainingAmount");
+        const razorpayBox = document.getElementById("razorpayBox");
+
+        // Backend pricing values
+        const weekday = parseFloat(`{{ pricing.weekday_price }}`);
+        const weekend = parseFloat(`{{ pricing.weekend_price }}`);
+        const extraGuestPrice = parseFloat(`{{ extra_price }}`);
+
+
+        const offerDates = JSON.parse(
+            document.getElementById("offer-dates-data")?.textContent || "{}"
+        );
+        // Calculate Base Amount
+        function calculateTotal() {
+            const inDate = new Date(checkIn.value);
+            const outDate = new Date(checkOut.value);
+
+            if (!checkIn.value || !checkOut.value || outDate <= inDate) {
+                return 0;
+            }
+
+            let total = 0;
+            let date = new Date(inDate);
+
+            {% comment %} // Loop through each night
+            while (date < outDate) {
+                let day = date.getDay();
+                if (day === 6 || day === 0) {
+                    total += weekend;
+                } else {
+                    total += weekday;
+                }
+                date.setDate(date.getDate() + 1);
+            } {% endcomment %}
+            while (date < outDate) {
+
+                let day = date.getDay();
+                let dateStr = date.toISOString().split('T')[0];
+
+                // 🔥 OFFER FIRST
+                if (offerDates[dateStr]) {
+                    total += offerDates[dateStr];
+                } else {
+                    // NORMAL PRICE
+                    if (day === 6 || day === 0) {
+                        total += weekend;
+                    } else {
+                        total += weekday;
+                    }
+                }
+
+                date.setDate(date.getDate() + 1);
+            }
+
+
+            // EXTRA GUEST COUNT logic (user entered)
+            let extra = parseInt(extraGuest.value || 0);
+
+            total += extra * extraGuestPrice;
+
+            // NO TAX (you set 0.00)
+            total += total * 0.00;
+
+            return Math.round(total);
+        }
+
+        // Update Payment Method Section
+        function updatePayment() {
+            let total = calculateTotal();
+
+
+            // apply coupon discount LIVE
+            if (couponDiscount > 0) {
+                total = total - couponDiscount;
+                if (total < 0) total = 0;
+            }
+
+
+            if (total <= 0) {
+                paymentSummary.classList.add("hidden");
+                return;
+            }
+
+            paymentSummary.classList.remove("hidden");
+
+            // Calculate 30%
+            let deposit = Math.round(total * 0.30);
+            let remaining = total - deposit;
+
+            document.getElementById("depositValue").innerText = deposit;
+            document.getElementById("fullValue").innerText = total;
+            document.getElementById("remainingValue").innerText = remaining;
+
+            let selected = document.querySelector("input[name='payment_method']:checked").value;
+
+            if (selected === "farmhouse") {
+                depositAmount.classList.add("hidden");
+                fullAmount.classList.remove("hidden");
+                remainingAmount.classList.add("hidden");
+                razorpayBox.classList.add("hidden");
+            }
+
+            if (selected === "partial_razorpay") {
+                depositAmount.classList.remove("hidden");
+                remainingAmount.classList.remove("hidden");
+                fullAmount.classList.add("hidden");
+                razorpayBox.classList.remove("hidden");
+            }
+
+            if (selected === "full_razorpay") {
+                fullAmount.classList.remove("hidden");
+                depositAmount.classList.add("hidden");
+                remainingAmount.classList.add("hidden");
+                razorpayBox.classList.remove("hidden");
+            }
+        }
+
+        /**************************************
+            LIVE COUPON VALIDATION (AJAX)
+           **************************************/
+        couponInput.addEventListener("change", function () {
+
+            let code = couponInput.value.trim();
+
+            if (code === "") {
+                couponDiscount = 0;
+                updatePayment();
+                return;
+            }
+
+            fetch(`/validate-coupon/?code=${code}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.valid) {
+                        couponDiscount = parseFloat(data.discount);
+                        alert(`Coupon Applied! Discount: ₹${couponDiscount}`);
+                    } else {
+                        couponDiscount = 0;
+                        alert("Invalid coupon code!");
+                    }
+                    updatePayment();
+                })
+                .catch(() => {
+                    couponDiscount = 0;
+                    updatePayment();
+                });
+        });
+
+
+
+        // ===============================
+        // DEBOUNCED COUPON CHECK
+        // ===============================
+
+
+
+
+
+
+
+
+
+        // ===============================
+        // DEBOUNCED COUPON CHECK
+        // ===============================
+
+        // Attach event listeners
+        radios.forEach(r => r.addEventListener("change", updatePayment));
+        checkIn.addEventListener("change", updatePayment);
+        checkOut.addEventListener("change", updatePayment);
+        guestCount.addEventListener("input", updatePayment);
+        extraGuest.addEventListener("input", updatePayment);
+
+        // moved validation here
+        guestCount.addEventListener("input", function () {
+            if (parseInt(this.value) > 15) {
+                alert("Guest count cannot exceed 15.");
+                this.value = 15;
+            }
+        });
+
+        extraGuest.addEventListener("input", function () {
+            if (parseInt(this.value) > 5) {
+                alert("Extra guest count cannot exceed 5.");
+                this.value = 5;
+            }
+        });
+
+        updatePayment();
+
+    });
+
+</script>
+
+
+
+{% comment %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script> {% endcomment %}
+<script>
+    function getCSRFToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+</script>
+
+<script>
+    document.querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch("", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCSRFToken(),
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: formData
+        })
+            .then(res => res.json())
+            .then(data => {
+
+                if (data.redirect) {
+                    window.location.href = data.url;
+                    return;
+                }
+
+                if (data.razorpay) {
+                    openRazorpay(data.amount);
+                }
+            });
+    });
+
+
+    {% comment %} function openRazorpay(amount) {
+
+        fetch("/create-razorpay-order/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCSRFToken(),
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `amount=${amount}`
+        })
+            .then(res => res.json())
+            .then(data => {
+
+                const options = {
+                    key: data.key,
+                    amount: data.amount,
+                    currency: "INR",
+                    name: "Vivaan Farmhouse",
+                    order_id: data.order_id,
+
+                    handler: function (response) {
+
+                        // ❌ If payment cancelled
+                        if (!response.razorpay_payment_id) {
+                            alert("Payment cancelled or failed");
+                            return;
+                        }
+
+                        // ✅ STORE ORDER ID FOR POLLING
+                        localStorage.setItem(
+                            "rzp_order_id",
+                            response.razorpay_order_id
+                        );
+
+                        // 🚀 REDIRECT IMMEDIATELY (FAST UX)
+                        window.location.href = "/payment-processing/";
+
+                        // 🔁 VERIFY IN BACKGROUND (DO NOT WAIT)
+                        fetch("/verify-payment/", {
+                            method: "POST",
+                            headers: {
+                                "X-CSRFToken": getCSRFToken(),
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body:
+                                `razorpay_payment_id=${response.razorpay_payment_id}` +
+                                `&razorpay_order_id=${response.razorpay_order_id}` +
+                                `&razorpay_signature=${response.razorpay_signature}`
+                        });
+                    },
+
+                    modal: {
+                        ondismiss: function () {
+                            alert("Payment cancelled");
+                        }
+                    },
+
+                    theme: {
+                        color: "#047857"
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.open();
+            })
+            .catch(err => {
+                console.error("Razorpay error:", err);
+                alert("Payment initialization failed");
+            });
+    } {% endcomment %}
+
+    let rzpStarted = false;
+
+    function openRazorpay() {
+    if (rzpStarted) return;
+    rzpStarted = true;
+    fetch("/create-razorpay-order/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": getCSRFToken()
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        const options = {
+            key: data.key,
+            amount: data.amount,
+            currency: "INR",
+            name: "Vivaan Farmhouse",
+            order_id: data.order_id,
+
+            handler: function (response) {
+
+                window.location.href = "/payment-processing/";
+            },
+
+            modal: {
+                ondismiss: function () {
+                    alert("Payment cancelled");
+                }
+            }
+        };
+
+        new Razorpay(options).open();
+    });
+}
+
+
+               {% comment %} localStorage.setItem(
+                    "rzp_order_id",
+                    response.razorpay_order_id
+                ); {% endcomment %}
+{% comment %} function openRazorpay(amount) {
+
+    // 1️⃣ Create Razorpay Order (booking already created on backend)
+    fetch("/create-razorpay-order/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": getCSRFToken(),
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `amount=${amount}`
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if (!data.order_id) {
+            alert("Unable to initiate payment. Please try again.");
+            return;
+        }
+
+        // 2️⃣ Razorpay Checkout Options
+        const options = {
+            key: data.key,                 // LIVE KEY
+            amount: data.amount,           // Amount in paise
+            currency: "INR",
+            name: "Vivaan Farmhouse",
+            description: "Villa Booking Payment",
+            order_id: data.order_id,
+
+            // ✅ SUCCESS CALLBACK (DO NOT VERIFY HERE)
+            handler: function (response) {
+
+                // Payment ID exists → Razorpay accepted payment
+                if (!response.razorpay_payment_id) {
+                    alert("Payment not completed.");
+                    return;
+                }
+            // ✅ STORE ORDER ID (CRITICAL)
+            localStorage.setItem("rzp_order_id", response.razorpay_order_id);
+
+            // 🚀 Redirect immediately
+            window.location.href = "/payment-processing/";
+                // 🚀 FAST UX: redirect immediately
+                // 🔥 Webhook will update booking status in background
+            },
+
+            // ❌ User closed popup
+            modal: {
+                ondismiss: function () {
+                    alert("Payment cancelled.");
+                }
+            },
+
+            theme: {
+                color: "#047857"
+            }
+        };
+
+        // 3️⃣ Open Razorpay Checkout
+        const rzp = new Razorpay(options);
+        rzp.open();
+    })
+    .catch(error => {
+        console.error("Razorpay Init Error:", error);
+        alert("Payment initialization failed. Please try again.");
+    });
+} {% endcomment %}
+
+</script>
+
+
+{% comment %} <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        if (typeof flatpickr === "undefined") {
+            console.error("❌ Flatpickr not loaded");
+            return;
+        }
+
+        const bookedDates = JSON.parse(
+            document.getElementById("booked-dates-data")?.textContent || "[]"
+        );
+
+        const blockedDates = JSON.parse(
+            document.getElementById("blocked-dates-data")?.textContent || "[]"
+        );
+
+        const disabledDates = [...new Set([...bookedDates, ...blockedDates])];
+
+        function formatDate(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, "0");
+            const d = String(date.getDate()).padStart(2, "0");
+            return `${y}-${m}-${d}`;
+        }
+
+        function decorateDay(dayElem) {
+            const dateStr = formatDate(dayElem.dateObj);
+
+            if (bookedDates.includes(dateStr)) {
+                dayElem.classList.add("booked-date");
+                dayElem.title = "Already booked";
+            }
+
+            if (blockedDates.includes(dateStr)) {
+                dayElem.classList.add("blocked-date");
+                dayElem.title = "Blocked by admin";
+            }
+
+            
+        }
+
+        let checkInPicker;
+        let checkOutPicker;
+
+        // ✅ CHECK-IN
+        checkInPicker = flatpickr("input[name='check_in']", {
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            disable: disabledDates,
+            allowInput: true,
+
+            onDayCreate(_, __, ___, dayElem) {
+                decorateDay(dayElem);
+            },
+
+            onChange(selectedDates) {
+                if (!selectedDates.length) return;
+
+                const nextDay = new Date(selectedDates[0]);
+                nextDay.setDate(nextDay.getDate() + 1);
+
+                checkOutPicker.set("minDate", nextDay);
+            }
+        });
+
+        // ✅ CHECK-OUT
+        checkOutPicker = flatpickr("input[name='check_out']", {
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            disable: disabledDates,
+            allowInput: true,
+
+            onDayCreate(_, __, ___, dayElem) {
+                decorateDay(dayElem);
+            },
+
+            onChange(selectedDates) {
+                if (!selectedDates.length) return;
+
+                const checkInDate = checkInPicker.selectedDates[0];
+
+                if (!checkInDate) {
+                    alert("⚠️ Please select check-in date first");
+                    checkOutPicker.clear();
+                    return;
+                }
+
+                let current = new Date(checkInDate);
+                const end = new Date(selectedDates[0]);
+
+                while (current <= end) {
+                    const dStr = formatDate(current);
+
+                    if (blockedDates.includes(dStr)) {
+                        alert("⚠️ Selected range includes dates blocked by admin");
+                        checkOutPicker.clear();
+                        return;
+                    }
+
+                    current.setDate(current.getDate() + 1);
+                }
+
+            }
+        });
+
+        console.log("✅ Flatpickr initialized correctly (SINGLE INSTANCE)");
+    });
+</script> {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+    function initCalendarIfNeeded() {
+
+    // prevent duplicate init
+    if (checkInPicker !== null) return;
+
+    if (typeof flatpickr === "undefined") {
+        console.error("❌ Flatpickr not loaded");
+        return;
+    }
+
+    const bookedDates = JSON.parse(
+        document.getElementById("booked-dates-data")?.textContent || "[]"
+    );
+
+    const blockedDates = JSON.parse(
+        document.getElementById("blocked-dates-data")?.textContent || "[]"
+    );
+
+    function formatDate(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        return `${y}-${m}-${d}`;
+    }
+
+        // 🔥 ADD THIS (FIX)
+    const offerDates = JSON.parse(
+        document.getElementById("offer-dates-data")?.textContent || "{}"
+    );
+
+    const weekday = parseFloat(`{{ pricing.weekday_price }}`);
+    const weekend = parseFloat(`{{ pricing.weekend_price }}`);
+
+function decorateDay(dayElem) {
+
+    const date = dayElem.dateObj;
+    {% comment %} const dateStr = date.toISOString().split('T')[0]; {% endcomment %}
+
+
+    function formatLocalDate(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+}
+    const dateStr = formatLocalDate(date);
+    const day = date.getDay();
+
+    let price = 0;
+
+    if (offerDates[dateStr]) {
+        price = offerDates[dateStr];
+    } else {
+        price = (day === 6 || day === 0) ? weekend : weekday;
+    }
+
+    // REMOVE OLD
+    const old = dayElem.querySelector(".price-tag");
+    if (old) old.remove();
+
+    // CREATE PRICE
+    const priceDiv = document.createElement("div");
+    priceDiv.className = "price-tag";
+    priceDiv.innerText = "₹" + price;
+
+    dayElem.appendChild(priceDiv);
+}
+
+
+
+    {% comment %} function decorateDay(dayElem) {
+
+    const date = dayElem.dateObj;
+    const dateStr = date.toISOString().split('T')[0];
+    const day = date.getDay();
+
+    let price = 0;
+
+    // ✅ OFFER OR NORMAL PRICE
+    if (offerDates[dateStr]) {
+        price = offerDates[dateStr];
+    } else {
+        price = (day === 6 || day === 0) ? weekend : weekday;
+    }
+
+    // 🔥 MAKE DAY VERTICAL (DATE + PRICE)
+    dayElem.style.display = "flex";
+    dayElem.style.flexDirection = "column";
+    dayElem.style.alignItems = "center";
+    dayElem.style.justifyContent = "center";
+
+    // 🔥 REMOVE OLD PRICE (avoid duplicates)
+    const old = dayElem.querySelector(".price-tag");
+    if (old) old.remove();
+
+    // 🔥 ADD PRICE BELOW DATE
+    const priceDiv = document.createElement("div");
+    priceDiv.className = "price-tag";
+    priceDiv.style.fontSize = "10px";
+    priceDiv.style.marginTop = "2px";
+    priceDiv.innerText = "₹" + price;
+
+    dayElem.appendChild(priceDiv);
+} {% endcomment %}
+
+
+
+
+
+
+
+
+    const disabledCheckInDates = [
+        ...new Set([...bookedDates, ...blockedDates])
+    ];
+
+    // =============================
+    // CHECK-IN
+    // =============================
+    checkInPicker = flatpickr("input[name='check_in']", {
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        disableMobile: true,
+        disable: disabledCheckInDates,
+
+
+        onDayCreate(_, __, ___, dayElem) {
+            decorateDay(dayElem);
+        },
+
+        onChange(selectedDates) {
+            if (!selectedDates.length) return;
+
+            {% comment %} const nextDay = new Date(selectedDates[0]);
+            nextDay.setDate(nextDay.getDate() + 1);
+
+            checkOutPicker.clear();
+            checkOutPicker.set("minDate", nextDay); {% endcomment %}
+
+
+            const checkIn = selectedDates[0];
+
+            const nextDay = new Date(checkIn);
+            nextDay.setDate(nextDay.getDate() + 1);
+
+            checkOutPicker.clear();
+            checkOutPicker.set("minDate", nextDay);
+
+            // 🔥 THIS IS THE FIX (IMPORTANT)
+            checkOutPicker.set("disable", [
+                function(date) {
+                    let d = date.toISOString().split('T')[0];
+
+                    // ❌ block only stay days BEFORE checkout
+                    return bookedDates.includes(d) && date <= checkIn;
+                }
+            ]);
+
+        }
+    });
+
+    // =============================
+    // CHECK-OUT
+    // =============================
+    checkOutPicker = flatpickr("input[name='check_out']", {
+    dateFormat: "Y-m-d",
+
+    // ✅ DO NOT block admin blocked dates
+    {% comment %} disable: bookedDates, {% endcomment %}
+    
+    disable: [
+        function(date) {
+            let d = date.toISOString().split('T')[0];
+
+            // block only if it's start of booking (stay date)
+            return bookedDates.includes(d);
+        }
+        ],
+    disableMobile: true,
+
+
+    onDayCreate(_, __, ___, dayElem) {
+        decorateDay(dayElem);
+    },
+    onChange(selectedDates) {
+        if (!selectedDates.length) return;
+
+        const checkInDate = checkInPicker.selectedDates[0];
+
+        if (!checkInDate) {
+            alert("Please select check-in date first");
+            checkOutPicker.clear();
+            return;
+        }
+
+        let current = new Date(checkInDate);
+        const end = new Date(selectedDates[0]);
+        end.setDate(end.getDate() - 1);
+
+        while (current <= end) {
+            const d = formatDate(current);
+
+            if (bookedDates.includes(d)) {
+                alert("These dates are already booked");
+                checkOutPicker.clear();
+                return;
+            }
+
+            if (blockedDates.includes(d)) {
+                alert("These dates are blocked by admin");
+                checkOutPicker.clear();
+                return;
+            }
+
+            current.setDate(current.getDate() + 1);
+        }
+    }
+});
+
+
+    console.log("✅ Flatpickr initialized correctly");
+}
+
+{% comment %} document.addEventListener('DOMContentLoaded', function () {
+
+    if (typeof flatpickr === "undefined") {
+        console.error("❌ Flatpickr not loaded");
+        return;
+    }
+
+    // -----------------------------
+    // DATA FROM BACKEND
+    // -----------------------------
+    const bookedDates = JSON.parse(
+        document.getElementById("booked-dates-data")?.textContent || "[]"
+    );
+
+    const blockedDates = JSON.parse(
+        document.getElementById("blocked-dates-data")?.textContent || "[]"
+    );
+
+    // -----------------------------
+    // UTILS
+    // -----------------------------
+    function formatDate(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        return `${y}-${m}-${d}`;
+    }
+
+    // ❗ Check-in cannot be booked or blocked
+    const disabledCheckInDates = [
+        ...new Set([...bookedDates, ...blockedDates])
+    ];
+
+    let checkInPicker;
+    let checkOutPicker;
+
+    // =============================
+    // CHECK-IN PICKER
+    // =============================
+    checkInPicker = flatpickr("input[name='check_in']", {
+        dateFormat: "Y-m-d",
+        minDate: "today",
+
+        // ❌ Booked + Blocked dates disabled
+        disable: disabledCheckInDates,
+
+        onChange(selectedDates) {
+            if (!selectedDates.length) return;
+
+            const nextDay = new Date(selectedDates[0]);
+            nextDay.setDate(nextDay.getDate() + 1);
+
+            checkOutPicker.clear();
+            checkOutPicker.set("minDate", nextDay);
+        }
+    });
+
+    // =============================
+    // CHECK-OUT PICKER
+    // =============================
+    checkOutPicker = flatpickr("input[name='check_out']", {
+        dateFormat: "Y-m-d",
+        minDate: "today",
+
+        // ❌ Only admin blocked dates disabled
+        disable: blockedDates,
+
+        onChange(selectedDates) {
+            if (!selectedDates.length) return;
+
+            const checkInDate = checkInPicker.selectedDates[0];
+
+            if (!checkInDate) {
+                alert("⚠️ Please select check-in date first");
+                checkOutPicker.clear();
+                return;
+            }
+
+            let current = new Date(checkInDate);
+            const end = new Date(selectedDates[0]);
+
+            // 🔥 Exclude checkout day (hotel logic)
+            end.setDate(end.getDate() - 1);
+
+            while (current <= end) {
+                const dateStr = formatDate(current);
+
+                // 🚫 Already booked
+                if (bookedDates.includes(dateStr)) {
+                    alert("❌ These dates are already booked. Please select different dates.");
+                    checkOutPicker.clear();
+                    return;
+                }
+
+                // 🚫 Admin blocked
+                if (blockedDates.includes(dateStr)) {
+                    alert("❌ These dates are blocked by admin.");
+                    checkOutPicker.clear();
+                    return;
+                }
+
+                current.setDate(current.getDate() + 1);
+            }
+        }
+    });
+
+    console.log("✅ Flatpickr booking rules applied successfully");
+}); {% endcomment %}
+</script>
+
+
+<script>
+/* 🚫 BLOCK ANDROID NATIVE DATE PICKER COMPLETELY */
+["check_in", "check_out"].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.addEventListener("focus", e => {
+        e.preventDefault();
+        el.blur();          // stop native picker
+    });
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    initCalendarIfNeeded();
+});
+</script>
+
+{% endblock %}
+{% endblock %}
+
+
+
+
+
