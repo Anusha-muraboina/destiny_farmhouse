@@ -221,7 +221,8 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
-    "http://127.0.0.1:9000",
+    "http://127.0.0.1:7000",
+    "https://f479-2404-1f00-8047-a3d9-bce5-7322-563a-67f7.ngrok-free.app",
 
 ]
 # Default primary key field type

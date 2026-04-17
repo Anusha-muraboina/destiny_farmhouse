@@ -14,7 +14,7 @@
     <!-- 3️⃣ Title -->
     <title>
     {% block title %}
-    {{ seo_title|default:"Vivaan Farmhouse – Elkatta, Hyderabad" }}
+    {{ seo_title|default:"Destany Farm – Elkatta, Hyderabad" }}
     {% endblock %}
     </title>
 
@@ -100,7 +100,7 @@
 
 <title>
 {% block title %}
-{{ seo_title|default:"Vivaan Farmhouse – Elkatta, Hyderabad" }}
+{{ seo_title|default:"Destany Farm – Elkatta, Hyderabad" }}
 {% endblock %}
 </title>
 
@@ -160,9 +160,9 @@
 {% load static %}
 
      <a href="{% url 'home' %}">
-                <img src="{% static 'images/vihaan-logo.webp' %}"
-                     alt="Vivaan Farmhouse"
-                     class="h-16">
+                <img src="{% static 'images/destiny_logo.jpeg' %}"
+                     alt="Destany Farm"
+                     class="h-16 rounded-full">
             </a>
 
                 <!-- Desktop Menu -->
@@ -312,6 +312,7 @@
         </div>
     </nav>
 
+    
 
     <!-- Main Content -->
     {% block content %}{% endblock %}
@@ -323,10 +324,10 @@
         <div class=" container mx-auto px-4 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    {% comment %} <h3 class="text-2xl font-bold mb-4 text-amber-400">Vivaan Farmhouse</h3> {% endcomment %}
+                    {% comment %} <h3 class="text-2xl font-bold mb-4 text-amber-400">Destany Farm</h3> {% endcomment %}
                         <a href="{% url 'home' %}">
-                <img src="{% static 'images/vihaan-logo.webp' %}"
-                     alt="Vivaan Farmhouse"
+                <img src="{% static 'images/destiny_logo.jpeg' %}"
+                     alt="Destany Farm"
                      class="h-16 mb-4">
             </a>
 
@@ -408,12 +409,12 @@
 
 
             {% comment %} <div class="border-t border-white-800 mt-8 pt-8 text-center text-white">
-<p>&copy; 2026 Vivaan Farmhouse. All rights reserved. Powered by Laxminarayan Infotech.</p>
+<p>&copy; 2026 Destany Farm. All rights reserved. Powered by Laxminarayan Infotech.</p>
 laxminarayaninfotech.com
             </div> {% endcomment %}
             <div class="border-t border-white-800 mt-8 pt-8 text-center text-white">
     <p>
-        &copy; 2026 Vivaan Farmhouse. All rights reserved. 
+        &copy; 2026 Destany Farm. All rights reserved. 
         Powered by 
         <a href="https://laxminarayaninfotech.com"
            target="_blank"
