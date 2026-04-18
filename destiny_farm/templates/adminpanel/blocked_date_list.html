@@ -6,7 +6,7 @@
 <div class="card">
     <div class="card-header">
         <h2>Blocked Periods</h2>
-        <a href="{% url 'vivaan_admin:blocked_date_create' %}" class="btn-action btn-view">
+        <a href="{% url 'destiny_admin:blocked_date_create' %}" class="btn-action btn-view">
             + Block Date
         </a>
     </div>
@@ -27,8 +27,8 @@
                 <td>{{ date.end_date }}</td>
                 <td>{{ date.reason|default:"—" }}</td>
                 <td>
-                    <a href="{% url 'vivaan_admin:blocked_date_edit' date.id %}" class="btn-action btn-view">Edit</a>
-                    <a href="{% url 'vivaan_admin:blocked_date_delete' date.id %}"
+                    <a href="{% url 'destiny_admin:blocked_date_edit' date.id %}" class="btn-action btn-view">Edit</a>
+                    <a href="{% url 'destiny_admin:blocked_date_delete' date.id %}"
                        class="btn-action btn-delete"
                        onclick="return confirm('Unblock this date range?');">
                         Delete

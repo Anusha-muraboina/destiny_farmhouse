@@ -45,7 +45,7 @@
 <div class="card">
     <div class="card-header flex-between">
         <h2>Villa Pricing</h2>
-        <a href="{% url 'vivaan_admin:pricing_add_edit' %}" class="btn-action btn-view">
+        <a href="{% url 'destiny_admin:pricing_add_edit' %}" class="btn-action btn-view">
             {% if pricing %}Edit Pricing{% else %}+ Add Pricing{% endif %}
         </a>
     </div>
@@ -74,12 +74,12 @@
 <div class="card">
     <div class="card-header flex-between">
         <h2>Room Categories</h2>
-        {% comment %} <a href="{% url 'vivaan_admin:category_add' %}" class="btn-action btn-add">
+        {% comment %} <a href="{% url 'destiny_admin:category_add' %}" class="btn-action btn-add">
             + Add Category
         </a> {% endcomment %}
 
             <!-- ADD CATEGORY BUTTON -->
-    <a href="{% url 'vivaan_admin:category_add' %}"
+    <a href="{% url 'destiny_admin:category_add' %}"
        class="btn-action btn-add bg-green-900 text-white  " 
        style="padding:8px 14px;font-weight:600; "  >
         + Category
@@ -105,10 +105,10 @@
                     <td>{{ c.max_occupancy }}</td>
                     <td>{{ c.view_type|title }}</td>
                     <td class="table-actions" style="text-align:center;">
-                        <a href="{% url 'vivaan_admin:category_edit' c.id %}" class="edit">
+                        <a href="{% url 'destiny_admin:category_edit' c.id %}" class="edit">
                             Edit
                         </a>
-                        <a href="{% url 'vivaan_admin:category_delete' c.id %}"
+                        <a href="{% url 'destiny_admin:category_delete' c.id %}"
                            class="delete"
                            onclick="return confirm('Delete this category?')">
                             Delete

@@ -104,7 +104,7 @@
 
     <div class="card-header">
         <h2>Groups</h2>
-        <a href="{% url 'vivaan_admin:group_create' %}" class="btn-add">
+        <a href="{% url 'destiny_admin:group_create' %}" class="btn-add">
             + Add Group
         </a>
     </div>
@@ -129,8 +129,8 @@
                     </td>
 
                     <td data-label="Actions">
-                        <a href="{% url 'vivaan_admin:group_edit' group.id %}" class="btn-sm btn-edit">Edit</a>
-                        <a href="{% url 'vivaan_admin:group_delete' group.id %}"
+                        <a href="{% url 'destiny_admin:group_edit' group.id %}" class="btn-sm btn-edit">Edit</a>
+                        <a href="{% url 'destiny_admin:group_delete' group.id %}"
                            onclick="return confirm('Delete this group?')"
                            class="btn-sm btn-delete">Delete</a>
                     </td>

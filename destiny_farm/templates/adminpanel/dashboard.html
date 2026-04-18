@@ -259,7 +259,7 @@
 <div class="card">
     <div class="card-header">
         <h2>Recent Bookings</h2>
-        <a href="{% url 'vivaan_admin:booking_list' %}" class="btn-action">View All</a>
+        <a href="{% url 'destiny_admin:booking_list' %}" class="btn-action">View All</a>
     </div>
 
     <table>
@@ -271,7 +271,7 @@
                 <td data-label="Check-in">{{ booking.check_in }}</td>
                 <td data-label="Status">{{ booking.status }}</td>
                 <td data-label="Action">
-                    <a href="{% url 'vivaan_admin:booking_edit' booking.id %}">Edit</a>
+                    <a href="{% url 'destiny_admin:booking_edit' booking.id %}">Edit</a>
                 </td>
             </tr>
             {% endfor %}

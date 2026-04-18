@@ -163,7 +163,7 @@
                 Blog Categories
             </h4>
 
-            <a href="{% url 'vivaan_admin:blog_category_add' %}" class="btn btn-add">
+            <a href="{% url 'destiny_admin:blog_category_add' %}" class="btn btn-add">
                 <i class="fa fa-plus"></i> Category
             </a>
         </div>
@@ -192,12 +192,12 @@
                         </td>
 
                         <td class="action-btns">
-                            <a href="{% url 'vivaan_admin:blog_category_edit' cat.id %}"
+                            <a href="{% url 'destiny_admin:blog_category_edit' cat.id %}"
                                class="btn-edit">
                                 <i class="fa fa-pen"></i> Edit
                             </a>
 
-                            <a href="{% url 'vivaan_admin:blog_category_delete' cat.id %}"
+                            <a href="{% url 'destiny_admin:blog_category_delete' cat.id %}"
                                onclick="return confirm('Delete this category?')"
                                class="btn-delete">
                                 <i class="fa fa-trash"></i> Delete

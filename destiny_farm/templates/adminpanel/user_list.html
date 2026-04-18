@@ -20,7 +20,7 @@
 <div class="card">
     <div class="card-header flex-between">
         <h2>System Users</h2>
-        <a href="{% url 'vivaan_admin:user_create' %}" class="bg-green-900 text-white md:p-2 p-1 rounded">
+        <a href="{% url 'destiny_admin:user_create' %}" class="bg-green-900 text-white md:p-2 p-1 rounded">
             + Create User
         </a>
     </div>
@@ -51,15 +51,15 @@
                     {% endif %}
                 </td>
                             <td>
-                <a href="{% url 'vivaan_admin:user_permissions' user.id %}" class="btn btn-perm">
+                <a href="{% url 'destiny_admin:user_permissions' user.id %}" class="btn btn-perm">
                     Assign Permissions
                 </a>
             </td>
                 <td>{{ u.date_joined|date:"M d, Y" }}</td>
                 {% comment %} <td>{{ u.last_login|date:"M d, Y H:i"|default:"Never" }}</td> {% endcomment %}
                 <td>
-                    <a href="{% url 'vivaan_admin:user_edit' u.id %}" class="btn-sm btn-view">Edit</a>
-                    <a href="{% url 'vivaan_admin:user_delete' u.id %}"
+                    <a href="{% url 'destiny_admin:user_edit' u.id %}" class="btn-sm btn-view">Edit</a>
+                    <a href="{% url 'destiny_admin:user_delete' u.id %}"
                        class="btn-sm btn-delete"
                        onclick="return confirm('Delete this user?');">
                         Delete

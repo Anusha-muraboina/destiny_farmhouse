@@ -7,7 +7,7 @@
 <div class="card pb-3">
     <div class="card-header">
         <h2>Amenity List</h2>
-        <a href="{% url 'vivaan_admin:amenity_create' %}" class="btn-action btn-view">
+        <a href="{% url 'destiny_admin:amenity_create' %}" class="btn-action btn-view">
             + Add Amenity
         </a>
     </div>
@@ -35,8 +35,8 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{% url 'vivaan_admin:amenity_edit' amenity.id %}" class="btn-action btn-view">Edit</a>
-                    <a href="{% url 'vivaan_admin:amenity_delete' amenity.id %}"
+                    <a href="{% url 'destiny_admin:amenity_edit' amenity.id %}" class="btn-action btn-view">Edit</a>
+                    <a href="{% url 'destiny_admin:amenity_delete' amenity.id %}"
                        class="btn-action btn-delete"
                        onclick="return confirm('Delete this amenity?');">
                        Delete

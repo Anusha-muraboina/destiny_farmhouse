@@ -32,7 +32,7 @@ def blog_list(request):
     context = {
         "blogs": blogs,
        # ✅ SEO from blog model
-        # "seo_title": seo_blog.meta_title if seo_blog else "Blog – Vivaan Farmhouse",
+        # "seo_title": seo_blog.meta_title if seo_blog else "Blog – Destany Farmhouse",
         # "seo_description": seo_blog.meta_description if seo_blog else "",
         # "seo_keywords": seo_blog.meta_keywords if seo_blog else "",
         

@@ -19,10 +19,10 @@
         <p style="white-space:pre-line;">{{ message.message }}</p>
 
         <div style="margin-top:2rem;">
-            <a href="{% url 'vivaan_admin:message_list' %}" class="bg-gray-400 p-2 rounded text-white mx-2">
+            <a href="{% url 'destiny_admin:message_list' %}" class="bg-gray-400 p-2 rounded text-white mx-2">
                 Back
             </a>
-            <a href="{% url 'vivaan_admin:message_delete' message.id %}"
+            <a href="{% url 'destiny_admin:message_delete' message.id %}"
                class="btn-delete p-2 rounded"
                onclick="return confirm('Delete this message?');">
                 Delete

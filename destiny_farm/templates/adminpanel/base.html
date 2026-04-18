@@ -672,78 +672,78 @@
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <a href="{% url 'vivaan_admin:dashboard' %}" class="sidebar-brand">
+            <a href="{% url 'destiny_admin:dashboard' %}" class="sidebar-brand">
                 <i class="fa-solid fa-house-chimney-window"></i>
                 <span class="sidebar-brand-text">Vivaan Admin</span>
             </a>
         </div>
         <nav class="sidebar-menu">
-            <a href="{% url 'vivaan_admin:dashboard' %}"
+            <a href="{% url 'destiny_admin:dashboard' %}"
                 class="menu-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
                 <i class="fa-solid fa-gauge-high"></i> <span class="menu-text">Dashboard</span>
             </a>
-            <a href="{% url 'vivaan_admin:booking_list' %}"
+            <a href="{% url 'destiny_admin:booking_list' %}"
                 class="menu-item {% if request.resolver_match.url_name == 'booking_list' %}active{% endif %}">
                 <i class="fa-solid fa-calendar-check"></i> <span class="menu-text">Bookings</span>
             </a>
-            <a href="{% url 'vivaan_admin:room_list' %}"
+            <a href="{% url 'destiny_admin:room_list' %}"
                 class="menu-item {% if request.resolver_match.url_name == 'room_list' %}active{% endif %}">
                 <i class="fa-solid fa-bed"></i> <span class="menu-text">Rooms & Villa</span>
             </a>
-            <a href="{% url 'vivaan_admin:banner_list' %}" class="menu-item"><i class="fa-solid fa-images"></i> <span
+            <a href="{% url 'destiny_admin:banner_list' %}" class="menu-item"><i class="fa-solid fa-images"></i> <span
                     class="menu-text">Banners</span></a>
-            <a href="{% url 'vivaan_admin:amenity_list' %}" class="menu-item"><i class="fa-solid fa-spa"></i> <span
+            <a href="{% url 'destiny_admin:amenity_list' %}" class="menu-item"><i class="fa-solid fa-spa"></i> <span
                     class="menu-text">Amenities</span></a>
-            <a href="{% url 'vivaan_admin:blocked_date_list' %}" class="menu-item"><i class="fa-solid fa-ban"></i> <span
+            <a href="{% url 'destiny_admin:blocked_date_list' %}" class="menu-item"><i class="fa-solid fa-ban"></i> <span
                     class="menu-text">Blocked Dates</span></a>
-            <a href="{% url 'vivaan_admin:coupon_list' %}" class="menu-item"><i class="fa-solid fa-ticket"></i> <span
+            <a href="{% url 'destiny_admin:coupon_list' %}" class="menu-item"><i class="fa-solid fa-ticket"></i> <span
                     class="menu-text">Coupons</span></a>
-            <a href="{% url 'vivaan_admin:gallery_list' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
+            <a href="{% url 'destiny_admin:gallery_list' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
                 <span class="menu-text">Gallery</span></a>
 
-            <a href="{% url 'vivaan_admin:offerlist' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
+            <a href="{% url 'destiny_admin:offerlist' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
                 <span class="menu-text">offer</span></a>
 
 
-            {% comment %} <a href="{% url 'vivaan_admin:user_permissions' user_id %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
+            {% comment %} <a href="{% url 'destiny_admin:user_permissions' user_id %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
                 <span class="menu-text">user permission</span></a> {% endcomment %}
-            {% comment %} <a href="{% url 'vivaan_admin:user_list' %}" class="menu-item">
+            {% comment %} <a href="{% url 'destiny_admin:user_list' %}" class="menu-item">
     <i class="fa-solid fa-users"></i>
     <span class="menu-text">Users</span>
 </a> {% endcomment %}
 
-            {% comment %} <a href="{% url 'vivaan_admin:group_list' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
+            {% comment %} <a href="{% url 'destiny_admin:group_list' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
                 <span class="menu-text">group permission</span></a>
  {% endcomment %}
 
 
 
 
-            <a href="{% url 'vivaan_admin:testimonial_list' %}" class="menu-item"><i class="fa-solid fa-star"></i> <span
+            <a href="{% url 'destiny_admin:testimonial_list' %}" class="menu-item"><i class="fa-solid fa-star"></i> <span
                     class="menu-text">Ratings</span></a>
-            <a href="{% url 'vivaan_admin:user_list' %}" class="menu-item"><i class="fa-solid fa-users-gear"></i> <span
+            <a href="{% url 'destiny_admin:user_list' %}" class="menu-item"><i class="fa-solid fa-users-gear"></i> <span
                     class="menu-text">Users</span></a>
-            <a href="{% url 'vivaan_admin:message_list' %}" class="menu-item"><i class="fa-solid fa-envelope"></i> <span
+            <a href="{% url 'destiny_admin:message_list' %}" class="menu-item"><i class="fa-solid fa-envelope"></i> <span
                     class="menu-text">Messages</span></a>
 
-                    <a href="{% url 'vivaan_admin:blog_list' %}" class="menu-item">
+                    <a href="{% url 'destiny_admin:blog_list' %}" class="menu-item">
     <i class="fa-solid fa-blog"></i>
     <span class="menu-text">Blogs</span>
 </a>
 
-{% comment %} <a href="{% url 'vivaan_admin:blog_category_list' %}" class="menu-item">
+{% comment %} <a href="{% url 'destiny_admin:blog_category_list' %}" class="menu-item">
     <i class="fa-solid fa-folder"></i>
     <span class="menu-text">Blog Categories</span>
 </a> {% endcomment %}
 
-{% comment %} <a href="{% url 'vivaan_admin:blog_comment_list' %}" class="menu-item">
+{% comment %} <a href="{% url 'destiny_admin:blog_comment_list' %}" class="menu-item">
     <i class="fa-solid fa-comments"></i>
     <span class="menu-text">Blog Comments</span>
 </a> {% endcomment %}
 
         </nav>
         <div class="sidebar-footer">
-            <a href="{% url 'vivaan_admin:logout' %}" class="menu-item" style="color: rgba(255,255,255,0.7);">
+            <a href="{% url 'destiny_admin:logout' %}" class="menu-item" style="color: rgba(255,255,255,0.7);">
                 <i class="fa-solid fa-right-from-bracket"></i> <span class="menu-text">Logout</span>
             </a>
             <a href="/" class="menu-item" style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">
@@ -801,7 +801,7 @@
             <a href="#">
                 <i class="fa-solid fa-user"></i> Profile
             </a>
-            <a href="{% url 'vivaan_admin:logout' %}">
+            <a href="{% url 'destiny_admin:logout' %}">
                 <i class="fa-solid fa-right-from-bracket"></i> Logout
             </a>
         </div>

@@ -26,8 +26,7 @@ SECRET_KEY = 'django-insecure-2@=-c@uvh@w(%epw=8%fl3*k!z&mppxqlra9l)#h@z!836quu4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -200,6 +199,7 @@ ADMIN_EMAIL = 'laxminarayaninfotech1@gmail.com'
 CC_EMAIL = [
     'anushamuraboina9@gmail.com',
     'laxminarayaninfotech1@gmail.com',
+    'destanyfarm@gmail.com',
 ]
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -222,7 +222,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://127.0.0.1:7000",
-    "https://f479-2404-1f00-8047-a3d9-bce5-7322-563a-67f7.ngrok-free.app",
+    "https://7d0f-2404-1f00-8047-a456-6493-7f2e-f002-8f36.ngrok-free.app",
 
 ]
 # Default primary key field type

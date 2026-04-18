@@ -149,7 +149,7 @@
 <div class="coupon-card">
     <div class="card-header">
         <h2 class="">Discount Coupons</h2>
-        <a href="{% url 'vivaan_admin:coupon_create' %}" class="btn-primary">
+        <a href="{% url 'destiny_admin:coupon_create' %}" class="btn-primary">
             + Coupon
         </a>
     </div>
@@ -180,8 +180,8 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'vivaan_admin:coupon_edit' coupon.id %}" class="btn-sm btn-view">Edit</a>
-                        <a href="{% url 'vivaan_admin:coupon_delete' coupon.id %}"
+                        <a href="{% url 'destiny_admin:coupon_edit' coupon.id %}" class="btn-sm btn-view">Edit</a>
+                        <a href="{% url 'destiny_admin:coupon_delete' coupon.id %}"
                            class="btn-sm btn-delete"
                            onclick="return confirm('Delete this coupon?');">
                             Delete

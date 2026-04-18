@@ -24,7 +24,7 @@ def is_admin(user):
 # --- Auth ---
 def admin_login(request):
     if request.user.is_authenticated and request.user.is_superuser:
-        return redirect('vivaan_admin:dashboard')
+        return redirect('destiny_admin:dashboard')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -32,7 +32,7 @@ def admin_login(request):
         if user is not None:
             if user.is_superuser:
                 login(request, user)
-                return redirect('vivaan_admin:dashboard')
+                return redirect('destiny_admin:dashboard')
             else:
                 messages.error(request, "Access denied.")
         else:
@@ -41,11 +41,11 @@ def admin_login(request):
 
 def admin_logout(request):
     logout(request)
-    return redirect('vivaan_admin:login')
+    return redirect('destiny_admin:login')
 
 # --- Dashboard ---
-# @login_required(login_url='vivaan_admin:login')
-# @user_passes_test(is_admin, login_url='vivaan_admin:login')
+# @login_required(login_url='destiny_admin:login')
+# @user_passes_test(is_admin, login_url='destiny_admin:login')
 # def dashboard(request):
 #     today = timezone.now().date()
 #     seven_days_ago = today - timedelta(days=7)
@@ -114,8 +114,8 @@ from decimal import Decimal
 #     return user.is_authenticated and user.is_superuser
 
 
-# @login_required(login_url='vivaan_admin:login')
-# @user_passes_test(is_admin, login_url='vivaan_admin:login')
+# @login_required(login_url='destiny_admin:login')
+# @user_passes_test(is_admin, login_url='destiny_admin:login')
 # def dashboard(request):
 #     today = timezone.now().date()
 #     seven_days_ago = today - timedelta(days=7)
@@ -236,8 +236,8 @@ from datetime import timedelta
 from decimal import Decimal
 import json
 
-@login_required(login_url='vivaan_admin:login')
-@user_passes_test(is_admin, login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
+@user_passes_test(is_admin, login_url='destiny_admin:login')
 def dashboard(request):
 
     # =======================
@@ -356,7 +356,7 @@ def dashboard(request):
 # from .forms import *
 
 # LIST
-# @login_required(login_url='vivaan_admin:login')
+# @login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 # def booking_list(request):
 #     bookings = Booking.objects.all()
@@ -369,7 +369,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 # from .models import Booking
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.view_booking', raise_exception=True)
 def booking_list(request):
@@ -436,7 +436,7 @@ from django.contrib.auth.decorators import login_required
 # from .models import Booking, BlockedDate, Coupon, VillaPricing
 from .forms import AdminBookingForm
 from resort.views import send_email_async
-# vivaan_admin/views.py
+# destiny_admin/views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
@@ -449,7 +449,7 @@ from .forms import AdminBookingForm
 
 
 
-# @login_required(login_url="vivaan_admin:login")
+# @login_required(login_url="destiny_admin:login")
 # @user_passes_test(is_admin)
 # def admin_booking_create(request):
 
@@ -498,7 +498,7 @@ from .forms import AdminBookingForm
 #             booking.save()
 
 #             messages.success(request, "Booking created successfully")
-#             return redirect("vivaan_admin:booking_list")
+#             return redirect("destiny_admin:booking_list")
 
 #     else:
 #         form = AdminBookingForm()
@@ -511,7 +511,7 @@ from .forms import AdminBookingForm
 
 
 from resort.views import * 
-# @login_required(login_url="vivaan_admin:login")
+# @login_required(login_url="destiny_admin:login")
 # @user_passes_test(is_admin)
 # def admin_booking_create(request):
 
@@ -563,7 +563,7 @@ from resort.views import *
 #             send_email_async(booking, old_status=None)
 
 #             messages.success(request, "Booking created and emails sent successfully")
-#             return redirect("vivaan_admin:booking_list")
+#             return redirect("destiny_admin:booking_list")
 
 #     else:
 #         form = AdminBookingForm()
@@ -576,7 +576,7 @@ from resort.views import *
 
 
 
-# @login_required(login_url="vivaan_admin:login")
+# @login_required(login_url="destiny_admin:login")
 # @user_passes_test(is_admin)
 # def admin_booking_create(request):
 
@@ -643,7 +643,7 @@ from resort.views import *
 
 
 #             messages.success(request, "Booking created successfully")
-#             return redirect("vivaan_admin:booking_list")
+#             return redirect("destiny_admin:booking_list")
 
 #     else:
 #         form = AdminBookingForm()
@@ -656,7 +656,7 @@ from resort.views import *
 
 
 
-@login_required(login_url="vivaan_admin:login")
+@login_required(login_url="destiny_admin:login")
 # @user_passes_test(is_admin)
 @permission_required('resort.add_booking', raise_exception=True)
 def admin_booking_create(request):
@@ -744,7 +744,7 @@ def admin_booking_create(request):
             send_booking_emails(booking, old_status="pending")
 
             messages.success(request, "Booking created successfully")
-            return redirect("vivaan_admin:booking_list")
+            return redirect("destiny_admin:booking_list")
 
     else:
         form = AdminBookingForm()
@@ -760,7 +760,7 @@ def admin_booking_create(request):
     
     
 
-@login_required(login_url="vivaan_admin:login")
+@login_required(login_url="destiny_admin:login")
 # @user_passes_test(is_admin)
 @permission_required('resort.change_booking', raise_exception=True)
 def booking_edit(request, pk):
@@ -805,7 +805,7 @@ def booking_edit(request, pk):
                 request,
                 f"Booking {updated_booking.booking_id} updated successfully."
             )
-            return redirect("vivaan_admin:booking_list")
+            return redirect("destiny_admin:booking_list")
 
     else:
         form = AdminBookingForm(instance=booking)
@@ -815,7 +815,7 @@ def booking_edit(request, pk):
         "booking": booking,
     })
 
-# @login_required(login_url="vivaan_admin:login")
+# @login_required(login_url="destiny_admin:login")
 # @user_passes_test(is_admin)
 # def booking_edit(request, pk):
 
@@ -870,7 +870,7 @@ def booking_edit(request, pk):
 #             request,
 #             f"Booking {updated_booking.booking_id} updated successfully."
 #         )
-#         return redirect("vivaan_admin:booking_list")
+#         return redirect("destiny_admin:booking_list")
 
 #     return render(request, "adminpanel/booking_form.html", {
 #         "form": form,
@@ -881,7 +881,7 @@ def booking_edit(request, pk):
 
 
 # DETAIL
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.view_booking', raise_exception=True)
 def booking_detail(request, pk):
@@ -889,7 +889,7 @@ def booking_detail(request, pk):
     return render(request, "adminpanel/booking_detail.html", {"booking": booking})
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.view_booking', raise_exception=True)
 def booking_api_detail(request, pk):
@@ -899,14 +899,14 @@ def booking_api_detail(request, pk):
 
 
 # DELETE
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.delete_booking', raise_exception=True)
 def booking_delete(request, pk):
     booking = get_object_or_404(Booking, pk=pk)
     booking.delete()
     messages.success(request, "Booking deleted.")
-    return redirect("vivaan_admin:booking_list")
+    return redirect("destiny_admin:booking_list")
 
 # --- Rooms & Categories ---
 
@@ -924,7 +924,7 @@ from django.utils.text import slugify
 # =========================
 # LIST PAGE
 # =========================
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 @permission_required('resort.view_roomcategory', raise_exception=True)
 # @user_passes_test(is_admin)
 def room_list(request):
@@ -939,7 +939,7 @@ def room_list(request):
 # =========================
 # ADD ROOM CATEGORY
 # =========================
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.add_roomcategory', raise_exception=True)
 def category_add(request):
@@ -959,7 +959,7 @@ def category_add(request):
             image=request.FILES.get('image')
         )
         messages.success(request, "Room category added successfully.")
-        return redirect('vivaan_admin:room_list')
+        return redirect('destiny_admin:room_list')
 
     return render(request, 'adminpanel/category_add.html')
 
@@ -968,7 +968,7 @@ def category_add(request):
 # EDIT ROOM CATEGORY
 # =========================
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.change_roomcategory', raise_exception=True)
 def category_edit(request, pk):
@@ -993,7 +993,7 @@ def category_edit(request, pk):
         category.save()
 
         messages.success(request, "Room category updated successfully.")
-        return redirect('vivaan_admin:room_list')
+        return redirect('destiny_admin:room_list')
 
     return render(request, 'adminpanel/category_edit.html', {
         'category': category
@@ -1002,19 +1002,19 @@ def category_edit(request, pk):
 # =========================
 # DELETE ROOM CATEGORY
 # =========================
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.delete_roomcategory', raise_exception=True)
 def category_delete(request, pk):
     get_object_or_404(RoomCategory, pk=pk).delete()
     messages.success(request, "Room category deleted.")
-    return redirect('vivaan_admin:room_list')
+    return redirect('destiny_admin:room_list')
 
 
 # =========================
 # ADD / EDIT VILLA PRICING
 # =========================
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.add_villapricing', raise_exception=True)
 def pricing_add_edit(request):
@@ -1030,7 +1030,7 @@ def pricing_add_edit(request):
         pricing.save()
 
         messages.success(request, "Villa pricing saved successfully.")
-        return redirect('vivaan_admin:room_list')
+        return redirect('destiny_admin:room_list')
 
     return render(request, 'adminpanel/pricing_form.html', {'pricing': pricing})
 
@@ -1038,8 +1038,8 @@ def pricing_add_edit(request):
 # ================================
 # EDIT ROOM CATEGORY
 # ================================
-# @login_required(login_url='vivaan_admin:login')
-# @user_passes_test(is_admin, login_url='vivaan_admin:login')
+# @login_required(login_url='destiny_admin:login')
+# @user_passes_test(is_admin, login_url='destiny_admin:login')
 # def category_edit(request, pk):
 #     category = get_object_or_404(RoomCategory, pk=pk)
 
@@ -1054,7 +1054,7 @@ def pricing_add_edit(request):
 #         category.save()
 
 #         messages.success(request, "Room category updated.")
-#         return redirect('vivaan_admin:room_list')
+#         return redirect('destiny_admin:room_list')
 
 #     return render(request, 'adminpanel/category_edit.html', {'category': category})
 
@@ -1062,20 +1062,20 @@ def pricing_add_edit(request):
 # ================================
 # DELETE ROOM CATEGORY
 # ================================
-# @login_required(login_url='vivaan_admin:login')
-# @user_passes_test(is_admin, login_url='vivaan_admin:login')
+# @login_required(login_url='destiny_admin:login')
+# @user_passes_test(is_admin, login_url='destiny_admin:login')
 # def category_delete(request, pk):
 #     category = get_object_or_404(RoomCategory, pk=pk)
 #     category.delete()
 #     messages.success(request, "Room category deleted.")
-#     return redirect('vivaan_admin:room_list')
+#     return redirect('destiny_admin:room_list')
 
 
 # ================================
 # EDIT VILLA PRICING (SINGLE)
 # ================================
-@login_required(login_url='vivaan_admin:login')
-# @user_passes_test(is_admin, login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
+# @user_passes_test(is_admin, login_url='destiny_admin:login')
 @permission_required('resort.change_villapricing', raise_exception=True)
 def pricing_edit(request):
     pricing = VillaPricing.objects.first() or VillaPricing.objects.create()
@@ -1087,7 +1087,7 @@ def pricing_edit(request):
         pricing.save()
 
         messages.success(request, "Villa pricing updated.")
-        return redirect('vivaan_admin:room_list')
+        return redirect('destiny_admin:room_list')
 
     return render(request, 'adminpanel/pricing_form.html', {'pricing': pricing})
 
@@ -1095,8 +1095,8 @@ def pricing_edit(request):
 
 
 # --- LIST ---
-@login_required(login_url='vivaan_admin:login')
-# @user_passes_test(is_admin, login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
+# @user_passes_test(is_admin, login_url='destiny_admin:login')
 @permission_required('resort.view_amenity', raise_exception=True)
 def amenity_list(request):
     amenity_qs = Amenity.objects.all().order_by('-id')
@@ -1109,7 +1109,7 @@ def amenity_list(request):
         'amenities': amenities
     })
 # --- CREATE ---
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.add_amenity', raise_exception=True)
 def amenity_create(request):
@@ -1117,11 +1117,11 @@ def amenity_create(request):
     if form.is_valid():
         form.save()
         messages.success(request, "Amenity created successfully.")
-        return redirect('vivaan_admin:amenity_list')
+        return redirect('destiny_admin:amenity_list')
     return render(request, 'adminpanel/amenity_form.html', {'form': form})
 
 # --- EDIT ---
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.change_amenity', raise_exception=True)
 def amenity_edit(request, pk):
@@ -1130,24 +1130,24 @@ def amenity_edit(request, pk):
     if form.is_valid():
         form.save()
         messages.success(request, "Amenity updated successfully.")
-        return redirect('vivaan_admin:amenity_list')
+        return redirect('destiny_admin:amenity_list')
     return render(request, 'adminpanel/amenity_form.html', {'form': form, 'amenity': amenity})
 
 # --- DELETE ---
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.delete_amenity', raise_exception=True)
 def amenity_delete(request, pk):
     amenity = get_object_or_404(Amenity, pk=pk)
     amenity.delete()
     messages.success(request, "Amenity deleted successfully.")
-    return redirect('vivaan_admin:amenity_list')
+    return redirect('destiny_admin:amenity_list')
 
 
 
 # --- Banners ---
-@login_required(login_url='vivaan_admin:login')
-# @user_passes_test(is_admin, login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
+# @user_passes_test(is_admin, login_url='destiny_admin:login')
 @permission_required('resort.view_mainbanner', raise_exception=True)
 def banner_list(request):
     banner_qs = MainBanner.objects.all().order_by('-id')
@@ -1159,7 +1159,7 @@ def banner_list(request):
     return render(request, 'adminpanel/banner_list.html', {
         'banners': banners
     })
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.add_mainbanner', raise_exception=True)
 def banner_create(request):
@@ -1175,11 +1175,11 @@ def banner_create(request):
             image=request.FILES.get('image'),
         )
         messages.success(request, "Banner created successfully.")
-        return redirect('vivaan_admin:banner_list')
+        return redirect('destiny_admin:banner_list')
 
     return render(request, 'adminpanel/banner_form.html')
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.change_mainbanner', raise_exception=True)
 def banner_edit(request, pk):
@@ -1199,19 +1199,19 @@ def banner_edit(request, pk):
 
         banner.save()
         messages.success(request, "Banner updated successfully.")
-        return redirect('vivaan_admin:banner_list')
+        return redirect('destiny_admin:banner_list')
 
     return render(request, 'adminpanel/banner_form.html', {'banner': banner})
 
-@login_required(login_url='vivaan_admin:login')
-# @user_passes_test(is_admin, login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
+# @user_passes_test(is_admin, login_url='destiny_admin:login')
 @permission_required('resort.delete_mainbanner', raise_exception=True)
 def banner_delete(request, pk):
     get_object_or_404(MainBanner, pk=pk).delete()
-    return redirect('vivaan_admin:banner_list')
+    return redirect('destiny_admin:banner_list')
 
 # --- Blocked Dates ---
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.view_blockeddate', raise_exception=True)
 def blocked_date_list(request):
@@ -1222,7 +1222,7 @@ def blocked_date_list(request):
 from resort.models import *
 from resort.forms import *
 
-@login_required(login_url="vivaan_admin:login")
+@login_required(login_url="destiny_admin:login")
 # @user_passes_test(is_admin)
 @permission_required('resort.add_blockeddate', raise_exception=True)
 def blocked_date_create(request):
@@ -1248,7 +1248,7 @@ def blocked_date_create(request):
             blocked.full_clean()   # 🔥 THIS WAS MISSING
             blocked.save()
             messages.success(request, "Dates blocked successfully.")
-            return redirect("vivaan_admin:blocked_date_list")
+            return redirect("destiny_admin:blocked_date_list")
     else:
         form = AdminBlockedDateForm()
 
@@ -1258,7 +1258,7 @@ def blocked_date_create(request):
         "blocked_dates": blocked_dates,
     })
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.change_blockeddate', raise_exception=True)
 def blocked_date_edit(request, pk):
@@ -1292,7 +1292,7 @@ def blocked_date_edit(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Blocked date updated.")
-            return redirect("vivaan_admin:blocked_date_list")
+            return redirect("destiny_admin:blocked_date_list")
     else:
         form = AdminBlockedDateForm(instance=blocked_date)
 
@@ -1303,18 +1303,18 @@ def blocked_date_edit(request, pk):
     })
 
 # DELETE
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.delete_blockeddate', raise_exception=True)
 def blocked_date_delete(request, pk):
     blocked = get_object_or_404(BlockedDate, pk=pk)
     blocked.delete()
     messages.success(request, "Blocked date removed.")
-    return redirect('vivaan_admin:blocked_date_list')
+    return redirect('destiny_admin:blocked_date_list')
 # --- Coupons ---
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.view_coupon', raise_exception=True)
 def coupon_list(request):
@@ -1322,7 +1322,7 @@ def coupon_list(request):
     return render(request, "adminpanel/coupon_list.html", {"coupons": coupons})
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.add_coupon', raise_exception=True)
 def coupon_create(request):
@@ -1330,11 +1330,11 @@ def coupon_create(request):
     if form.is_valid():
         form.save()
         messages.success(request, "Coupon created successfully.")
-        return redirect("vivaan_admin:coupon_list")
+        return redirect("destiny_admin:coupon_list")
     return render(request, "adminpanel/coupon_form.html", {"form": form})
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.change_coupon', raise_exception=True)
 def coupon_edit(request, pk):
@@ -1343,24 +1343,24 @@ def coupon_edit(request, pk):
     if form.is_valid():
         form.save()
         messages.success(request, "Coupon updated successfully.")
-        return redirect("vivaan_admin:coupon_list")
+        return redirect("destiny_admin:coupon_list")
     return render(request, "adminpanel/coupon_form.html", {
         "form": form,
         "coupon": coupon
     })
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.delete_coupon', raise_exception=True)
 def coupon_delete(request, pk):
     coupon = get_object_or_404(Coupon, pk=pk)
     coupon.delete()
     messages.success(request, "Coupon deleted.")
-    return redirect("vivaan_admin:coupon_list")
+    return redirect("destiny_admin:coupon_list")
 
 # --- Gallery ---
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.view_gallery', raise_exception=True)
 def gallery_list(request):
@@ -1370,7 +1370,7 @@ def gallery_list(request):
     })
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.add_gallery', raise_exception=True)
 def gallery_create(request):
@@ -1379,14 +1379,14 @@ def gallery_create(request):
     if form.is_valid():
         form.save()
         messages.success(request, "Gallery image added successfully.")
-        return redirect("vivaan_admin:gallery_list")
+        return redirect("destiny_admin:gallery_list")
 
     return render(request, "adminpanel/gallery_form.html", {
         "form": form
     })
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.change_gallery', raise_exception=True)
 def gallery_edit(request, pk):
@@ -1396,7 +1396,7 @@ def gallery_edit(request, pk):
     if form.is_valid():
         form.save()
         messages.success(request, "Gallery image updated successfully.")
-        return redirect("vivaan_admin:gallery_list")
+        return redirect("destiny_admin:gallery_list")
 
     return render(request, "adminpanel/gallery_form.html", {
         "form": form,
@@ -1404,19 +1404,19 @@ def gallery_edit(request, pk):
     })
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.delete_gallery', raise_exception=True)
 def gallery_delete(request, pk):
     photo = get_object_or_404(Gallery, pk=pk)
     photo.delete()
     messages.success(request, "Gallery image deleted.")
-    return redirect("vivaan_admin:gallery_list")
+    return redirect("destiny_admin:gallery_list")
 
 # --- Testimonials ---
 from django.core.paginator import Paginator
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.view_testimonial', raise_exception=True)
 def testimonial_list(request):
@@ -1431,7 +1431,7 @@ def testimonial_list(request):
     })
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.add_testimonial', raise_exception=True)
 def testimonial_create(request):
@@ -1439,14 +1439,14 @@ def testimonial_create(request):
     if form.is_valid():
         form.save()
         messages.success(request, "Testimonial added successfully.")
-        return redirect("vivaan_admin:testimonial_list")
+        return redirect("destiny_admin:testimonial_list")
 
     return render(request, "adminpanel/testimonial_form.html", {
         "form": form
     })
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.change_testimonial', raise_exception=True)
 def testimonial_edit(request, pk):
@@ -1456,7 +1456,7 @@ def testimonial_edit(request, pk):
     if form.is_valid():
         form.save()
         messages.success(request, "Testimonial updated successfully.")
-        return redirect("vivaan_admin:testimonial_list")
+        return redirect("destiny_admin:testimonial_list")
 
     return render(request, "adminpanel/testimonial_form.html", {
         "form": form,
@@ -1464,18 +1464,18 @@ def testimonial_edit(request, pk):
     })
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.delete_testimonial', raise_exception=True)
 def testimonial_delete(request, pk):
     testimonial = get_object_or_404(Testimonial, pk=pk)
     testimonial.delete()
     messages.success(request, "Testimonial deleted.")
-    return redirect("vivaan_admin:testimonial_list")
+    return redirect("destiny_admin:testimonial_list")
 
 # --- Messages & Users (Existing) ---
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.view_contactmessage', raise_exception=True)
 def message_list(request):
@@ -1489,7 +1489,7 @@ def message_list(request):
         'messages': messages_page
     })
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.add_contactmessage', raise_exception=True)
 def message_create(request):
@@ -1503,12 +1503,12 @@ def message_create(request):
             is_read=True  # admin-added messages are read
         )
         messages.success(request, "Message added successfully.")
-        return redirect("vivaan_admin:message_list")
+        return redirect("destiny_admin:message_list")
 
     return render(request, "adminpanel/message_form.html")
 
 # VIEW / DETAIL
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.change_contactmessage', raise_exception=True)
 def message_detail(request, pk):
@@ -1524,19 +1524,19 @@ def message_detail(request, pk):
 
 
 # DELETE
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.delete_contactmessage', raise_exception=True)
 def message_delete(request, pk):
     msg = get_object_or_404(ContactMessage, pk=pk)
     msg.delete()
     messages.success(request, "Message deleted successfully.")
-    return redirect('vivaan_admin:message_list')
+    return redirect('destiny_admin:message_list')
 
 
 
 # LIST
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 def user_list(request):
     users = User.objects.all().order_by('-date_joined')
@@ -1544,7 +1544,7 @@ def user_list(request):
 
 
 # CREATE
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 @user_passes_test(is_admin)
 def user_create(request):
     if request.method == 'POST':
@@ -1555,7 +1555,7 @@ def user_create(request):
 
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists.")
-            return redirect('vivaan_admin:user_create')
+            return redirect('destiny_admin:user_create')
 
         user = User.objects.create_user(
             username=username,
@@ -1571,13 +1571,13 @@ def user_create(request):
 
         user.save()
         messages.success(request, f"User {username} created successfully.")
-        return redirect('vivaan_admin:user_list')
+        return redirect('destiny_admin:user_list')
 
     return render(request, 'adminpanel/user_form.html')
 
 
 # EDIT
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 @user_passes_test(is_admin)
 def user_edit(request, pk):
     user = get_object_or_404(User, pk=pk)
@@ -1602,13 +1602,13 @@ def user_edit(request, pk):
 
         user.save()
         messages.success(request, "User updated successfully.")
-        return redirect('vivaan_admin:user_list')
+        return redirect('destiny_admin:user_list')
 
     return render(request, 'adminpanel/user_form.html', {'edit_user': user})
 
 
 # DELETE
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 @user_passes_test(is_admin)
 def user_delete(request, pk):
     user = get_object_or_404(User, pk=pk)
@@ -1619,7 +1619,7 @@ def user_delete(request, pk):
         user.delete()
         messages.success(request, "User deleted successfully.")
 
-    return redirect('vivaan_admin:user_list')
+    return redirect('destiny_admin:user_list')
 
 
 
@@ -1639,7 +1639,7 @@ def user_delete(request, pk):
 from blog.models import Blog, BlogCategory, BlogTag, BlogComment
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('blog.view_blogcategory', raise_exception=True)
 def blog_category_list(request):
@@ -1647,7 +1647,7 @@ def blog_category_list(request):
     return render(request, 'adminpanel/blog/category_list.html', {
         'categories': categories
     })
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('blog.add_blogcategory', raise_exception=True)
 def blog_category_add(request):
@@ -1663,10 +1663,10 @@ def blog_category_add(request):
         )
 
         messages.success(request, "Blog category added successfully.")
-        return redirect('vivaan_admin:blog_category_list')
+        return redirect('destiny_admin:blog_category_list')
 
     return render(request, 'adminpanel/blog/category_add_edit.html')
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('blog.change_blogcategory', raise_exception=True)
 def blog_category_edit(request, pk):
@@ -1680,23 +1680,23 @@ def blog_category_edit(request, pk):
         category.save()
 
         messages.success(request, "Blog category updated successfully.")
-        return redirect('vivaan_admin:blog_category_list')
+        return redirect('destiny_admin:blog_category_list')
 
     return render(request, 'adminpanel/blog/category_add_edit.html', {
         'category': category
     })
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('blog.delete_blogcategory', raise_exception=True)
 def blog_category_delete(request, pk):
     get_object_or_404(BlogCategory, pk=pk).delete()
     messages.success(request, "Blog category deleted.")
-    return redirect('vivaan_admin:blog_category_list')
+    return redirect('destiny_admin:blog_category_list')
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('blog.view_blog', raise_exception=True)
 def blog_list(request):
@@ -1705,7 +1705,7 @@ def blog_list(request):
         'blogs': blogs
     })
     
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('blog.add_blog', raise_exception=True)
 def blog_add(request):
@@ -1738,10 +1738,10 @@ def blog_add(request):
             blog.save()
 
         messages.success(request, "Blog created successfully.")
-        return redirect('vivaan_admin:blog_list')
+        return redirect('destiny_admin:blog_list')
 
     return render(request, 'adminpanel/blog/blog_form.html')
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('blog.change_blog', raise_exception=True)
 def blog_edit(request, pk):
@@ -1771,7 +1771,7 @@ def blog_edit(request, pk):
         blog.save()
 
         messages.success(request, "Blog updated successfully.")
-        return redirect('vivaan_admin:blog_list')
+        return redirect('destiny_admin:blog_list')
 
     return render(request, 'adminpanel/blog/blog_form.html', {
         'blog': blog
@@ -1779,16 +1779,16 @@ def blog_edit(request, pk):
 
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('blog.delete_blog', raise_exception=True)
 def blog_delete(request, pk):
     get_object_or_404(Blog, pk=pk).delete()
     messages.success(request, "Blog deleted.")
-    return redirect('vivaan_admin:blog_list')
+    return redirect('destiny_admin:blog_list')
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('blog.view_blogcomment', raise_exception=True)
 def blog_comment_list(request):
@@ -1798,7 +1798,7 @@ def blog_comment_list(request):
     })
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('blog.add_blogcomment', raise_exception=True)
 def blog_comment_approve(request, pk):
@@ -1806,14 +1806,14 @@ def blog_comment_approve(request, pk):
     comment.is_approved = True
     comment.save()
     messages.success(request, "Comment approved.")
-    return redirect('vivaan_admin:blog_comment_list')
-@login_required(login_url='vivaan_admin:login')
+    return redirect('destiny_admin:blog_comment_list')
+@login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('blog.delete_blogcomment', raise_exception=True)
 def blog_comment_delete(request, pk):
     get_object_or_404(BlogComment, pk=pk).delete()
     messages.success(request, "Comment deleted.")
-    return redirect('vivaan_admin:blog_comment_list')
+    return redirect('destiny_admin:blog_comment_list')
 
 
 
@@ -1824,7 +1824,7 @@ def blog_comment_delete(request, pk):
 
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 @permission_required('resort.view_offer', raise_exception=True)
 def offer_list(request):
 
@@ -1890,7 +1890,7 @@ def offer_create(request):
 
 
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 @permission_required('resort.change_offer', raise_exception=True)
 def offer_edit(request, pk):
 
@@ -1951,7 +1951,7 @@ def offer_edit(request, pk):
         'offer': offer,
         'offer_dates': offer_dates   # 🔥 THIS WAS MISSING
     })
-# @login_required(login_url='vivaan_admin:login')
+# @login_required(login_url='destiny_admin:login')
 # @permission_required('resort.add_offer', raise_exception=True)
 # def offer_create(request):
 
@@ -1965,7 +1965,7 @@ def offer_edit(request, pk):
 
 #     return render(request, 'adminpanel/offer/form.html', {'form': form})
 
-# @login_required(login_url='vivaan_admin:login')
+# @login_required(login_url='destiny_admin:login')
 # @permission_required('resort.change_offer', raise_exception=True)
 # def offer_edit(request, pk):
 
@@ -1981,14 +1981,14 @@ def offer_edit(request, pk):
 
 #     return render(request, 'adminpanel/offer/form.html', {'form': form})
 
-@login_required(login_url='vivaan_admin:login')
+@login_required(login_url='destiny_admin:login')
 @permission_required('resort.delete_offer', raise_exception=True)
 def offer_delete(request, pk):
 
     offer = get_object_or_404(Offer, pk=pk)
     offer.delete()
 
-    return redirect('vivaan_admin:offerlist')
+    return redirect('destiny_admin:offerlist')
 
 
 
@@ -2010,7 +2010,7 @@ def group_create(request):
         group = Group.objects.create(name=name)
         group.permissions.set(perms)
 
-        return redirect("vivaan_admin:group_list")
+        return redirect("destiny_admin:group_list")
 
     return render(request, "adminpanel/group/group_form.html", {
         "permissions": permissions
@@ -2028,7 +2028,7 @@ def group_create(request):
         group = Group.objects.create(name=name)
         group.permissions.set(perms)
 
-        return redirect("vivaan_admin:group_list")
+        return redirect("destiny_admin:group_list")
 
     return render(request, "adminpanel/group/group_form.html", {
         "permissions": permissions
@@ -2038,7 +2038,7 @@ def group_create(request):
 def group_delete(request, pk):
     group = get_object_or_404(Group, pk=pk)
     group.delete()
-    return redirect("vivaan_admin:group_list")
+    return redirect("destiny_admin:group_list")
 
 
 @login_required
@@ -2053,7 +2053,7 @@ def group_edit(request, pk):
         group.permissions.set(perms)
         group.save()
 
-        return redirect("vivaan_admin:group_list")
+        return redirect("destiny_admin:group_list")
 
     return render(request, "adminpanel/group/group_form.html", {
         "group": group,
@@ -2083,7 +2083,7 @@ def user_permission_assign(request, user_id):
         user.groups.set(selected_groups)
         user.user_permissions.set(selected_perms)
 
-        return redirect("vivaan_admin:user_list")
+        return redirect("destiny_admin:user_list")
 
     return render(request, "adminpanel/user_permission_form.html", {
         "user": user,
@@ -2112,7 +2112,7 @@ def user_permission_assign(request, user_id):
 #         # Assign individual permissions
 #         user.user_permissions.set(selected_perms)
 
-#         return redirect("vivaan_admin:user_list")
+#         return redirect("destiny_admin:user_list")
 
 #     return render(request, "adminpanel/user_permission_form.html", {
 #         "user": user,

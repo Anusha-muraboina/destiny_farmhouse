@@ -28,11 +28,11 @@
         </td>
         <td>
             {% if not c.is_approved %}
-            <a href="{% url 'vivaan_admin:blog_comment_approve' c.id %}"
+            <a href="{% url 'destiny_admin:blog_comment_approve' c.id %}"
                class="btn btn-sm btn-success">Approve</a>
             {% endif %}
 
-            <a href="{% url 'vivaan_admin:blog_comment_delete' c.id %}"
+            <a href="{% url 'destiny_admin:blog_comment_delete' c.id %}"
                class="btn btn-sm btn-danger"
                onclick="return confirm('Delete comment?')">
                Delete

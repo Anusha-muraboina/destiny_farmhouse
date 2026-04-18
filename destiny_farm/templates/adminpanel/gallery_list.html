@@ -36,7 +36,7 @@
 <div class="card">
     <div class="card-header">
         <h2>Photo Gallery</h2>
-        <a href="{% url 'vivaan_admin:gallery_create' %}" class="btn-action btn-view"><i class="fa-solid fa-plus"></i>
+        <a href="{% url 'destiny_admin:gallery_create' %}" class="btn-action btn-view"><i class="fa-solid fa-plus"></i>
             Add Photo</a>
     </div>
     <div class="table-responsive">
@@ -63,18 +63,18 @@
                  
                 <td>
                     <div class="gallery-actions">
-    <a href="{% url 'vivaan_admin:gallery_edit' photo.id %}" class="btn-view btn-sm">
+    <a href="{% url 'destiny_admin:gallery_edit' photo.id %}" class="btn-view btn-sm">
         Edit
     </a>
 
-    <a href="{% url 'vivaan_admin:gallery_delete' photo.id %}"
+    <a href="{% url 'destiny_admin:gallery_delete' photo.id %}"
        class="btn-delete btn-sm"
        onclick="return confirm('Delete this photo?');">
         Delete
     </a>
 </div>
 
-                    {% comment %} <a href="{% url 'vivaan_admin:gallery_delete' photo.id %}" class="btn-action btn-delete"
+                    {% comment %} <a href="{% url 'destiny_admin:gallery_delete' photo.id %}" class="btn-action btn-delete"
                         onclick="return confirm('Delete?');">Delete</a>
                     
                     </td> {% endcomment %}

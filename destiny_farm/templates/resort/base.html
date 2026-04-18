@@ -67,82 +67,6 @@
     </script>
    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 
-    {% comment %} <meta name="robots" content="noindex, nofollow"> {% endcomment %}
-
-
-
-
-
-
-
-{% comment %} <meta name="google-site-verification" content="google897de87a6140d20a" /> {% endcomment %}
-
-{% comment %} {% block robots %}
-<meta name="robots" content="noindex, nofollow">
-{% endblock %}
-
-
-
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-54HFYP7FG7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-54HFYP7FG7');
-</script>
-
-  {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-<title>
-{% block title %}
-{{ seo_title|default:"Destany Farm – Elkatta, Hyderabad" }}
-{% endblock %}
-</title>
-
-<meta name="description"
-      content="{{ seo_description|default:'Luxury farmhouse stay in Hyderabad with valley views, private stay and peaceful nature.' }}">
-
-<meta name="keywords"
-      content="{{ seo_keywords|default:'farmhouse in hyderabad, luxury farmhouse, weekend stay hyderabad' }}">
-
-
-
-{% block canonical %}
-<link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
-{% endblock %}
-
-
-  
-    <link rel="icon" type="image/x-icon" href="{% static 'images/vivaan_favicon.jpeg' %}" type="image/png" >
-
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-/>
-
-    
-    <script src="https://cdn.tailwindcss.com" defer></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" as="style">
-
-        <link
-  href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
-  rel="stylesheet">
-
-  
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> {% endcomment %}
-
-
     {% block meta %}{% endblock %}
 
     {% block extra_css %}{% endblock %}
@@ -162,7 +86,7 @@
      <a href="{% url 'home' %}">
                 <img src="{% static 'images/destiny_logo.jpeg' %}"
                      alt="Destany Farm"
-                     class="h-16 rounded-full">
+                     class="h-16 ">
             </a>
 
                 <!-- Desktop Menu -->
@@ -279,7 +203,7 @@
 
 <!-- Offcanvas Menu -->
 <div id="offcanvasMenu"
-     class="fixed top-0 left-0 h-full w-72 bg-emerald-800 z-50
+     class="fixed top-0 left-0 h-full w-72 bg-[#0D47A1] z-50
             transform -translate-x-full transition-transform duration-300 ease-in-out">
 
   <!-- Header -->
@@ -397,12 +321,12 @@
                 <div>
                     <p class="text-xl font-semibold mb-4">Contact Info</p>
                     <ul class="space-y-3 text-white">
-                        <li><i class="fas fa-map-marker-alt mr-2 text-white-900"></i>Elkatta, Hyderabad, India
+                        <li><i class="fas fa-map-marker-alt mr-2 text-white-900"></i>Hayat Nagar, Rajendranagar mandal, Hyderabad, Telangana 501218 ,India
                         </li>
                         <li><i class="fas fa-phone mr-2 text-white-900"></i>+91 96668 58675</li>
-                        <li><i class="fas fa-envelope mr-2 text-white-900"></i>info@vivaanfarmhouse.com</li>
+                        <li><i class="fas fa-envelope mr-2 text-white-900"></i>destanyfarm@gmail.com</li>
 
-                        <li><i class="fas fa-clock mr-2 text-white-900"></i>24/7 Available</li>
+                        <li><i class="fas fa-clock mr-2 text-white-900"></i>11AM-10PM Available</li>
                     </ul>
                 </div>
             </div>
