@@ -683,7 +683,7 @@ def admin_booking_create(request):
         import requests
 
         # ✅ LOCAL URL (VERY IMPORTANT)
-        url = "http://127.0.0.1:9000/bookings/blocked-dates/65/"
+        url = "http://127.0.0.1:9000/bookings/blocked-dates/72/"
 
         res = requests.get(url, timeout=5)
 

@@ -442,7 +442,7 @@ def room_detail(request, slug):
 
     try:
         from django.conf import settings
-        external_url = "https://farmhouseshyderabad.com/bookings/blocked-dates/65/" if settings.DEBUG else "https://farmhouseshyderabad.com/bookings/blocked-dates/65/"
+        external_url = "https://farmhouseshyderabad.com/bookings/blocked-dates/72/" if settings.DEBUG else "https://farmhouseshyderabad.com/bookings/blocked-dates/72/"
         res = requests.get(external_url, timeout=5)
 
         if res.status_code == 200:
@@ -1102,7 +1102,7 @@ def blocked_dates_api_vivaan(request):
 
         # ✅ USE LOCAL OR PRODUCTION BASED ON ENV
         # hyd_url = "http://127.0.0.1:9000/bookings/api/blocked-dates/65/"
-        hyd_url = "https://farmhouseshyderabad.com/bookings/api/blocked-dates/65/"
+        hyd_url = "https://farmhouseshyderabad.com/bookings/api/blocked-dates/72/"
 
         res = requests.get(hyd_url, timeout=5)
 
@@ -1229,7 +1229,7 @@ from .models import Booking
 
 def export_ical(request):
     cal = Calendar()
-    cal.add('prodid', '-//Vivaan Farmhouse//')
+    cal.add('prodid', '-//Destany Farmhouse//')
     cal.add('version', '2.0')
 
     # =========================

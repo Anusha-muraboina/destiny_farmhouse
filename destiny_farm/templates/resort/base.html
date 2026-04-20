@@ -31,10 +31,10 @@
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
 
     <!-- 6️⃣ Google Site Verification -->
-    <meta name="google-site-verification" content="google897de87a6140d20a" />
+    {% comment %} <meta name="google-site-verification" content="google897de87a6140d20a" /> {% endcomment %}
 
     <!-- 7️⃣ Favicon -->
-    <link rel="icon" href="{% static 'images/vivaan_favicon.jpeg' %}">
+    <link rel="icon" href="{% static 'images/destiny_logo.jpeg' %}">
 
     <!-- 8️⃣ Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,6 +56,8 @@
     <!-- 1️⃣1️⃣ Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
           rel="stylesheet">
+
+          <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <!-- 1️⃣2️⃣ Google Analytics (LAST in head) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-54HFYP7FG7"></script>
@@ -83,11 +85,30 @@
                 </a> {% endcomment %}
 {% load static %}
 
-     <a href="{% url 'home' %}">
+<a href="{% url 'home' %}" class="flex items-center gap-2">
+    
+    <!-- Logo -->
+    <img src="{% static 'images/destiny_logo.jpeg' %}"
+         alt="Destany Farm"
+         class="h-14 sm:h-16">
+
+    <!-- Text -->
+    <div class="flex flex-col leading-tight md:hidden font-[Poppins]">
+        <span class="text-sm sm:text-lg font-bold text-white">
+            Destany
+        </span>
+         <span class="text-lg text-white">
+           Farmhouse
+        </span> 
+    </div>
+
+</a>
+
+     {% comment %} <a href="{% url 'home' %}">
                 <img src="{% static 'images/destiny_logo.jpeg' %}"
                      alt="Destany Farm"
-                     class="h-16 ">
-            </a>
+                     class="h-20">
+            </a> {% endcomment %}
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8">
