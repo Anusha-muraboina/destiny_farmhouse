@@ -34,7 +34,7 @@
     {% comment %} <meta name="google-site-verification" content="google897de87a6140d20a" /> {% endcomment %}
 
     <!-- 7️⃣ Favicon -->
-    <link rel="icon" href="{% static 'images/destiny_logo.jpeg' %}">
+    <link rel="icon" href="{% static 'images/destinylogo.png' %}">
 
     <!-- 8️⃣ Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,19 +88,19 @@
 <a href="{% url 'home' %}" class="flex items-center gap-2">
     
     <!-- Logo -->
-    <img src="{% static 'images/destiny_logo.jpeg' %}"
+    <img src="{% static 'images/destinylogo.png' %}"
          alt="Destany Farm"
          class="h-14 sm:h-16">
 
     <!-- Text -->
-    <div class="flex flex-col leading-tight md:hidden font-[Poppins]">
+    {% comment %} <div class="flex flex-col leading-tight md:hidden font-[Poppins]">
         <span class="text-sm sm:text-lg font-bold text-white">
             Destany
         </span>
          <span class="text-lg text-white">
            Farmhouse
         </span> 
-    </div>
+    </div> {% endcomment %}
 
 </a>
 
