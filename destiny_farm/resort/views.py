@@ -79,7 +79,7 @@ def home(request):
             )
 
             user_email = EmailMultiAlternatives(
-                subject="Thank you for contacting Vivaan Farmhouse",
+                subject="Thank you for contacting Destany Farmhouse",
                 body="",
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=[contact_msg.email],
@@ -120,7 +120,7 @@ def home(request):
         'gallery_images': gallery_images,
         
                 # ✅ SEO DATA
-        "seo_title": seo_banner.page_title if seo_banner and seo_banner.page_title else "Vivaan Farmhouse – Elkatta, Hyderabad",
+        "seo_title": seo_banner.page_title if seo_banner and seo_banner.page_title else "Destany Farmhouse –  Hyderabad",
         "seo_description": seo_banner.meta_description if seo_banner else "",
         "seo_keywords": seo_banner.meta_keyword if seo_banner else "",
     }
@@ -303,7 +303,7 @@ def send_booking_emails(booking, old_status=None):
 
     # ================= PAYMENT FAILED =================
     if booking.payment_status == "failed":
-        user_subject = "Payment Failed – Vivaan Farmhouse"
+        user_subject = "Payment Failed – Destany Farmhouse"
         user_template = "emails/payment_failed_user.html"
 
     # ================= FARMHOUSE BOOKING CREATED =================
@@ -321,7 +321,7 @@ def send_booking_emails(booking, old_status=None):
         and old_status == "pending"
         and booking.status == "confirmed"
     ):
-        user_subject = "Booking Confirmed – Vivaan Farmhouse"
+        user_subject = "Booking Confirmed – Destany Farmhouse"
         user_template = "emails/user_booking_email.html"
 
     # ================= PARTIAL PAYMENT =================
@@ -344,7 +344,7 @@ def send_booking_emails(booking, old_status=None):
 
     # ================= CANCELLED =================
     elif old_status != booking.status and booking.status == "cancelled":
-        user_subject = "Booking Cancelled – Vivaan Farmhouse"
+        user_subject = "Booking Cancelled – Destany Farmhouse"
         user_template = "emails/booking_cancelled_user.html"
 
     # ================= SEND USER EMAIL =================
@@ -353,7 +353,7 @@ def send_booking_emails(booking, old_status=None):
 
         email = EmailMultiAlternatives(
             subject=user_subject,
-            body="Booking update from Vivaan Farmhouse",
+            body="Booking update from Destany Farmhouse",
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=[booking.guest_email],
         )
@@ -595,10 +595,10 @@ def room_detail(request, slug):
             "razorpay": True,
             "amount": float(pay_now)
         })
-    seo_title = f"{room_category.name} | Vivaan Farmhouse"
+    seo_title = f"{room_category.name} | Destany Farmhouse"
 
     seo_description = (
-        f"Book {room_category.name} at Vivaan Farmhouse. "
+        f"Book {room_category.name} at Destany Farmhouse. "
         f"Enjoy a private luxury farmhouse stay with premium amenities, "
         f"perfect for family outings, weekend getaways, and celebrations."
     )
@@ -855,9 +855,9 @@ def booking_confirmation(request, booking_id):
 def cancel_booking(request):
         # ✅ SEO (works with your base.html)
     seo_context = {
-        "seo_title": "Cancel Booking Online | Vivaan Farmhouse",
+        "seo_title": "Cancel Booking Online | Destany Farmhouse",
         "seo_description": (
-            "Cancel your Vivaan Farmhouse booking online easily. "
+            "Cancel your Destany Farmhouse booking online easily. "
             "Check cancellation policy, refund eligibility, and manage your reservation securely."
         ),
        
@@ -891,11 +891,11 @@ def cancel_booking(request):
                     
                     Reason: {booking.cancellation_reason}
 
-                    We hope to greet you at Vivaan Farmhouse in the future.
+                    We hope to greet you at Destany Farmhouse in the future.
 
 
                     Regards,
-                    Vivaan Farmhouse Team
+                    Destany Farmhouse Team
                     """
                     send_mail(
                         subject, 
@@ -936,9 +936,9 @@ def leave_review(request):
         'reviews': reviews,
         'form': form,
                 # ✅ SEO
-        "seo_title": "Guest Reviews & Ratings | Vivaan Farmhouse",
+        "seo_title": "Guest Reviews & Ratings | Destany Farmhouse",
         "seo_description": (
-            "Read real guest reviews of Vivaan Farmhouse. "
+            "Read real guest reviews of Destany Farmhouse. "
             "See customer experiences, ratings, and share your stay feedback online."
         ),
     }
@@ -1072,7 +1072,7 @@ def vivaan_receive_booking(request):
 @permission_classes([AllowAny])
 def blocked_dates_api_vivaan(request):
     """
-    Blocked dates API for Vivaan Farmhouse calendar
+    Blocked dates API for Destany Farmhouse calendar
     """
     disabled_dates = set()
 

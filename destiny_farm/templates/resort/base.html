@@ -14,7 +14,7 @@
     <!-- 3️⃣ Title -->
     <title>
     {% block title %}
-    {{ seo_title|default:"Destany Farm – Elkatta, Hyderabad" }}
+    {{ seo_title|default:"Destany Farm –  Hyderabad" }}
     {% endblock %}
     </title>
 
@@ -57,16 +57,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
           rel="stylesheet">
 
-          <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <!-- 1️⃣2️⃣ Google Analytics (LAST in head) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-54HFYP7FG7"></script>
+    {% comment %} <script async src="https://www.googletagmanager.com/gtag/js?id=G-54HFYP7FG7"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-54HFYP7FG7');
-    </script>
+    </script> {% endcomment %}
    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 
     {% block meta %}{% endblock %}
@@ -77,8 +76,8 @@
 <body class="bg-white-50">
    
     <!-- Navigation -->
-    <nav class="navbar-glass bg-[#0D47A1] md:px-14 px-4 sticky top-0 z-50 shadow-md">
-        <div class=" px-4">
+    <nav class="navbar-glass bg-[#0D47A1] md:px-8 px-2 sticky top-0 z-50 shadow-md">
+        <div class=" px-2">
             <div class="flex justify-between items-center py-2">
                 {% comment %} <a href="{% url 'home' %}" class="text-3xl font-bold text-red-900">
                   Resort
@@ -88,20 +87,16 @@
 <a href="{% url 'home' %}" class="flex items-center gap-2">
     
     <!-- Logo -->
-    <img src="{% static 'images/destinylogo.png' %}"
+
+
+
+    <img src="{% static 'images/destiny_logo.jpeg' %}"
          alt="Destany Farm"
-         class="h-14 sm:h-16">
-
-    <!-- Text -->
-    {% comment %} <div class="flex flex-col leading-tight md:hidden font-[Poppins]">
-        <span class="text-sm sm:text-lg font-bold text-white">
-            Destany
-        </span>
-         <span class="text-lg text-white">
-           Farmhouse
-        </span> 
-    </div> {% endcomment %}
-
+         class="h-16 hidden md:block">
+        
+        <img src="{% static 'images/destinylogo.png' %}"
+         alt="Destany Farm"  
+         class="h-14   block md:hidden pr-4">
 </a>
 
      {% comment %} <a href="{% url 'home' %}">
