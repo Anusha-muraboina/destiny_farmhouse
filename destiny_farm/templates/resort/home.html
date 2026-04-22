@@ -100,7 +100,8 @@
 <section id="rooms" class="md:py-14 py-4 md:px-14 px-2 ">
     <div class=" px-2">
         <div class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 section-title mb-4">Our Farmhouse</h1>
+            <h1 class="text-4xl md:text-5xl  text-[#45443F] font-[Cinzel,'Palatino Linotype',sans-serif] section-title mb-4   font-semibold 
+               tracking-wide    ">Our Farmhouse</h1>
             <p class="text-gray-600 text-lg max-w-2xl mx-auto">
                Destany Farm is a tranquil natural retreat near shadnagar that provides comfort, natural beauty, and the ideal getaway from city life
             </p>
@@ -139,13 +140,13 @@
                     <div class="flex items-center justify-between mt-4">
     
     <!-- Left: Price -->
-    <p class="text-xl font-bold text-[#0D47A1]">
+    <p class="text-xl font-bold text-yellow-900">
         ₹{{ room.base_price|floatformat:0 }} / night
     </p>
 
     <!-- Right: Button -->
     <a href="{% url 'room_detail' room.slug %}"
-        class="bg-[#0D47A1] text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-900 transition">
+        class="bg-yellow-900 text-white px-6 py-2 rounded-lg font-semibold hover:bg-yellow-800 transition">
         View Details
     </a>
 
@@ -569,7 +570,7 @@
 
         <button
           type="submit" aria-label="Send message"
-          class="w-full bg-[#0D47A1] hover:bg-[#0D47A1]
+          class="w-full bg-yellow-900 hover:bg-yellow-800
                  text-white font-bold py-3 rounded-lg mt-4 transition">
           Send Message
         </button>
@@ -593,12 +594,12 @@
             Terms & Conditions
           </h3>
 
-          <p class="text-gray-600 mb-4">
+          <p class="text-gray-800 mb-4">
             You are making a booking directly with <strong>Destany Farm</strong>.
             Please read the following terms carefully before confirming your booking.
           </p>
 
-          <ul class="space-y-4 text-gray-600 list-disc list-inside">
+          <ul class="space-y-4 text-gray-800 list-disc list-inside">
             <li>
               All bookings are subject to availability and confirmation.
             </li>
@@ -632,12 +633,12 @@
             Privacy Policy
           </h3>
 
-          <p class="text-gray-600 mb-4">
+          <p class="text-gray-800 mb-4">
             This privacy policy explains how <strong>Destany Farm</strong> uses and protects
             any information that guest(s) provide when using this website.
           </p>
 
-          <div class="space-y-4 text-gray-600">
+          <div class="space-y-4 text-gray-800">
             <p>
               We are committed to ensuring that your privacy is protected. Any personal information
               collected will only be used in accordance with this privacy policy.

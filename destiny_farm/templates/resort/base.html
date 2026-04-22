@@ -53,6 +53,9 @@
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
+
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
     <!-- 1️⃣1️⃣ Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
           rel="stylesheet">
@@ -67,7 +70,7 @@
       gtag('config', 'G-54HFYP7FG7');
     </script> {% endcomment %}
    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
-
+   
     {% block meta %}{% endblock %}
 
     {% block extra_css %}{% endblock %}
@@ -76,7 +79,7 @@
 <body class="bg-white-50">
    
     <!-- Navigation -->
-    <nav class="navbar-glass bg-[#0D47A1] md:px-8 px-2 sticky top-0 z-50 shadow-md">
+    <nav class="navbar-glass bg-white md:px-8 px-2 sticky top-0 z-50 shadow-md">
         <div class=" px-2">
             <div class="flex justify-between items-center py-2">
                 {% comment %} <a href="{% url 'home' %}" class="text-3xl font-bold text-red-900">
@@ -107,7 +110,7 @@
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="/" class="text-white hover:text-amber-400 font-medium transition">Home</a>
+                    <a href="/" class="text-yellow-700 hover:text-amber-400 font-medium transition">Home</a>
                     {% comment %} <a href="{% url 'home' %}#about"
                         class="text-white hover:text-amber-400 font-medium transition">About</a>
                     <a href="{% url 'home' %}#rooms"
@@ -119,11 +122,11 @@
                         class="text-white hover:text-amber-400 font-medium transition">Gallery</a> 
                     {% endcomment %}
                     {% comment %} <a onclick="scrollToSection('about')" class="text-white cursor-pointer">About</a> {% endcomment %}
-                    <a href="{% url 'home' %}" onclick="setScroll('about')" class="text-white cursor-pointer">About</a>
-                     <a href="{% url 'home' %}" onclick="setScroll('rooms')" class="text-white cursor-pointer">Rooms</a>
+                    <a href="{% url 'home' %}" onclick="setScroll('about')" class="text-yellow-700 cursor-pointer">About</a>
+                     <a href="{% url 'home' %}" onclick="setScroll('rooms')" class="text-yellow-700 cursor-pointer">Rooms</a>
                     {% comment %} <a onclick="scrollToSection('rooms')" class="text-white cursor-pointer">Rooms</a> {% endcomment %}
-                    <a href="{% url 'home' %}" onclick="setScroll('amenities')" class="text-white cursor-pointer">Amenities</a>
-                    <a href="{% url 'home' %}" onclick="setScroll('gallery')" class="text-white cursor-pointer">Gallery</a>
+                    <a href="{% url 'home' %}" onclick="setScroll('amenities')" class="text-yellow-700 cursor-pointer">Amenities</a>
+                    <a href="{% url 'home' %}" onclick="setScroll('gallery')" class="text-yellow-700 cursor-pointer">Gallery</a>
                   
                     
                                     {% comment %} <a href="{% url 'home' %}#reviews" class="text-white hover:text-amber-400 font-medium transition"
@@ -136,7 +139,7 @@
                 <!-- MORE DROPDOWN (HOVER BASED) -->
 <div class="relative group">
   <button
-    class="text-white hover:text-amber-400 font-medium flex items-center gap-1 transition">
+    class="text-yellow-700 hover:text-amber-400 font-medium flex items-center gap-1 transition">
     More
     <i class="fas fa-chevron-down text-xs transition-transform duration-300 group-hover:rotate-180"></i>
   </button>
@@ -156,8 +159,8 @@
 
     <li>
       <a onclick="setScroll('reviews')" href="{% url 'home' %}"
-         class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:bg-[#64B5F6] hover:text-[#0D47A1] transition cursor-pointer">
-        <i class="fas fa-star text-[#0D47A1]"></i>
+         class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:bg-yellow-600 hover:text-white transition cursor-pointer">
+        <i class="fas fa-star text-yellow-700"></i>
         Reviews
       </a> 
 
@@ -170,22 +173,22 @@
         {% comment %} <a onclick="scrollToSection('contact')" class="text-white cursor-pointer">Contact</a> {% endcomment %}
 
       <a onclick="setScroll('contact')" href="{% url 'home' %}"
-         class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:bg-[#64B5F6] hover:text-[#0D47A1] transition cursor-pointer">
-        <i class="fas fa-phone-alt text-[#0D47A1]"></i>
+         class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:bg-yellow-600 hover:text-white transition cursor-pointer">
+        <i class="fas fa-phone-alt text-yellow-700"></i>
         Contact
       </a>
     </li>
        <li>
     <a href="{% url 'blog:blog_list' %}" 
-       class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:bg-[#64B5F6] hover:text-[#0D47A1] transition cursor-pointer">
-       <i class="fas fa-newspaper text-[#0D47A1]"></i>
+       class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:bg-yellow-600 hover:text-white transition cursor-pointer">
+       <i class="fas fa-newspaper text-yellow-700"></i>
         Blog
     </a>
 </li>
     <li>
       <a onclick="setScroll('location')" href="{% url 'home' %}"
-         class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:bg-[#64B5F6] hover:text-[#0D47A1] transition cursor-pointer">
-        <i class="fas fa-map-marker-alt text-[#0D47A1]"></i>
+         class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:bg-yellow-600 hover:text-white transition cursor-pointer">
+        <i class="fas fa-map-marker-alt text-yellow-700"></i>
         Location
       </a>
     </li>
@@ -196,7 +199,7 @@
 
              
 
-                    <a href="{% url 'home' %}#rooms" class="bg-white text-gray-900 px-6 py-2 rounded-full font-semibold">
+                    <a href="{% url 'home' %}#rooms" class="bg-yellow-700 text-white px-6 py-2 rounded-full font-semibold">
                         Book Now
                     </a> 
                 </div>
@@ -242,7 +245,7 @@
     <!-- CTA -->
     <li class="pt-4">
       <a href="#rooms"
-         class="block bg-white text-emerald-800 text-center py-3 rounded-full font-semibold">
+         class="block bg-yellow-800 text-white text-center py-3 rounded-full font-semibold">
         Book Now
       </a>
     </li>
@@ -258,7 +261,7 @@
     {% block content %}{% endblock %}
 
     <!-- Footer -->
-    <footer class=" bg-[#0D47A1] text-white mt-0">
+    <footer class=" bg-yellow-900 text-white mt-0">
             
 
         <div class=" container mx-auto px-4 py-12">
