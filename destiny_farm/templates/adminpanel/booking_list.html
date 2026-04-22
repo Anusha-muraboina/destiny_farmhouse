@@ -380,7 +380,7 @@
 
 
 
-
+{% comment %} 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -472,14 +472,17 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
-</script>
+</script> {% endcomment %}
 
 
 
-{% comment %} <script>
+<script>
+
+
 document.addEventListener("DOMContentLoaded", function () {
-
-    fetch("https://farmhouseshyderabad.com/farmhouse_admin/owner/bookings/lists/", {
+    const FARMHOUSE_SLUG = "destany-farm-shamshabad";
+    {% comment %} fetch("https://farmhouseshyderabad.com/farmhouse_admin/owner/bookings/lists/", { {% endcomment %}
+    fetch(`https://farmhouseshyderabad.com/farmhouse_admin/owner/bookings/lists/?farmhouse=${FARMHOUSE_SLUG}`, {
         method: "GET",
         credentials: "include"
     })
@@ -556,7 +559,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
- {% endcomment %}
+
 
 
 
