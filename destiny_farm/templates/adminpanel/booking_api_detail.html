@@ -301,16 +301,11 @@ fetch(`https://farmhouseshyderabad.com/farmhouse_admin/owner/bookings/detail/{{ 
 });
 }
 
-
-const FARMHOUSE_SLUG = "destany-farm-shamshabad";
 /* UPDATE BOOKING */
 function updateBooking() {
 
-
+    const FARMHOUSE_SLUG = "destany-farm-shamshabad";
 fetch(`https://farmhouseshyderabad.com/farmhouse_admin/owner/bookings/{{ booking_id }}/update/?farmhouse=${FARMHOUSE_SLUG}`, {
-
-{% comment %} fetch(`https://farmhouseshyderabad.com/farmhouse_admin/owner/bookings/{{ booking_id }}/update/`, { {% endcomment %}
-
     method:"PATCH",
     headers:{
         "Content-Type":"application/json",
