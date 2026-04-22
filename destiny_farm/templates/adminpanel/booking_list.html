@@ -381,9 +381,102 @@
 
 
 
-
-
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // 🔥 SET FARMHOUSE SLUG (IMPORTANT)
+    const FARMHOUSE_SLUG = "destany-farm-shamshabad";
+
+    fetch(`https://farmhouseshyderabad.com/farmhouse_admin/owner/bookings/lists/?farmhouse=${FARMHOUSE_SLUG}`, {
+        method: "GET",
+        credentials: "include"
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Unauthorized");
+        return res.json();
+    })
+    .then(data => {
+
+        const tbody = document.getElementById("booking-table-body");
+
+        if (!tbody) {
+            console.error("❌ tbody not found");
+            return;
+        }
+
+        // 🔥 Clear old Django data (IMPORTANT)
+        tbody.innerHTML = "";
+
+        if (!data.results || data.results.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align:center;padding:20px;">
+                        No bookings found
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        data.results.forEach(b => {
+
+            let statusClass = "badge-pending";
+            if (b.status === "confirmed") statusClass = "badge-confirmed";
+            if (b.status === "cancelled") statusClass = "badge-cancelled";
+
+            // 🔥 Format date nicely
+            const createdDate = new Date(b.created_at).toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            });
+
+            const row = `
+                <tr>
+                    <td>
+                        <strong>${b.booking_id}</strong><br>
+                        <small>${createdDate}</small>
+                    </td>
+
+                    <td>
+                        <strong>${b.guest_name}</strong><br>
+                        <small>${b.guest_phone}</small>
+                    </td>
+
+                    <td>
+                        ${b.check_in} → ${b.check_out}
+                    </td>
+
+                    <td>
+                        <span class="badge ${statusClass}">
+                            ${b.status}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${b.payment_status}
+                    </td>
+
+                    <td>
+                        <a href="/destiny_admin/booking-api-detail/${b.id}/" class="btn-action btn-view">View</a>
+                    </td>
+                </tr>
+            `;
+
+            tbody.insertAdjacentHTML("beforeend", row);
+        });
+
+    })
+    .catch(err => {
+        console.error("❌ API error:", err);
+    });
+
+});
+</script>
+
+
+
+{% comment %} <script>
 document.addEventListener("DOMContentLoaded", function () {
 
     fetch("https://farmhouseshyderabad.com/farmhouse_admin/owner/bookings/lists/", {
@@ -463,7 +556,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
-
+ {% endcomment %}
 
 
 
