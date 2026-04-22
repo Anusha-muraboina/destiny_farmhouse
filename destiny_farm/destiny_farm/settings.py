@@ -106,7 +106,7 @@ DATABASES = {
         'NAME': 'destiny_farmhouse',
         'USER': 'destiny_user',
         'PASSWORD': 'destiny@123',
-        'HOST': 'localhost',
+        'HOST': '3.6.87.103',
         'PORT': '3306',
     }
 }
