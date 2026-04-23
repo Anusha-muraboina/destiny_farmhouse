@@ -26,7 +26,14 @@ SECRET_KEY = 'django-insecure-2@=-c@uvh@w(%epw=8%fl3*k!z&mppxqlra9l)#h@z!836quu4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    
+        "destinyfarm4.com",
+    "www.destinyfarm4.com",
+    "3.6.87.103",
+    
+    "127.0.0.1"
+]
 
 # Application definition
 
@@ -223,6 +230,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://127.0.0.1:7000",
     "https://7d0f-2404-1f00-8047-a456-6493-7f2e-f002-8f36.ngrok-free.app",
+    
+        "https://destinyfarm4.com",
+    "https://www.destinyfarm4.com",
 
 ]
 # Default primary key field type
