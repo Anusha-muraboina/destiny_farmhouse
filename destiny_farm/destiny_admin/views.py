@@ -19,7 +19,7 @@ import json
 from resort.forms import AmenityForm 
 from destiny_admin.forms import OfferForm ,GalleryForm ,CouponForm ,AdminBlockedDateForm
 def is_admin(user):
-    return user.is_authenticated and user.is_superuser
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
 
 # --- Auth ---
 def admin_login(request):
@@ -30,7 +30,8 @@ def admin_login(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            if user.is_superuser:
+            # if user.is_superuser:
+            if user.is_staff or user.is_superuser: 
                 login(request, user)
                 return redirect('destiny_admin:dashboard')
             else:
@@ -2017,22 +2018,22 @@ def group_create(request):
     })
     
     
-@login_required
-def group_create(request):
-    permissions = Permission.objects.all()
+# @login_required
+# def group_create(request):
+#     permissions = Permission.objects.all()
 
-    if request.method == "POST":
-        name = request.POST.get("name")
-        perms = request.POST.getlist("permissions")
+#     if request.method == "POST":
+#         name = request.POST.get("name")
+#         perms = request.POST.getlist("permissions")
 
-        group = Group.objects.create(name=name)
-        group.permissions.set(perms)
+#         group = Group.objects.create(name=name)
+#         group.permissions.set(perms)
 
-        return redirect("destiny_admin:group_list")
+#         return redirect("destiny_admin:group_list")
 
-    return render(request, "adminpanel/group/group_form.html", {
-        "permissions": permissions
-    })
+#     return render(request, "adminpanel/group/group_form.html", {
+#         "permissions": permissions
+#     })
     
 @login_required
 def group_delete(request, pk):
@@ -2074,7 +2075,8 @@ def user_permission_assign(request, user_id):
     user_permissions = user.user_permissions.all()
 
     # ✅ GROUP PERMISSIONS (INHERITED)
-    group_permissions = Permission.objects.filter(group__user=user).distinct()
+    # group_permissions = Permission.objects.filter(group__user=user).distinct()
+    group_permissions = Permission.objects.filter(group__in=user.groups.all()).distinct()
 
     if request.method == "POST":
         selected_groups = request.POST.getlist("groups")
