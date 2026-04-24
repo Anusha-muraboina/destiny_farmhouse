@@ -1578,6 +1578,7 @@ def user_create(request):
 
 
 # EDIT
+
 @login_required(login_url='destiny_admin:login')
 @user_passes_test(is_admin)
 def user_edit(request, pk):
@@ -1586,26 +1587,60 @@ def user_edit(request, pk):
     if request.method == 'POST':
         user.username = request.POST.get('username')
         user.email = request.POST.get('email')
+
         role = request.POST.get('role')
 
-        user.is_superuser = False
-        user.is_staff = False
-
+        # 🔥 FIXED LOGIC (DO NOT RESET BLINDLY)
         if role == "superuser":
             user.is_superuser = True
             user.is_staff = True
+
         elif role == "staff":
+            user.is_superuser = False
             user.is_staff = True
+
+        else:
+            user.is_superuser = False
+            user.is_staff = False
 
         password = request.POST.get('password')
         if password:
             user.set_password(password)
 
         user.save()
+
         messages.success(request, "User updated successfully.")
         return redirect('destiny_admin:user_list')
 
     return render(request, 'adminpanel/user_form.html', {'edit_user': user})
+# @login_required(login_url='destiny_admin:login')
+# @user_passes_test(is_admin)
+# def user_edit(request, pk):
+#     user = get_object_or_404(User, pk=pk)
+
+#     if request.method == 'POST':
+#         user.username = request.POST.get('username')
+#         user.email = request.POST.get('email')
+#         role = request.POST.get('role')
+
+#         user.is_superuser = False
+#         user.is_staff = False
+
+#         if role == "superuser":
+#             user.is_superuser = True
+#             user.is_staff = True
+#         elif role == "staff":
+#             user.is_staff = True
+
+#         password = request.POST.get('password')
+#         if password:
+#             user.set_password(password)
+
+#         user.save()
+#         messages.success(request, "User updated successfully.")
+#         return redirect('destiny_admin:user_list')
+
+#     return render(request, 'adminpanel/user_form.html', {'edit_user': user})
 
 
 # DELETE
@@ -1995,11 +2030,22 @@ def offer_delete(request, pk):
 
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import Group, Permission
+from django.contrib.auth import get_user_model
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
+User = get_user_model()
+
+
+# ================= GROUP LIST =================
 @login_required
 def group_list(request):
     groups = Group.objects.all()
     return render(request, "adminpanel/group/group_list.html", {"groups": groups})
+
+
+# ================= GROUP CREATE =================
 @login_required
 def group_create(request):
     permissions = Permission.objects.all()
@@ -2008,40 +2054,22 @@ def group_create(request):
         name = request.POST.get("name")
         perms = request.POST.getlist("permissions")
 
+        # ✅ Convert IDs → int
+        perms = list(map(int, perms)) if perms else []
+
         group = Group.objects.create(name=name)
-        group.permissions.set(perms)
+
+        perms_qs = Permission.objects.filter(id__in=perms)
+        group.permissions.set(perms_qs)
 
         return redirect("destiny_admin:group_list")
 
     return render(request, "adminpanel/group/group_form.html", {
         "permissions": permissions
     })
-    
-    
-# @login_required
-# def group_create(request):
-#     permissions = Permission.objects.all()
-
-#     if request.method == "POST":
-#         name = request.POST.get("name")
-#         perms = request.POST.getlist("permissions")
-
-#         group = Group.objects.create(name=name)
-#         group.permissions.set(perms)
-
-#         return redirect("destiny_admin:group_list")
-
-#     return render(request, "adminpanel/group/group_form.html", {
-#         "permissions": permissions
-#     })
-    
-@login_required
-def group_delete(request, pk):
-    group = get_object_or_404(Group, pk=pk)
-    group.delete()
-    return redirect("destiny_admin:group_list")
 
 
+# ================= GROUP EDIT =================
 @login_required
 def group_edit(request, pk):
     group = get_object_or_404(Group, pk=pk)
@@ -2051,52 +2079,89 @@ def group_edit(request, pk):
         group.name = request.POST.get("name")
         perms = request.POST.getlist("permissions")
 
-        group.permissions.set(perms)
-        group.save()
+        perms = list(map(int, perms)) if perms else []
 
+        perms_qs = Permission.objects.filter(id__in=perms)
+        group.permissions.set(perms_qs)
+
+        group.save()
         return redirect("destiny_admin:group_list")
 
     return render(request, "adminpanel/group/group_form.html", {
         "group": group,
         "permissions": permissions
     })
-    
+
+
+# ================= GROUP DELETE =================
+@login_required
+def group_delete(request, pk):
+    group = get_object_or_404(Group, pk=pk)
+    group.delete()
+    return redirect("destiny_admin:group_list")
+
+
+# ================= USER PERMISSION ASSIGN =================
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 @login_required
 def user_permission_assign(request, user_id):
-
-    user = get_object_or_404(User, id=user_id)
-
+   
+    # 🔥 IMPORTANT CHANGE
+    target_user = get_object_or_404(User, id=user_id)
+    print("URL USER ID:", user_id)
+    print("TARGET USER FROM DB:", target_user.username)
+    print("LOGGED-IN USER:", request.user.username)
     groups = Group.objects.all()
     permissions = Permission.objects.all()
 
-    # ✅ USER CURRENT
-    user_groups = user.groups.all()
-    user_permissions = user.user_permissions.all()
-
-    # ✅ GROUP PERMISSIONS (INHERITED)
-    # group_permissions = Permission.objects.filter(group__user=user).distinct()
-    group_permissions = Permission.objects.filter(group__in=user.groups.all()).distinct()
+    user_groups = target_user.groups.all()
+    user_permissions = target_user.user_permissions.all()
 
     if request.method == "POST":
+
         selected_groups = request.POST.getlist("groups")
         selected_perms = request.POST.getlist("permissions")
 
-        user.groups.set(selected_groups)
-        user.user_permissions.set(selected_perms)
+        print("TARGET USER:", target_user.username)
+        print("LOGGED USER:", request.user.username)
+
+        # ✅ convert to int safely
+        selected_groups = [int(i) for i in selected_groups if i.isdigit()]
+        selected_perms = [int(i) for i in selected_perms if i.isdigit()]
+
+        print("GROUP IDS:", selected_groups)
+        print("PERM IDS:", selected_perms)
+
+        # ✅ fetch queryset
+        groups_qs = Group.objects.filter(id__in=selected_groups)
+        perms_qs = Permission.objects.filter(id__in=selected_perms)
+
+        print("GROUP QS:", list(groups_qs))
+        print("PERM QS:", list(perms_qs))
+
+        # 🔥 APPLY ONLY TO TARGET USER
+        target_user.groups.set(groups_qs)
+        target_user.user_permissions.set(perms_qs)
+
+        # 🔥 refresh (clears cache)
+        target_user = User.objects.get(pk=target_user.pk)
+
+        print("AFTER SAVE:", list(target_user.user_permissions.all()))
 
         return redirect("destiny_admin:user_list")
 
     return render(request, "adminpanel/user_permission_form.html", {
-        "user": user,
+        "user": target_user,
         "groups": groups,
         "permissions": permissions,
         "user_groups": user_groups,
         "user_permissions": user_permissions,
-        "group_permissions": group_permissions,
     })
-
-
+    
+    
+    
 # @login_required
 # def user_permission_assign(request, user_id):
 

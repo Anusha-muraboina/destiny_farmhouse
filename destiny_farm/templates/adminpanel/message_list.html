@@ -50,9 +50,11 @@
 <div class="card">
     <div class="card-header flex-between">
         <h2>Inbox Messages</h2>
+        {% if perms.resort.add_contactmessage %}
             <a href="{% url 'destiny_admin:message_create' %}" class="bg-[#78350f] text-white md:p-2 p-1 rounded">
         + Add Message
     </a>
+     {% endif %}
     </div>
 <div class="table-responsive">
     <table class="admin-table">
@@ -84,14 +86,18 @@
                 </td>
                 <td>{{ msg.created_at|date:"M d, Y H:i" }}</td>
                 <td>
+
                     <a href="{% url 'destiny_admin:message_detail' msg.id %}" class="btn-sm btn-view">
                         View
                     </a>
+
+                    {% if perms.resort.delete_contactmessage %}
                     <a href="{% url 'destiny_admin:message_delete' msg.id %}"
                        class="btn-sm btn-delete"
                        onclick="return confirm('Delete this message?');">
                         Delete
                     </a>
+                     {% endif %}
                 </td>
             </tr>
         {% empty %}

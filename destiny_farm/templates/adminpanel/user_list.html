@@ -50,13 +50,13 @@
                         <span class="badge badge-user">User</span>
                     {% endif %}
                 </td>
-                            <td>
-                <a href="{% url 'destiny_admin:user_permissions' user.id %}" class="btn btn-perm">
+                            {% comment %} <td>
+                <a href="{% url 'destiny_admin:user_permissions' u.id %}" class="btn btn-perm">
                     Assign Permissions
                 </a>
-            </td>
+            </td> {% endcomment %}
                 <td>{{ u.date_joined|date:"M d, Y" }}</td>
-                {% comment %} <td>{{ u.last_login|date:"M d, Y H:i"|default:"Never" }}</td> {% endcomment %}
+                 <td>{{ u.last_login|date:"M d, Y "|default:"Never" }}</td> 
                 <td>
                     <a href="{% url 'destiny_admin:user_edit' u.id %}" class="btn-sm btn-view">Edit</a>
                     <a href="{% url 'destiny_admin:user_delete' u.id %}"

@@ -900,7 +900,7 @@ def cancel_booking(request):
                     send_mail(
                         subject, 
                         message, 
-                        'reservations@vivaanfarmhouse.com', 
+                        'destanyfarm@gmail.com', 
 
                         [booking.guest_email], 
                         fail_silently=True

@@ -91,8 +91,6 @@
     
     <!-- Logo -->
 
-
-
     <img src="{% static 'images/destiny_logo.jpeg' %}"
          alt="Destany Farm"
          class="h-16 hidden md:block">
@@ -122,13 +120,12 @@
                         class="text-white hover:text-amber-400 font-medium transition">Gallery</a> 
                     {% endcomment %}
                     {% comment %} <a onclick="scrollToSection('about')" class="text-white cursor-pointer">About</a> {% endcomment %}
-                    <a href="{% url 'home' %}" onclick="setScroll('about')" class="text-yellow-700 cursor-pointer">About</a>
-                     <a href="{% url 'home' %}" onclick="setScroll('rooms')" class="text-yellow-700 cursor-pointer">Rooms</a>
+                    <a href="{% url 'home' %}" onclick="setScroll('about')" class="text-yellow-700 font-medium cursor-pointer">About</a>
+                     <a href="{% url 'home' %}" onclick="setScroll('rooms')" class="text-yellow-700 font-medium cursor-pointer">Rooms</a>
                     {% comment %} <a onclick="scrollToSection('rooms')" class="text-white cursor-pointer">Rooms</a> {% endcomment %}
-                    <a href="{% url 'home' %}" onclick="setScroll('amenities')" class="text-yellow-700 cursor-pointer">Amenities</a>
-                    <a href="{% url 'home' %}" onclick="setScroll('gallery')" class="text-yellow-700 cursor-pointer">Gallery</a>
-                  
-                    
+                    <a href="{% url 'home' %}" onclick="setScroll('amenities')" class="text-yellow-700 font-medium cursor-pointer">Amenities</a>
+                    <a href="{% url 'home' %}" onclick="setScroll('gallery')" class="text-yellow-700 font-medium cursor-pointer">Gallery</a>
+
                                     {% comment %} <a href="{% url 'home' %}#reviews" class="text-white hover:text-amber-400 font-medium transition"
                 onclick="toggleMobileMenu()">Review</a>
             <a href="{% url 'home' %}#contact" class="text-white hover:text-amber-400 font-medium transition"

@@ -663,7 +663,6 @@
     }
 }
 
-
     </style>
 </head>
 
@@ -679,32 +678,66 @@
             </a>
         </div>
         <nav class="sidebar-menu">
+
+
             <a href="{% url 'destiny_admin:dashboard' %}"
                 class="menu-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
                 <i class="fa-solid fa-gauge-high"></i> <span class="menu-text">Dashboard</span>
             </a>
+
+
+             {% if perms.resort.view_booking %}
             <a href="{% url 'destiny_admin:booking_list' %}"
                 class="menu-item {% if request.resolver_match.url_name == 'booking_list' %}active{% endif %}">
                 <i class="fa-solid fa-calendar-check"></i> <span class="menu-text">Bookings</span>
             </a>
+            {% endif %}
+
+             {% if perms.resort.view_roomcategory %}
             <a href="{% url 'destiny_admin:room_list' %}"
                 class="menu-item {% if request.resolver_match.url_name == 'room_list' %}active{% endif %}">
                 <i class="fa-solid fa-bed"></i> <span class="menu-text">Rooms & Villa</span>
             </a>
+            {% endif %}
+
+
+
+
+            {% if perms.resort.view_mainbanner %}
             <a href="{% url 'destiny_admin:banner_list' %}" class="menu-item"><i class="fa-solid fa-images"></i> <span
                     class="menu-text">Banners</span></a>
+
+            {% endif %}
+
+            {% if perms.resort.view_amenity %}
             <a href="{% url 'destiny_admin:amenity_list' %}" class="menu-item"><i class="fa-solid fa-spa"></i> <span
                     class="menu-text">Amenities</span></a>
+            {% endif %}
+
+
+            {% if perms.resort.view_blockeddate %}
             <a href="{% url 'destiny_admin:blocked_date_list' %}" class="menu-item"><i class="fa-solid fa-ban"></i> <span
                     class="menu-text">Blocked Dates</span></a>
+            {% endif %}
+            
+
+            {% if perms.resort.view_coupon %}
             <a href="{% url 'destiny_admin:coupon_list' %}" class="menu-item"><i class="fa-solid fa-ticket"></i> <span
                     class="menu-text">Coupons</span></a>
+            {% endif %}
+
+
+            {% if perms.resort.view_gallery %}
             <a href="{% url 'destiny_admin:gallery_list' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
                 <span class="menu-text">Gallery</span></a>
 
+            {% endif %}
+
+
+            {% if perms.resort.view_offer %}
             <a href="{% url 'destiny_admin:offerlist' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
                 <span class="menu-text">offer</span></a>
-
+              {% endif %}
 
             {% comment %} <a href="{% url 'destiny_admin:user_permissions' user_id %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
                 <span class="menu-text">user permission</span></a> {% endcomment %}
@@ -712,25 +745,37 @@
     <i class="fa-solid fa-users"></i>
     <span class="menu-text">Users</span>
 </a> {% endcomment %}
-
-           <a href="{% url 'destiny_admin:group_list' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
+            
+           
+           {% comment %} <a href="{% url 'destiny_admin:group_list' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
                 <span class="menu-text">group permission</span></a>
- 
+  {% endcomment %}
 
 
 
-
+            {% if perms.resort.view_testimonial %}
             <a href="{% url 'destiny_admin:testimonial_list' %}" class="menu-item"><i class="fa-solid fa-star"></i> <span
                     class="menu-text">Ratings</span></a>
+             {% endif %}
+            
+            {% if perms.resort.view_user %}
             <a href="{% url 'destiny_admin:user_list' %}" class="menu-item"><i class="fa-solid fa-users-gear"></i> <span
                     class="menu-text">Users</span></a>
+             {% endif %}
+
+            
+            {% if perms.resort.view_contactmessage %}
             <a href="{% url 'destiny_admin:message_list' %}" class="menu-item"><i class="fa-solid fa-envelope"></i> <span
                     class="menu-text">Messages</span></a>
+             {% endif %}
 
+
+            {% if perms.resort.view_blog %}
                     <a href="{% url 'destiny_admin:blog_list' %}" class="menu-item">
     <i class="fa-solid fa-blog"></i>
     <span class="menu-text">Blogs</span>
 </a>
+ {% endif %}
 
 {% comment %} <a href="{% url 'destiny_admin:blog_category_list' %}" class="menu-item">
     <i class="fa-solid fa-folder"></i>

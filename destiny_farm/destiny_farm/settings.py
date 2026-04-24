@@ -187,9 +187,9 @@ CELERY_BEAT_SCHEDULE = {
 
 #razorpay 
 
-RAZORPAY_KEY_ID = "rzp_live_S1nrNOPM5cqDLt"
-RAZORPAY_KEY_SECRET = "iF3FGjKTlinQO0N2xbiKDGrG"
-RAZORPAY_WEBHOOK_SECRET = "dajnf2h9hfkjbary23u38547y3shdgkjhiuhtnsdty43oh9@$($^"
+RAZORPAY_KEY_ID = "rzp_test_SgQhka00qYMZbs"
+RAZORPAY_KEY_SECRET = "ukzYYhYVzY7j4bSIAkaKQYM0"
+RAZORPAY_WEBHOOK_SECRET = "sjfosaf08wjefnesfksjnt@$#%$#^09508ojsdgjsjgJSDFOJDG"
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
