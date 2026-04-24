@@ -663,6 +663,7 @@
     }
 }
 
+
     </style>
 </head>
 
@@ -701,14 +702,11 @@
             {% endif %}
 
 
-
-
             {% if perms.resort.view_mainbanner %}
             <a href="{% url 'destiny_admin:banner_list' %}" class="menu-item"><i class="fa-solid fa-images"></i> <span
                     class="menu-text">Banners</span></a>
 
             {% endif %}
-
             {% if perms.resort.view_amenity %}
             <a href="{% url 'destiny_admin:amenity_list' %}" class="menu-item"><i class="fa-solid fa-spa"></i> <span
                     class="menu-text">Amenities</span></a>
@@ -747,12 +745,9 @@
 </a> {% endcomment %}
             
            
-           {% comment %} <a href="{% url 'destiny_admin:group_list' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
+           <a href="{% url 'destiny_admin:group_list' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
                 <span class="menu-text">group permission</span></a>
-  {% endcomment %}
-
-
-
+ 
             {% if perms.resort.view_testimonial %}
             <a href="{% url 'destiny_admin:testimonial_list' %}" class="menu-item"><i class="fa-solid fa-star"></i> <span
                     class="menu-text">Ratings</span></a>
@@ -772,9 +767,9 @@
 
             {% if perms.resort.view_blog %}
                     <a href="{% url 'destiny_admin:blog_list' %}" class="menu-item">
-    <i class="fa-solid fa-blog"></i>
-    <span class="menu-text">Blogs</span>
-</a>
+                <i class="fa-solid fa-blog"></i>
+                <span class="menu-text">Blogs</span>
+            </a>
  {% endif %}
 
 {% comment %} <a href="{% url 'destiny_admin:blog_category_list' %}" class="menu-item">
@@ -876,6 +871,7 @@ document.addEventListener("click", function (e) {
     }
 });
 </script>
+
 
     <script>
         const sidebarToggle = document.getElementById('sidebarToggle');

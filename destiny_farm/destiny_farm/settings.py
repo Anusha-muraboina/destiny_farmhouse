@@ -96,8 +96,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'destiny_farm.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
 
 # DATABASES = {
 #     'default': {
@@ -235,10 +234,13 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:7000",
     "https://7d0f-2404-1f00-8047-a456-6493-7f2e-f002-8f36.ngrok-free.app",
     
-        "https://destinyfarm4.com",
+    "https://destinyfarm4.com",
     "https://www.destinyfarm4.com",
 
 ]
+
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
