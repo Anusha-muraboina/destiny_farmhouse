@@ -551,10 +551,10 @@ def room_detail(request, slug):
      
      
     # ADD THIS EXACTLY HERE
-    if booking.payment_method == "farmhouse":
-        booking.status = "pending"
-        booking.payment_status = "pending"
-        booking.save()
+    # if booking.payment_method == "farmhouse":
+    #     booking.status = "pending"
+    #     booking.payment_status = "pending"
+    #     booking.save()
 
      # 🔥 ADD HERE (AFTER booking created)
 
