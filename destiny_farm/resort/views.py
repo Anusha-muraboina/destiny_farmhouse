@@ -41,7 +41,7 @@ import hashlib
 from django.http import JsonResponse, HttpResponse
 # from django.views.decorators.csrf import csrf_exempt
 # from decimal import Decimal
-
+from django.db import transaction
 
 def home(request):
       # ================= CONTACT FORM =================
@@ -545,11 +545,16 @@ def room_detail(request, slug):
         }
     )
      
+     
+     
+     
+     
+     
     # ADD THIS EXACTLY HERE
-    # if booking.payment_method == "farmhouse":
-    #     booking.status = "pending"
-    #     booking.payment_status = "pending"
-    #     booking.save()
+    if booking.payment_method == "farmhouse":
+        booking.status = "pending"
+        booking.payment_status = "pending"
+        booking.save()
 
      # 🔥 ADD HERE (AFTER booking created)
 
@@ -606,11 +611,6 @@ def room_detail(request, slug):
     
     # ================= OFFER DATES =================
     
-    
-    
-    
-    
-
 
     offer_dates = {}
 

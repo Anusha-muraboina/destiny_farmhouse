@@ -744,10 +744,11 @@
     <span class="menu-text">Users</span>
 </a> {% endcomment %}
             
-           
+           {% if perms.auth.view_group %}
            <a href="{% url 'destiny_admin:group_list' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
                 <span class="menu-text">group permission</span></a>
- 
+            {% endif %}
+            
             {% if perms.resort.view_testimonial %}
             <a href="{% url 'destiny_admin:testimonial_list' %}" class="menu-item"><i class="fa-solid fa-star"></i> <span
                     class="menu-text">Ratings</span></a>
