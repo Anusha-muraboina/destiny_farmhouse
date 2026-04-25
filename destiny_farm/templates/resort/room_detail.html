@@ -139,10 +139,11 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
 }
 
 /* Disabled dates (keep default greyed) */
-.flatpickr-day.disabled {
-    opacity: 0.4 !important;
+.flatpickr-day.flatpickr-disabled {
+    opacity: 1 !important;   /* remove fade */
+    color: #111 !important;  /* dark text */
+    {% comment %} background: #f9fafb !important; /* light background */ {% endcomment %}
 }
-
 
 
 {% comment %} 
@@ -358,12 +359,6 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
                                 <span id="dateNotificationText"></span>
                             </div>
                         </div>
-
-
-
-
-
-
                          <div class="flex justify-end pt-4">
     <button type="button"
         onclick="validateStep1()"
@@ -657,7 +652,6 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
                             <i class="fas fa-calendar-check mr-2"></i>Book Farmhouse
                         </button>
 
-
                     </form>
 
                     <div class="mt-6 pt-6 border-t border-gray-200">
@@ -680,8 +674,10 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
 
 
 
-<!-- ====================================================== -->
 
+
+
+<!-- ====================================================== -->
 
             <!-- Room Information -->
             <div class="">
@@ -746,18 +742,7 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
                         {{ room_category.description|safe }}
                     </div> {% endcomment %}
                 </div>
-
-
             </div>
-
-
-
-
-
-
-
-
-
         </div>
     </div>
 </section>
@@ -1563,6 +1548,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <script>
 
+
+function formatPrice(price) {
+    if (price >= 1000) {
+        return (price / 1000).toFixed(price % 1000 === 0 ? 0 : 1) + "K";
+    }
+    return price;
+}
+
     function initCalendarIfNeeded() {
 
     // prevent duplicate init
@@ -1596,10 +1589,59 @@ document.addEventListener("DOMContentLoaded", function () {
     const weekday = parseFloat(`{{ pricing.weekday_price }}`);
     const weekend = parseFloat(`{{ pricing.weekend_price }}`);
 
-function decorateDay(dayElem) {
+
+
+    function decorateDay(dayElem) {
 
     const date = dayElem.dateObj;
-    {% comment %} const dateStr = date.toISOString().split('T')[0]; {% endcomment %}
+
+    function formatLocalDate(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        return `${y}-${m}-${d}`;
+    }
+
+    const dateStr = formatLocalDate(date);
+    const day = date.getDay();
+
+    // 🔥 NEW: CHECK TODAY
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    // ❌ IF PAST DATE → REMOVE PRICE
+    if (date < today) {
+        const old = dayElem.querySelector(".price-tag");
+        if (old) old.remove();
+        return;  // 🚀 STOP HERE
+    }
+
+    let price = 0;
+
+    if (offerDates[dateStr]) {
+        price = offerDates[dateStr];
+    } else {
+        price = (day === 6 || day === 0) ? weekend : weekday;
+    }
+
+    // REMOVE OLD PRICE
+    const old = dayElem.querySelector(".price-tag");
+    if (old) old.remove();
+
+    // ADD PRICE
+    const priceDiv = document.createElement("div");
+    priceDiv.className = "price-tag";
+    {% comment %} priceDiv.innerText = "₹" + price; {% endcomment %}
+
+    priceDiv.innerText = "₹" + formatPrice(price);
+
+    dayElem.appendChild(priceDiv);
+}
+
+
+{% comment %} function decorateDay(dayElem) {
+
+    const date = dayElem.dateObj;
 
 
     function formatLocalDate(date) {
@@ -1629,7 +1671,7 @@ function decorateDay(dayElem) {
     priceDiv.innerText = "₹" + price;
 
     dayElem.appendChild(priceDiv);
-}
+} {% endcomment %}
 
 
 
