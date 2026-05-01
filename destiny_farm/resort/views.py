@@ -209,7 +209,8 @@ def calculate_booking_cost(check_in, check_out, guest_count, extra_guest_count):
     # ===============================
     while current_date < check_out:
 
-        date_str = str(current_date)
+        # date_str = str(current_date)
+        date_str = current_date.strftime("%Y-%m-%d")
 
         # ✅ 1. API PRICE (HIGHEST PRIORITY)
         if date_str in api_offers:

@@ -114,6 +114,10 @@ class VillaPricing(models.Model):
     """Global pricing for the entire villa"""
     weekday_price = models.DecimalField(max_digits=10, decimal_places=2, default=15000.00)
     weekend_price = models.DecimalField(max_digits=10, decimal_places=2, default=20000.00)
+    
+    weekday_half_price = models.DecimalField(max_digits=10, decimal_places=2, default=12000)
+    weekend_half_price = models.DecimalField(max_digits=10, decimal_places=2, default=15000)
+
     extra_guest_price = models.DecimalField(max_digits=10, decimal_places=2, default=500.00)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -186,7 +190,15 @@ class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     updated_at = models.DateTimeField(auto_now=True)
-
+    slot = models.CharField(
+    max_length=20,
+    choices=[
+        ("14:00-00:00", "02:00 PM – 12:00 AM"),
+        ("01:00-10:00", "01:00 AM – 10:00 AM"),
+    ],
+    null=True,
+    blank=True
+)
     # class Meta:
     #     ordering = ['-created_at']
     class Meta:
@@ -223,8 +235,17 @@ class Booking(models.Model):
             return 0
 
         return self.total_amount - self.remaining_amount
+    
+    
+def is_slot_available(date, slot):
 
-
+    return not Booking.objects.filter(
+        check_in=date,
+        slot=slot,
+        status="confirmed"
+    ).exists()
+    
+    
 # models.py
 class BlockedDate(models.Model):
     start_date = models.DateField()

@@ -4,7 +4,7 @@ from .models import Booking, ContactMessage ,Testimonial
 from django import forms
 from .models import Amenity
 from .models import BlockedDate
-
+from datetime import datetime
 
 
 class BookingForm(forms.ModelForm):
@@ -19,10 +19,13 @@ class BookingForm(forms.ModelForm):
             'class': 'space-y-2'
         })
     )
+    
+    check_in_time = forms.TimeField(required=False)
+    check_out_time = forms.TimeField(required=False)
     class Meta:
         model = Booking
         fields = [
-            'guest_name', 'guest_email', 'guest_phone', 'payment_method',
+            'guest_name', 'guest_email', 'guest_phone', 'payment_method', 'check_in_time','check_out_time',
             'guest_count', 'check_in', 'check_out', 'special_requests','extra_guest_count',
         ]
         labels = {
@@ -77,6 +80,8 @@ class BookingForm(forms.ModelForm):
             
             "check_in": forms.DateInput(attrs={"type": "date"}),
             "check_out": forms.DateInput(attrs={"type": "date"}),
+            
+
 
         }
 
@@ -108,7 +113,28 @@ class BookingForm(forms.ModelForm):
             return Coupon.objects.get(code__iexact=code, is_active=True)
         except Coupon.DoesNotExist:
             raise forms.ValidationError("Invalid coupon code")
+    
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        check_in = cleaned_data.get("check_in")
+        check_out = cleaned_data.get("check_out")
+        check_in_time = cleaned_data.get("check_in_time")
+        check_out_time = cleaned_data.get("check_out_time")
+
+        if check_in and check_out and check_in_time and check_out_time:
+
+            start = datetime.combine(check_in, check_in_time)
+            end = datetime.combine(check_out, check_out_time)
+
+            # 🔥 FIX: HANDLE MIDNIGHT CASE
+            if end <= start:
+                raise forms.ValidationError(
+                    f"Invalid timing: check-in {start} → check-out {end}"
+                )
+
+        return cleaned_data
 
 class ContactForm(forms.ModelForm):
     class Meta:

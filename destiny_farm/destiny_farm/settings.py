@@ -26,15 +26,17 @@ SECRET_KEY = 'django-insecure-2@=-c@uvh@w(%epw=8%fl3*k!z&mppxqlra9l)#h@z!836quu4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
+# ALLOWED_HOSTS = [
     
-        "destinyfarm4.com",
-    "www.destinyfarm4.com",
-    "3.6.87.103",
+#         "destinyfarm4.com",
+#     "www.destinyfarm4.com",
+#     "3.6.87.103",
     
-    "127.0.0.1"
-]
+#     "127.0.0.1",
+#     "https://36ad-103-5-135-107.ngrok-free.app",
+# ]
 
+ALLOWED_HOSTS=["*"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -112,7 +114,7 @@ DATABASES = {
         'NAME': 'destiny_farmhouse',
         'USER': 'destiny_user',
         'PASSWORD': 'destiny@123',
-        'HOST': '3.6.87.103',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
@@ -209,7 +211,7 @@ ADMIN_EMAIL = 'laxminarayaninfotech1@gmail.com'
 CC_EMAIL = [
     'anushamuraboina9@gmail.com',
     'laxminarayaninfotech1@gmail.com',
-    'destanyfarm@gmail.com',
+    'destanyfarm4@gmail.com',
 ]
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -232,7 +234,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://127.0.0.1:7000",
-    "https://7d0f-2404-1f00-8047-a456-6493-7f2e-f002-8f36.ngrok-free.app",
+    "https://36ad-103-5-135-107.ngrok-free.app",
     
     "https://destinyfarm4.com",
     "https://www.destinyfarm4.com",
@@ -245,3 +247,19 @@ CORS_ALLOWED_ORIGINS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+BOOKING_RULES = {
+    "full": {
+        "check_in": "14:00",
+        "check_out": "11:00",
+        "next_day": True
+    },
+    "half": {
+        "check_in": "14:00",
+        "check_out": "23:00",
+        "next_day": False
+    }
+}
