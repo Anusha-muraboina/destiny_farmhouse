@@ -26,17 +26,17 @@ SECRET_KEY = 'django-insecure-2@=-c@uvh@w(%epw=8%fl3*k!z&mppxqlra9l)#h@z!836quu4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = [
+ALLOWED_HOSTS = [
     
-#         "destinyfarm4.com",
-#     "www.destinyfarm4.com",
-#     "3.6.87.103",
+        "destinyfarm4.com",
+    "www.destinyfarm4.com",
+    "3.6.87.103",
     
-#     "127.0.0.1",
-#     "https://36ad-103-5-135-107.ngrok-free.app",
-# ]
+    "127.0.0.1",
+    "https://36ad-103-5-135-107.ngrok-free.app",
+]
 
-ALLOWED_HOSTS=["*"]
+# ALLOWED_HOSTS=["*"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -114,7 +114,7 @@ DATABASES = {
         'NAME': 'destiny_farmhouse',
         'USER': 'destiny_user',
         'PASSWORD': 'destiny@123',
-        'HOST': '127.0.0.1',
+        'HOST': '3.6.87.103',
         'PORT': '3306',
     }
 }

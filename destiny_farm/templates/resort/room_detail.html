@@ -1163,51 +1163,7 @@ function toggleSlot() {
 }
 
 // AUTO CHECKOUT
-
 function autoCheckout() {
-
-    const checkInInput = document.getElementById("check_in");
-    const checkOutInput = document.getElementById("check_out");
-    const display = document.getElementById("auto_checkout_display");
-
-    if (!checkInInput || !checkOutInput || !display) {
-        console.log("Missing elements");
-        return;
-    }
-
-    const bookingType = document.getElementById("booking_type").value;
-
-    if (!checkInInput.value) return;
-
-    let checkInDate = new Date(checkInInput.value);
-
-    // 🔥 FULL DAY
-    if (bookingType === "full") {
-
-        let nextDay = new Date(checkInDate);
-        nextDay.setDate(nextDay.getDate() + 1);
-
-        let y = nextDay.getFullYear();
-        let m = String(nextDay.getMonth() + 1).padStart(2, "0");
-        let d = String(nextDay.getDate()).padStart(2, "0");
-
-        checkOutInput.value = `${y}-${m}-${d}`;
-
-        display.innerText = `${y}-${m}-${d} 12:00 PM`;
-    }
-
-    // 🔥 HALF DAY
-    else {
-
-        const startTime = document.getElementById("check_in_time").value;
-        const endTime = document.getElementById("check_out_time").value;
-
-        if (!startTime || !endTime) return;
-
-        display.innerText = `${checkInInput.value} ${endTime}`;
-    }
-}
-{% comment %} function autoCheckout() {
 
     const type = document.getElementById("booking_type").value;
     const date = document.getElementById("check_in").value;
@@ -1245,7 +1201,7 @@ function autoCheckout() {
         `${checkOutInput.value} 12:00 PM`;
 
     return;
-} {% endcomment %}
+}
 
     {% comment %} if (type === "full") {
 
@@ -2919,10 +2875,27 @@ document.querySelector("form").addEventListener("submit", function (e) {
     const error = document.getElementById("termsError");
 
     // 🚨 VALIDATION (THIS WAS MISSING)
-    if (!terms.checked) {
+    {% comment %} if (!terms.checked) {
         error.classList.remove("hidden");   // SHOW ERROR
         return;   // 🚨 STOP HERE (VERY IMPORTANT)
+    } {% endcomment %}
+
+    if (!terms.checked) {
+
+        error.classList.remove("hidden");
+
+        // 🔥 OPEN STEP 4 (because it's collapsed)
+        toggleCollapse("step4");
+
+        // 🔥 SCROLL TO ERROR
+        setTimeout(() => {
+            error.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 200);
+
+        return; // ❌ STOP BOOKING
     }
+
+
 
     // ✅ HIDE ERROR IF CHECKED
     error.classList.add("hidden");
