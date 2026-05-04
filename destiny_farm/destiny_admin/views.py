@@ -21,7 +21,7 @@ from destiny_admin.forms import OfferForm ,GalleryForm ,CouponForm ,AdminBlocked
 def is_admin(user):
     return user.is_authenticated and (user.is_staff or user.is_superuser)
 
-# --- Auth ---
+# --- Auth -----------
 def admin_login(request):
     if request.user.is_authenticated and request.user.is_superuser:
         return redirect('destiny_admin:dashboard')
