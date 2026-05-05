@@ -667,8 +667,133 @@ from resort.views import *
 
 
 
+# @login_required(login_url="destiny_admin:login")
+# # @user_passes_test(is_admin)
+# @permission_required('resort.add_booking', raise_exception=True)
+# def admin_booking_create(request):
+
+#     # ================= LOCAL BOOKINGS =================
+#     booked_dates = []
+#     for b in Booking.objects.filter(status__in=["confirmed", "pending"]):
+#         d = b.check_in
+#         while d < b.check_out:
+#             booked_dates.append(d.strftime("%Y-%m-%d"))
+#             d += timedelta(days=1)
+
+#     # ================= LOCAL BLOCKED =================
+#     blocked_dates = []
+#     for block in BlockedDate.objects.all():
+#         d = block.start_date
+#         while d < block.end_date:
+#             blocked_dates.append(d.strftime("%Y-%m-%d"))
+#             d += timedelta(days=1)
+
+#     # ================= 🔥 FETCH HYD DATA =================
+#     external_dates = []
+#     try:
+#         import requests
+
+#         # ✅ LOCAL URL (VERY IMPORTANT)
+#         url = "http://127.0.0.1:9000/bookings/blocked-dates/72/"
+
+#         res = requests.get(url, timeout=5)
+
+#         if res.status_code == 200:
+#             data = res.json()
+
+#             for item in data:
+#                 start = datetime.strptime(item["from"], "%Y-%m-%d").date()
+#                 end = datetime.strptime(item["to"], "%Y-%m-%d").date()
+
+#                 d = start
+#                 while d <= end:
+#                     external_dates.append(d.strftime("%Y-%m-%d"))
+#                     d += timedelta(days=1)
+
+#     except Exception as e:
+#         print("❌ Hyd fetch error:", e)
+
+#     # ================= FINAL MERGE =================
+#     all_blocked = list(set(booked_dates + blocked_dates + external_dates))
+
+#     pricing = VillaPricing.objects.first()
+
+#     if request.method == "POST":
+#         form = AdminBookingForm(request.POST)
+
+#         if form.is_valid():
+#             booking = form.save(commit=False)
+            
+            
+#             booking_type = request.POST.get("booking_type")
+
+#             if booking_type == "half":
+#                 booking.check_in_time = request.POST.get("check_in_time")
+#                 booking.check_out_time = request.POST.get("check_out_time")
+#                 booking.slot = request.POST.get("slot")
+
+#             else:
+#                 booking.check_in_time = "14:00"
+#                 booking.check_out_time = "12:00"
+#                 booking.slot = ""
+
+                        
+#             # ✅ ADD THIS (VERY IMPORTANT)
+#             booking.check_in_time = request.POST.get("check_in_time")
+#             booking.check_out_time = request.POST.get("check_out_time")
+#             booking.slot = request.POST.get("slot")
+
+#             booking.status = (booking.status or "confirmed").strip().lower()
+#             booking.payment_status = (booking.payment_status or "pending").strip().lower()
+#             booking.payment_method = (booking.payment_method or "farmhouse").strip().lower()
+
+#             nights = (booking.check_out - booking.check_in).days
+#             base = pricing.weekday_price * nights
+#             extra = (booking.extra_guest_count or 0) * pricing.extra_guest_price
+
+#             sub_total = base + extra
+
+#             coupon = form.cleaned_data.get("coupon_code")
+#             discount = Decimal("0.00")
+
+#             if coupon:
+#                 discount = coupon.discount_amount
+#                 booking.disc_price = coupon
+
+#             booking.sub_total = sub_total
+#             booking.disc_price = discount
+#             booking.total_amount = sub_total - discount
+#             booking.remaining_amount = booking.total_amount
+
+#             booking.save()
+
+#             # 🔥 SYNC TO HYD
+#             if booking.status == "confirmed":
+#                 sync_booking_to_farmhouse_hyd(booking)
+
+#             send_booking_emails(booking, old_status="pending")
+
+#             messages.success(request, "Booking created successfully")
+#             return redirect("destiny_admin:booking_list")
+
+#     else:
+#         form = AdminBookingForm()
+
+#     return render(request, "adminpanel/booking_form.html", {
+#         "form": form,
+
+#         # 🔥 IMPORTANT
+#         "booked_dates": all_blocked,
+#         "blocked_dates": all_blocked,
+#     })
+    
+    
+    
+from decimal import Decimal
+from datetime import timedelta, datetime
+import json
+
 @login_required(login_url="destiny_admin:login")
-# @user_passes_test(is_admin)
 @permission_required('resort.add_booking', raise_exception=True)
 def admin_booking_create(request):
 
@@ -688,14 +813,12 @@ def admin_booking_create(request):
             blocked_dates.append(d.strftime("%Y-%m-%d"))
             d += timedelta(days=1)
 
-    # ================= 🔥 FETCH HYD DATA =================
+    # ================= EXTERNAL =================
     external_dates = []
     try:
         import requests
 
-        # ✅ LOCAL URL (VERY IMPORTANT)
         url = "http://127.0.0.1:9000/bookings/blocked-dates/72/"
-
         res = requests.get(url, timeout=5)
 
         if res.status_code == 200:
@@ -713,27 +836,87 @@ def admin_booking_create(request):
     except Exception as e:
         print("❌ Hyd fetch error:", e)
 
-    # ================= FINAL MERGE =================
+    # ================= FINAL BLOCKED =================
     all_blocked = list(set(booked_dates + blocked_dates + external_dates))
 
     pricing = VillaPricing.objects.first()
 
+    # ================= OFFER DATA =================
+    # offers = Offer.objects.all()
+    # offer_dict = {
+    #     str(o.date): float(o.price) for o in offers
+    # }
+    
+    offers = Offer.objects.filter(is_active=True)
+
+    offer_dict = {}
+
+    for o in offers:
+        current = o.valid_from
+
+        while current <= o.valid_until:
+            offer_dict[current.strftime("%Y-%m-%d")] = float(o.offer_price)
+            current += timedelta(days=1)
+
+
+    
+    
     if request.method == "POST":
         form = AdminBookingForm(request.POST)
 
         if form.is_valid():
             booking = form.save(commit=False)
 
+            booking_type = request.POST.get("booking_type")
+
+            # ================= TIME SLOT =================
+            if booking_type == "half":
+                booking.check_in_time = request.POST.get("check_in_time")
+                booking.check_out_time = request.POST.get("check_out_time")
+                booking.slot = request.POST.get("slot")
+            else:
+                booking.check_in_time = "14:00"
+                booking.check_out_time = "12:00"
+                booking.slot = ""
+
+            # ================= STATUS =================
             booking.status = (booking.status or "confirmed").strip().lower()
             booking.payment_status = (booking.payment_status or "pending").strip().lower()
             booking.payment_method = (booking.payment_method or "farmhouse").strip().lower()
 
-            nights = (booking.check_out - booking.check_in).days
-            base = pricing.weekday_price * nights
+            # ================= PRICING =================
+            total = Decimal("0.00")
+            current = booking.check_in
+
+            while current < booking.check_out:
+
+                is_weekend = current.weekday() in [5, 6]
+                date_str = current.strftime("%Y-%m-%d")
+
+                # HALF DAY
+                if booking_type == "half":
+                    price = pricing.weekend_half_price if is_weekend else pricing.weekday_half_price
+                    total += price
+                    break
+
+                # FULL DAY
+                else:
+                    # 🔥 OFFER PRICE
+                    if date_str in offer_dict:
+                        price = Decimal(str(offer_dict[date_str]))
+                    else:
+                        price = pricing.weekend_price if is_weekend else pricing.weekday_price
+
+                    total += price
+
+                current += timedelta(days=1)
+
+            # EXTRA GUEST
             extra = (booking.extra_guest_count or 0) * pricing.extra_guest_price
 
-            sub_total = base + extra
+            sub_total = total + extra
 
+            # ================= COUPON =================
             coupon = form.cleaned_data.get("coupon_code")
             discount = Decimal("0.00")
 
@@ -748,7 +931,7 @@ def admin_booking_create(request):
 
             booking.save()
 
-            # 🔥 SYNC TO HYD
+            # ================= SYNC =================
             if booking.status == "confirmed":
                 sync_booking_to_farmhouse_hyd(booking)
 
@@ -762,14 +945,14 @@ def admin_booking_create(request):
 
     return render(request, "adminpanel/booking_form.html", {
         "form": form,
-
-        # 🔥 IMPORTANT
         "booked_dates": all_blocked,
         "blocked_dates": all_blocked,
+
+        # 🔥 IMPORTANT FOR CALENDAR PRICE
+        "pricing": pricing,
+        # "offer_dates": json.dumps(offer_dict),
+        "offer_dates": offer_dict,
     })
-    
-    
-    
 
 @login_required(login_url="destiny_admin:login")
 # @user_passes_test(is_admin)
@@ -1987,11 +2170,11 @@ def offer_edit(request, pk):
         form = OfferForm(request.POST, instance=offer)
         if form.is_valid():
             form.save()
-            return redirect('offerlist')
+            return redirect('destiny_admin:offerlist')
     else:
         form = OfferForm(instance=offer)
 
-    # ✅ PASS offer_dates ALSO
+    # ✅ PASS offer_dates ALSO3
     return render(request, 'adminpanel/offer/form.html', {
         'form': form,
         'offer': offer,

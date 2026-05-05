@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     
-        "destinyfarm4.com",
+    "destinyfarm4.com",
     "www.destinyfarm4.com",
     "3.6.87.103",
     
@@ -66,6 +66,7 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
+SITE_URL = "https://destinyfarm4.com"
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -114,7 +115,7 @@ DATABASES = {
         'NAME': 'destiny_farmhouse',
         'USER': 'destiny_user',
         'PASSWORD': 'destiny@123',
-        'HOST': '3.6.87.103',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
@@ -188,6 +189,7 @@ CELERY_BEAT_SCHEDULE = {
 
 #razorpay 
 
+
 RAZORPAY_KEY_ID = "rzp_live_SkSG1pAQO3WR4M"
 RAZORPAY_KEY_SECRET = "6L813XIDAxv5vGFaq1H7iteG"
 RAZORPAY_WEBHOOK_SECRET = "slkghlhsoSJKHUHHLHDLDLJDLJ@#@#32545hfdjjj//.,"
@@ -254,16 +256,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True
 
-BOOKING_RULES = {
-    "full": {
-        "check_in": "14:00",
-        "check_out": "11:00",
-        "next_day": True
-    },
-    "half": {
-        "check_in": "14:00",
-        "check_out": "23:00",
-        "next_day": False
-    }
-}
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# SECURE_SSL_REDIRECT = True
+
+# USE_X_FORWARDED_HOST = True
+
+
+# BOOKING_RULES = {
+#     "full": {
+#         "check_in": "14:00",
+#         "check_out": "11:00",
+#         "next_day": True
+#     },
+#     "half": {
+#         "check_in": "14:00",
+#         "check_out": "23:00",
+#         "next_day": False
+#     }
+# }

@@ -34,6 +34,8 @@ class AdminBookingForm(forms.ModelForm):
             "check_in_time",
             "check_out_time",
             
+            "slot",  
+            
             # Status & payment (ADMIN ONLY)
             "payment_method",
             "payment_status",

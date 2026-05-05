@@ -176,6 +176,43 @@
     border-radius: 4px;
 }
 
+
+/* FIX DAY STRUCTURE */
+.flatpickr-day {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 45px !important;
+    line-height: 1 !important;
+    font-size: 14px;
+    padding: 4px 0;
+}
+
+/* DATE NUMBER */
+.flatpickr-day span {
+    display: block;
+}
+
+/* PRICE TEXT */
+.price-tag {
+    font-size: 11px;
+    margin-top: 4px;
+    font-weight: 600;
+    text-align: center;
+}
+.price-normal {
+    color: #374151;
+}
+
+.price-weekend {
+    color: #2563eb;
+}
+
+.price-offer {
+    color: #16a34a;
+    font-weight: bold;
+}
 </style>
 
 <div class="booking-container">
@@ -218,6 +255,36 @@
                     {{ form.guest_phone }}
                 </div>
             </div>
+
+
+
+            <!-- ================= BOOKING TYPE ================= -->
+<div class="grid grid-cols-2 gap-4">
+    <div>
+        <label>Booking Type</label>
+        <select id="booking_type" name="booking_type">
+            <option value="full">Full Day</option>
+            <option value="half">Half Day (12 Hours)</option>
+        </select>
+    </div>
+
+    <div id="slot_wrapper" style="display:none;">
+        <label>Time Slot</label>
+        <select id="slot_ui" name="slot_ui">
+            <option value="">Select Slot</option>
+            <option value="14:00-00:00">2 PM – 12 AM</option>
+            <option value="01:00-10:00">1 AM – 10 AM</option>
+        </select>
+    </div>
+</div>
+
+<!-- ================= HIDDEN FIELDS ================= -->
+<input type="hidden" name="check_in_time" id="check_in_time">
+<input type="hidden" name="check_out_time" id="check_out_time">
+<input type="hidden" name="slot" id="slot">
+
+
+
 
             <!-- ================= GUEST COUNT ================= -->
             {% comment %} <h3 class="font-semibold mt-6 mb-2">Guests</h3> {% endcomment %}
@@ -364,6 +431,7 @@
 <!-- DJANGO DATA -->
 {{ booked_dates|json_script:"booked-dates" }}
 {{ blocked_dates|json_script:"blocked-dates" }}
+{{ offer_dates|json_script:"offer-dates-data" }}
 {% comment %} <script>
 const startHours = 7;   // 7 AM
 const endHours = 22;    // 10 PM
@@ -482,8 +550,30 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script> {% endcomment %}
 <script>
+
+
+function formatDateLocal(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+}
+function getDateKey(date) {
+    return date.getFullYear() + "-" +
+        String(date.getMonth() + 1).padStart(2, "0") + "-" +
+        String(date.getDate()).padStart(2, "0");
+}
+function formatPrice(price) {
+    if (price >= 1000) {
+        return "₹" + (price / 1000).toFixed(1).replace(".0", "") + "K";
+    }
+    return "₹" + price;
+}
+
+
 let checkInPicker = null;
 let checkOutPicker = null;
+
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -492,6 +582,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    // ================= DATA =================
     const bookedDates = JSON.parse(
         document.getElementById("booked-dates").textContent
     );
@@ -500,93 +591,137 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("blocked-dates").textContent
     );
 
-    // =========================
-    // UTIL
-    // =========================
-    function formatDate(date) {
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, "0");
-        const d = String(date.getDate()).padStart(2, "0");
-        return `${y}-${m}-${d}`;
+    const offerDates = JSON.parse(
+        document.getElementById("offer-dates-data").textContent || "{}"
+    );
+
+    console.log("🔥 OFFERS:", offerDates);
+
+    const disabledDates = [...new Set([...bookedDates, ...blockedDates])];
+
+    const weekday = parseFloat(`{{ pricing.weekday_price }}`);
+    const weekend = parseFloat(`{{ pricing.weekend_price }}`);
+
+    const weekdayHalf = parseFloat(`{{ pricing.weekday_half_price }}`);
+    const weekendHalf = parseFloat(`{{ pricing.weekend_half_price }}`);
+
+    let checkInPicker;
+    let checkOutPicker;
+
+    // ================= PRICE LOGIC =================
+    function getPrice(date) {
+
+        const dateStr = getDateKey(date);
+        const day = date.getDay();
+
+        const bookingType = document.getElementById("booking_type").value;
+
+        let price = 0;
+
+        // HALF DAY
+        if (bookingType === "half") {
+            price = (day === 0 || day === 6) ? weekendHalf : weekdayHalf;
+        }
+
+        // FULL DAY
+        else {
+
+            // ✅ OFFER PRIORITY
+            if (offerDates[dateStr] !== undefined) {
+                price = parseFloat(offerDates[dateStr]);
+                console.log("✅ OFFER APPLIED:", dateStr, price);
+            } else {
+                price = (day === 0 || day === 6) ? weekend : weekday;
+            }
+        }
+
+        return price;
     }
 
-    // ❌ check-in cannot be booked or blocked
-    const disabledCheckInDates = [
-        ...new Set([...bookedDates, ...blockedDates])
-    ];
+    // ================= UI RENDER =================
+    function decorateDay(dayElem) {
 
-    // =========================
-    // CHECK-IN CALENDAR
-    // =========================
+        const date = dayElem.dateObj;
+        if (!date) return;
+
+        const today = new Date();
+        today.setHours(0,0,0,0);
+
+        // ❌ REMOVE OLD
+        {% comment %} const old = dayElem.querySelector(".price-tag");
+        if (old) old.remove(); {% endcomment %}
+
+        // 🔥 FULL RESET (IMPORTANT)
+        dayElem.innerHTML = `<span>${dayElem.dateObj.getDate()}</span>`;
+
+        // ❌ PAST DATE
+        if (date < today) return;
+
+        const price = getPrice(date);
+
+        const priceDiv = document.createElement("div");
+        priceDiv.className = "price-tag";
+
+        
+
+        const dateStr = getDateKey(date);
+
+        // ✅ OFFER STYLE
+        if (offerDates[dateStr] !== undefined) {
+            priceDiv.style.color = "#16a34a";
+            priceDiv.style.fontWeight = "700";
+        }
+
+        priceDiv.innerText = formatPrice(price);
+
+        dayElem.appendChild(priceDiv);
+    }
+
+    // ================= CHECK-IN =================
     checkInPicker = flatpickr("input[name='check_in']", {
         dateFormat: "Y-m-d",
         minDate: "today",
-        disable: disabledCheckInDates,
-        allowInput: false,
+        disable: disabledDates,
+
+        onDayCreate(_, __, ___, dayElem) {
+            decorateDay(dayElem);
+        },
 
         onChange(selectedDates) {
+
             if (!selectedDates.length) return;
 
-            const nextDay = new Date(selectedDates[0]);
-            nextDay.setDate(nextDay.getDate() + 1);
+            const next = new Date(selectedDates[0]);
+            next.setDate(next.getDate() + 1);
 
-            checkOutPicker.clear();
-            checkOutPicker.set("minDate", nextDay);
+            checkOutPicker.set("minDate", next);
             checkOutPicker.open();
         }
     });
 
-    // =========================
-    // CHECK-OUT CALENDAR
-    // =========================
+    // ================= CHECK-OUT =================
     checkOutPicker = flatpickr("input[name='check_out']", {
         dateFormat: "Y-m-d",
         minDate: "today",
-        disable: blockedDates, 
+        disable: blockedDates,
 
-        // ❌ checkout day itself can be booked (hotel logic)
-        {% comment %} disable: blockedDates, {% endcomment %}
-
-        allowInput: false,
-
-        onChange(selectedDates) {
-            if (!selectedDates.length) return;
-
-            const checkInDate = checkInPicker.selectedDates[0];
-
-            if (!checkInDate) {
-                alert("Select check-in date first");
-                checkOutPicker.clear();
-                return;
-            }
-
-            let current = new Date(checkInDate);
-            const end = new Date(selectedDates[0]);
-
-            // 🔥 exclude checkout day
-            end.setDate(end.getDate() - 1);
-
-            while (current <= end) {
-                const d = formatDate(current);
-
-                if (bookedDates.includes(d)) {
-                    alert("❌ Some dates are already booked");
-                    checkOutPicker.clear();
-                    return;
-                }
-
-                if (blockedDates.includes(d)) {
-                    alert("❌ Some dates are blocked by admin");
-                    checkOutPicker.clear();
-                    return;
-                }
-
-                current.setDate(current.getDate() + 1);
-            }
+        onDayCreate(_, __, ___, dayElem) {
+            decorateDay(dayElem);
         }
     });
 
-    console.log("✅ Admin booking calendar loaded successfully");
+    // ================= TYPE CHANGE =================
+    const bookingType = document.getElementById("booking_type");
+
+    bookingType.addEventListener("change", function () {
+
+        console.log("🔄 TYPE CHANGED:", this.value);
+
+        if (checkInPicker) checkInPicker.redraw();
+        if (checkOutPicker) checkOutPicker.redraw();
+    });
+
+    console.log("✅ ADMIN CALENDAR READY");
 });
 
 
@@ -595,11 +730,187 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+// ===============================
+// BOOKING TYPE SWITCH
+// ===============================
+{% comment %} const type = document.getElementById("booking_type");
+const slotWrapper = document.getElementById("slot_wrapper");
+
+type.addEventListener("change", function () {
+
+    if (this.value === "half") {
+        slotWrapper.style.display = "block";
+    } else {
+        slotWrapper.style.display = "none";
+
+        // FULL DAY DEFAULT
+        document.getElementById("check_in_time").value = "14:00";
+        document.getElementById("check_out_time").value = "12:00";
+        document.getElementById("slot").value = "";
+    }
+});
+
+// ===============================
+// SLOT SELECTION
+// ===============================
+document.getElementById("slot_ui").addEventListener("change", function () {
+
+    const val = this.value;
+    if (!val) return;
+
+    const [start, end] = val.split("-");
+
+    document.getElementById("check_in_time").value = start;
+    document.getElementById("check_out_time").value = end;
+    document.getElementById("slot").value = val;
+});
+
+
+
+document.querySelector("input[name='check_in']").addEventListener("change", function () {
+
+    const typeVal = document.getElementById("booking_type").value;
+    const checkIn = this.value;
+
+    if (!checkIn) return;
+
+    if (typeVal === "full") {
+
+        let date = new Date(checkIn);
+        date.setDate(date.getDate() + 1);
+
+        let y = date.getFullYear();
+        let m = String(date.getMonth() + 1).padStart(2, "0");
+        let d = String(date.getDate()).padStart(2, "0");
+
+        document.querySelector("input[name='check_out']").value = `${y}-${m}-${d}`;
+
+        document.getElementById("check_in_time").value = "14:00";
+        document.getElementById("check_out_time").value = "12:00";
+    }
+}); {% endcomment %}
 
 
 
 
+document.addEventListener("DOMContentLoaded", function () {
 
+    const type = document.getElementById("booking_type");
+    const slotWrapper = document.getElementById("slot_wrapper");
+    const slotUI = document.getElementById("slot_ui");
+
+    const checkInTime = document.getElementById("check_in_time");
+    const checkOutTime = document.getElementById("check_out_time");
+    const slotInput = document.getElementById("slot");
+
+    const totalInput = document.getElementById("total_amount");
+
+    // ================= DYNAMIC PRICES =================
+    const weekday = parseFloat(`{{ pricing.weekday_price }}`);
+    const weekend = parseFloat(`{{ pricing.weekend_price }}`);
+
+    const weekdayHalf = parseFloat(`{{ pricing.weekday_half_price }}`);
+    const weekendHalf = parseFloat(`{{ pricing.weekend_half_price }}`);
+
+    const extraPrice = parseFloat(`{{ pricing.extra_guest_price }}`);
+
+    // ================= BOOKING TYPE =================
+    type.addEventListener("change", function () {
+
+        if (this.value === "half") {
+            slotWrapper.style.display = "block";
+        } else {
+            slotWrapper.style.display = "none";
+
+            checkInTime.value = "14:00";
+            checkOutTime.value = "12:00";
+            slotInput.value = "";
+        }
+
+        
+
+        updatePrice();
+
+
+                // 🔥 VERY IMPORTANT
+        if (checkInPicker) checkInPicker.redraw();
+        if (checkOutPicker) checkOutPicker.redraw();
+    });
+
+    // ================= SLOT =================
+    slotUI.addEventListener("change", function () {
+
+        const val = this.value;
+        if (!val) return;
+
+        const [start, end] = val.split("-");
+
+        checkInTime.value = start;
+        checkOutTime.value = end;
+        slotInput.value = val;
+
+        updatePrice();
+    });
+
+    // ================= PRICE =================
+    function updatePrice() {
+
+        const checkIn = document.querySelector("input[name='check_in']").value;
+        const checkOut = document.querySelector("input[name='check_out']").value;
+
+        if (!checkIn || !checkOut) return;
+
+        let total = 0;
+
+        let start = new Date(checkIn);
+        let end = new Date(checkOut);
+
+        if (type.value === "half") {
+
+            const day = start.getDay();
+            total = (day === 0 || day === 6) ? weekendHalf : weekdayHalf;
+
+        } else {
+
+            let current = new Date(start);
+
+            while (current < end) {
+
+                const day = current.getDay();
+                total += (day === 0 || day === 6) ? weekend : weekday;
+
+                current.setDate(current.getDate() + 1);
+            }
+        }
+
+        const extra = parseInt(
+            document.querySelector("input[name='extra_guest_count']").value || 0
+        );
+
+        total += extra * extraPrice;
+
+        totalInput.value = "₹ " + total;
+    }
+
+    // EVENTS
+    document.querySelector("input[name='check_in']").addEventListener("change", updatePrice);
+    document.querySelector("input[name='check_out']").addEventListener("change", updatePrice);
+    document.querySelector("input[name='extra_guest_count']").addEventListener("input", updatePrice);
+
+});
+
+
+{% comment %} type.addEventListener("change", function () {
+
+    if (this.value === "half") {
+        slotWrapper.style.display = "block";
+    } else {
+        slotWrapper.style.display = "none";
+    }
+
+    // 🔥 IMPORTANT
+    checkInPicker.redraw();
+}); {% endcomment %}
 
 
 </script>
