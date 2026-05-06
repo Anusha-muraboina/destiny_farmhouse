@@ -52,6 +52,16 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
         cursor: pointer;
     }  {% endcomment %}
 
+
+
+        /* 🔴 Booked dates */
+    .flatpickr-day.booked-date {
+        background: #f87171 !important;
+        color: white !important;
+        border: 1px solid #ef4444 !important;
+        cursor: not-allowed;
+    }
+
     /* 🟠 Admin blocked dates */
     .flatpickr-day.blocked-date {
         background: rgba(233, 146, 84, 1) !important;
@@ -60,6 +70,8 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
         border: 1px solid #f8a970ff !important;
         cursor: not-allowed;
     }
+
+    
 
     /* 🟢 Selected range */
     {% comment %} .flatpickr-day.inRange,
@@ -141,6 +153,7 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
 .flatpickr-day.flatpickr-disabled {
     opacity: 1 !important;   /* remove fade */
     color: #7a0707 !important;  /* dark text */
+    background: rgb(237, 236, 236) !important; 
     {% comment %} background: #f9fafb !important; /* light background */ {% endcomment %}
 }
 
@@ -821,7 +834,7 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
        
         <span>
             By completing this reservation you are accepting our
-            <a href="{% url 'home' %}" onclick="setScroll('terms')" target="_blank"
+            <a href="{% url 'terms' %}" target="_blank"
                class="text-yellow-900 font-semibold underline">
                 Terms & Conditions
             </a>
@@ -2153,7 +2166,12 @@ function formatLocalDate(date) {
 
 
 <script>
+
+
+
 function decorateDay(dayElem) {
+
+    
 
     const date = dayElem.dateObj;
     if (!date) return;
@@ -2265,6 +2283,9 @@ function formatPrice(price) {
 
         const date = dayElem.dateObj;
         if (!date) return;
+        
+
+        
 
         // ✅ GET BOOKING TYPE CORRECTLY
         const bookingType = document.getElementById("booking_type").value;
@@ -2309,6 +2330,9 @@ function formatPrice(price) {
                     : weekday;
             }
         }
+
+
+        
 
         // ✅ REMOVE OLD PRICE
         const old = dayElem.querySelector(".price-tag");

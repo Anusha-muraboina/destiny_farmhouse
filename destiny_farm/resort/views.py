@@ -281,7 +281,8 @@ def calculate_booking_cost(check_in, check_out, guest_count, extra_guest_count):
 
 
 
-
+def terms_view(request):
+    return render(request, "resort/terms.html")
 
 
 

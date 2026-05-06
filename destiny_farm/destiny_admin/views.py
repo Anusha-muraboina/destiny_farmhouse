@@ -954,16 +954,46 @@ def admin_booking_create(request):
         "offer_dates": offer_dict,
     })
 
+
 @login_required(login_url="destiny_admin:login")
-# @user_passes_test(is_admin)
 @permission_required('resort.change_booking', raise_exception=True)
 def booking_edit(request, pk):
 
     booking = get_object_or_404(Booking, pk=pk)
 
-    # 🔑 VERY IMPORTANT (before form)
     old_status = booking.status
     old_payment_status = booking.payment_status
+
+    # ================= BLOCKED DATES =================
+    booked_dates = []
+    for b in Booking.objects.filter(status__in=["confirmed", "pending"]):
+        d = b.check_in
+        while d < b.check_out:
+            booked_dates.append(d.strftime("%Y-%m-%d"))
+            d += timedelta(days=1)
+
+    blocked_dates = []
+    for block in BlockedDate.objects.all():
+        d = block.start_date
+        while d < block.end_date:
+            blocked_dates.append(d.strftime("%Y-%m-%d"))
+            d += timedelta(days=1)
+
+    all_blocked = list(set(booked_dates + blocked_dates))
+
+    # ================= PRICING =================
+    pricing = VillaPricing.objects.first()
+
+    # ================= OFFER DATA =================
+    offers = Offer.objects.filter(is_active=True)
+
+    offer_dict = {}
+
+    for o in offers:
+        current = o.valid_from
+        while current <= o.valid_until:
+            offer_dict[current.strftime("%Y-%m-%d")] = float(o.offer_price)
+            current += timedelta(days=1)
 
     # ================= FORM =================
     if request.method == "POST":
@@ -972,26 +1002,20 @@ def booking_edit(request, pk):
         if form.is_valid():
             updated_booking = form.save(commit=False)
 
-            # Safe defaults
-            # updated_booking.status = updated_booking.status or "confirmed"
             updated_booking.status = updated_booking.status or old_status
-
             updated_booking.payment_status = (
                 updated_booking.payment_status or old_payment_status
             )
 
             updated_booking.save()
 
-            # ================= EMAIL LOGIC =================
+            # EMAIL
             if (
                 old_status != updated_booking.status
                 or old_payment_status != updated_booking.payment_status
             ):
                 try:
-                    send_booking_emails(
-                        updated_booking,
-                        old_status=old_status
-                    )
+                    send_booking_emails(updated_booking, old_status=old_status)
                 except Exception as e:
                     print("EMAIL ERROR:", e)
 
@@ -1004,10 +1028,71 @@ def booking_edit(request, pk):
     else:
         form = AdminBookingForm(instance=booking)
 
+    # ================= IMPORTANT CONTEXT =================
     return render(request, "adminpanel/booking_form.html", {
         "form": form,
         "booking": booking,
+
+        # 🔥 REQUIRED FOR CALENDAR
+        "pricing": pricing,
+        "offer_dates": offer_dict,
+        "booked_dates": all_blocked,
+        "blocked_dates": all_blocked,
     })
+# @login_required(login_url="destiny_admin:login")
+# # @user_passes_test(is_admin)
+# @permission_required('resort.change_booking', raise_exception=True)
+# def booking_edit(request, pk):
+
+#     booking = get_object_or_404(Booking, pk=pk)
+
+#     # 🔑 VERY IMPORTANT (before form)
+#     old_status = booking.status
+#     old_payment_status = booking.payment_status
+
+#     # ================= FORM =================
+#     if request.method == "POST":
+#         form = AdminBookingForm(request.POST, instance=booking)
+
+#         if form.is_valid():
+#             updated_booking = form.save(commit=False)
+
+#             # Safe defaults
+#             # updated_booking.status = updated_booking.status or "confirmed"
+#             updated_booking.status = updated_booking.status or old_status
+
+#             updated_booking.payment_status = (
+#                 updated_booking.payment_status or old_payment_status
+#             )
+
+#             updated_booking.save()
+
+#             # ================= EMAIL LOGIC =================
+#             if (
+#                 old_status != updated_booking.status
+#                 or old_payment_status != updated_booking.payment_status
+#             ):
+#                 try:
+#                     send_booking_emails(
+#                         updated_booking,
+#                         old_status=old_status
+#                     )
+#                 except Exception as e:
+#                     print("EMAIL ERROR:", e)
+
+#             messages.success(
+#                 request,
+#                 f"Booking {updated_booking.booking_id} updated successfully."
+#             )
+#             return redirect("destiny_admin:booking_list")
+
+#     else:
+#         form = AdminBookingForm(instance=booking)
+
+#     return render(request, "adminpanel/booking_form.html", {
+#         "form": form,
+#         "booking": booking,
+#     })
 
 # @login_required(login_url="destiny_admin:login")
 # @user_passes_test(is_admin)
