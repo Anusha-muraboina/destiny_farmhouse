@@ -828,7 +828,7 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
        
         <span>
             By completing this reservation you are accepting our
-            <a href="{% url 'terms' %}" target="_blank"
+            <a href="{% url 'terms' %}" onclick="setScroll('room_detail')" 
                class="text-yellow-900 font-semibold underline">
                 Terms & Conditions
             </a>
@@ -992,6 +992,23 @@ function toggleCollapse(id) {
 </script> {% endcomment %}
 
 <script>
+function setScroll(section) {
+    sessionStorage.setItem("scrollTo", section);
+}
+
+window.addEventListener("load", function () {
+    const section = sessionStorage.getItem("scrollTo");
+
+    if (section) {
+        const el = document.getElementById(section);
+        if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+        }
+
+        sessionStorage.removeItem("scrollTo");
+    }
+});
+
 
 const offerDates = JSON.parse(
     document.getElementById("offer-dates-data").textContent

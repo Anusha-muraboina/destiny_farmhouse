@@ -754,7 +754,7 @@
                     class="menu-text">Ratings</span></a>
              {% endif %}
             
-            {% if perms.resort.view_user %}
+            {% if perms.auth.view_user %}
             <a href="{% url 'destiny_admin:user_list' %}" class="menu-item"><i class="fa-solid fa-users-gear"></i> <span
                     class="menu-text">Users</span></a>
              {% endif %}

@@ -115,7 +115,7 @@ DATABASES = {
         'NAME': 'destiny_farmhouse',
         'USER': 'destiny_user',
         'PASSWORD': 'destiny@123',
-        'HOST': '3.6.87.103',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
@@ -207,22 +207,26 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'laxminarayaninfotech1@gmail.com'
-EMAIL_HOST_PASSWORD = 'odcqvzvymjixrlha'
-DEFAULT_FROM_EMAIL = 'laxminarayaninfotech1@gmail.com'
-ADMIN_EMAIL = 'laxminarayaninfotech1@gmail.com' 
+EMAIL_HOST_USER = 'destanyfarm4@gmail.com'
+EMAIL_HOST_PASSWORD = 'fndewughhucchaqz'
+DEFAULT_FROM_EMAIL = 'destanyfarm4@gmail.com'
+ADMIN_EMAIL = 'destanyfarm4@gmail.com' 
 
 # FRONTEND_URL = 'http://127.0.0.1:9000'  
 
 CC_EMAIL = [
     'anushamuraboina9@gmail.com',
     'laxminarayaninfotech1@gmail.com',
-    'destanyfarm4@gmail.com',
 ]
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True
 
 
+
+
+
+RECAPTCHA_SITE_KEY = "6LeDIuEsAAAAAHjh2XlUAIPmoENdOKt6YT9VJ0Ta"
+RECAPTCHA_SECRET_KEY = "6LeDIuEsAAAAAGZ_8-bRkbD4bQX4PlWyyJaXqFVQ"
 
 # Django allauth (if you are using it)
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'

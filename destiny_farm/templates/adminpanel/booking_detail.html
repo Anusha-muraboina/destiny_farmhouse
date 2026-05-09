@@ -39,6 +39,33 @@
                 <p><strong>Extra Guests:</strong> {{ booking.extra_guest_count|default:"0" }}</p>
             </div>
 
+
+
+
+
+        <!-- SEND COUPON -->
+<form method="POST" action="{% url 'destiny_admin:send_booking_coupon' booking.id %}">
+    {% csrf_token %}
+
+    <div class="flex gap-2 mt-4">
+
+        <select name="coupon_id" class="border p-2 rounded w-full">
+            {% for coupon in coupons %}
+                <option value="{{ coupon.id }}">
+                    {{ coupon.code }} - ₹{{ coupon.discount_amount }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit"
+            class="bg-blue-600 text-white px-4 py-2 rounded">
+            Send Coupon
+        </button>
+
+    </div>
+</form>
+
+
             <!-- STAY INFO -->
             <div>
                 <h3 class="section-title">Stay Details</h3>

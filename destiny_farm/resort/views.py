@@ -48,6 +48,30 @@ def home(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
 
+           # ✅ RECAPTCHA VALIDATION
+        recaptcha_response = request.POST.get("g-recaptcha-response")
+
+        if not recaptcha_response:
+            messages.error(request, "Please verify reCAPTCHA.")
+            return redirect("home")
+
+        data = {
+            "secret": settings.RECAPTCHA_SECRET_KEY,
+            "response": recaptcha_response
+        }
+
+        r = requests.post(
+            "https://www.google.com/recaptcha/api/siteverify",
+            data=data
+        )
+
+        result = r.json()
+
+        if not result.get("success"):
+            messages.error(request, "Invalid reCAPTCHA. Try again.")
+            return redirect("home")
+
+
         if form.is_valid():
             contact_msg = form.save()
 
@@ -93,6 +117,10 @@ def home(request):
 
     else:
         form = ContactForm()
+        
+            # 🔥 IMPORTANT: ADD THIS
+
+    
     """Homepage view"""
     banners = MainBanner.objects.filter(active=True).order_by("slot_position")
     seo_banner = banners.first()
@@ -112,6 +140,10 @@ def home(request):
         ).order_by("slot_position")[:8]
 
     context = {
+        
+        "form": form,
+        "RECAPTCHA_SITE_KEY": settings.RECAPTCHA_SITE_KEY,
+
         'featured_rooms': featured_rooms,
         'amenities': amenities,
         "banners": banners,

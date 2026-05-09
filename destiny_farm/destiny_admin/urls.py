@@ -89,10 +89,6 @@ urlpatterns = [
 
 
 
-
-
-
-
     # BLOG
     path('blog/', views.blog_list, name='blog_list'),
     path('blog/add/', views.blog_add, name='blog_add'),
@@ -124,6 +120,13 @@ urlpatterns = [
     path("groups/<int:pk>/delete/", views.group_delete, name="group_delete"),
 
     path("users/<int:user_id>/permissions/", views.user_permission_assign, name="user_permissions"),
+    
+    
+    
+    
+    path("booking/<int:pk>/send-coupon/", views.send_booking_coupon, name="send_booking_coupon"),
+    
+    path("download-coupon/<int:pk>/", views.download_coupon, name="download_coupon"),
 
 ]
 

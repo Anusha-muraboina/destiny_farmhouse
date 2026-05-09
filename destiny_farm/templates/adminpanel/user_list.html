@@ -11,6 +11,8 @@
     font-weight: 600;
 }
 
+
+
 .badge-admin { background:#dc2626; color:white; }
 .badge-staff { background:#2563eb; color:white; }
 .badge-user { background:#9ca3af; color:white; }
@@ -20,9 +22,13 @@
 <div class="card">
     <div class="card-header flex-between">
         <h2>System Users</h2>
+
+        {% if perms.auth.add_user %}
         <a href="{% url 'destiny_admin:user_create' %}" class="bg-[#78350f] text-white md:p-2 p-1 rounded">
             + Create User
         </a>
+        {% endif %}
+
     </div>
 <div class="table-responsive">
     <table class="admin-table">
@@ -59,12 +65,20 @@
                 <td>{{ u.date_joined|date:"M d, Y" }}</td>
                  <td>{{ u.last_login|date:"M d, Y "|default:"Never" }}</td> 
                 <td>
+
+                    {% if perms.auth.change_user %}
                     <a  ref="{% url 'destiny_admin:user_edit' u.id %}" class="btn-sm btn-view">Edit</a>
+                    {% endif %}
+
+
+                    {% if perms.auth.delete_user %}
                     <a href="{% url 'destiny_admin:user_delete' u.id %}"
                        class="btn-sm btn-delete"
                        onclick="return confirm('Delete this user?');">
                         Delete
                     </a>
+                    {% endif %}
+
                 </td>
             </tr>
         {% empty %}

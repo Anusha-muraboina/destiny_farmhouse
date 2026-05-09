@@ -1165,15 +1165,18 @@ def booking_edit(request, pk):
 @permission_required('resort.view_booking', raise_exception=True)
 def booking_detail(request, pk):
     booking = get_object_or_404(Booking, pk=pk)
-    return render(request, "adminpanel/booking_detail.html", {"booking": booking})
+    coupons = Coupon.objects.filter(is_active=True)
+    return render(request, "adminpanel/booking_detail.html", {"booking": booking ,"coupons": coupons})
 
 
 @login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
 @permission_required('resort.view_booking', raise_exception=True)
 def booking_api_detail(request, pk):
+    coupons = Coupon.objects.filter(is_active=True)
     return render(request, "adminpanel/booking_api_detail.html", {
-        "booking_id": pk
+        "booking_id": pk,
+        "coupons": coupons
     })
 
 
@@ -1817,6 +1820,7 @@ def message_delete(request, pk):
 # LIST
 @login_required(login_url='destiny_admin:login')
 # @user_passes_test(is_admin)
+@permission_required('auth.view_user', raise_exception=True)
 def user_list(request):
     users = User.objects.all().order_by('-date_joined')
     return render(request, 'adminpanel/user_list.html', {'users': users})
@@ -1824,6 +1828,7 @@ def user_list(request):
 
 # CREATE
 @login_required(login_url='destiny_admin:login')
+@permission_required('auth.add_user', raise_exception=True)
 @user_passes_test(is_admin)
 def user_create(request):
     if request.method == 'POST':
@@ -1858,7 +1863,8 @@ def user_create(request):
 # EDIT
 
 @login_required(login_url='destiny_admin:login')
-@user_passes_test(is_admin)
+# @user_passes_test(is_admin)
+@permission_required('auth.change_user', raise_exception=True)
 def user_edit(request, pk):
     user = get_object_or_404(User, pk=pk)
 
@@ -1923,7 +1929,8 @@ def user_edit(request, pk):
 
 # DELETE
 @login_required(login_url='destiny_admin:login')
-@user_passes_test(is_admin)
+# @user_passes_test(is_admin)
+@permission_required('auth.delete_user', raise_exception=True)
 def user_delete(request, pk):
     user = get_object_or_404(User, pk=pk)
 
@@ -2464,3 +2471,73 @@ def user_permission_assign(request, user_id):
 #         "groups": groups,
 #         "permissions": permissions
 #     })
+
+
+
+
+
+from django.core.mail import send_mail
+
+@login_required(login_url='destiny_admin:login')
+@permission_required('resort.view_booking', raise_exception=True)
+def send_booking_coupon(request, pk):
+    booking = get_object_or_404(Booking, pk=pk)
+
+    if request.method == "POST":
+        coupon_id = request.POST.get("coupon_id")
+        coupon = get_object_or_404(Coupon, id=coupon_id)
+
+        # 🔥 EMAIL MESSAGE
+        message = f"""
+🎉 Destiny Farmhouse Coupon
+
+Hello {booking.guest_name},
+
+You have received a special coupon!
+
+Code: {coupon.code}
+Discount: ₹{coupon.discount_amount}
+
+Valid from: {coupon.valid_from}
+Valid until: {coupon.valid_until}
+
+Download your coupon:
+http://127.0.0.1:8000/download-coupon/{coupon.id}/
+
+Thank you!
+"""
+
+        send_mail(
+            subject="Your Farmhouse Coupon 🎁",
+            message=message,
+            from_email="your@email.com",
+            recipient_list=[booking.guest_email],
+        )
+
+        messages.success(request, "Coupon sent to user email successfully!")
+        return redirect("destiny_admin:booking_detail", pk=booking.id)
+    
+    
+    
+    
+    
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from django.http import HttpResponse
+
+def download_coupon(request, pk):
+    coupon = get_object_or_404(Coupon, pk=pk)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="coupon_{coupon.code}.pdf"'
+
+    doc = SimpleDocTemplate(response)
+    content = []
+
+    content.append(Paragraph("DESTINY FARMHOUSE COUPON", getSampleStyleSheet()['Title']))
+    content.append(Spacer(1, 20))
+    content.append(Paragraph(f"Code: {coupon.code}", getSampleStyleSheet()['Normal']))
+    content.append(Paragraph(f"Discount: ₹{coupon.discount_amount}", getSampleStyleSheet()['Normal']))
+    content.append(Paragraph(f"Valid: {coupon.valid_from} to {coupon.valid_until}", getSampleStyleSheet()['Normal']))
+
+    doc.build(content)
+    return response
