@@ -42,72 +42,184 @@ from django.http import JsonResponse, HttpResponse
 # from django.views.decorators.csrf import csrf_exempt
 # from decimal import Decimal
 from django.db import transaction
-
+try:
+    from ratelimit.decorators import ratelimit
+except ImportError:
+    def ratelimit(*args, **kwargs):
+        def decorator(func):
+            return func
+        return decorator
 def home(request):
       # ================= CONTACT FORM =================
+    # if request.method == "POST":
+    #     form = ContactForm(request.POST)
+        
+    #     recaptcha_response = request.POST.get("g-recaptcha-response")
+    #     is_captcha_valid = False
+
+    #     if not recaptcha_response:
+    #         messages.error(request, "Please verify reCAPTCHA.")
+    #     else:
+    #         data = {
+    #             "secret": settings.RECAPTCHA_SECRET_KEY,
+    #             "response": recaptcha_response
+    #         }
+
+    #         r = requests.post(
+    #             "https://www.google.com/recaptcha/api/siteverify",
+    #             data=data
+    #         )
+
+    #         result = r.json()
+    #         print(result)
+
+    #         if result.get("success"):
+    #             is_captcha_valid = True
+    #         else:
+    #             messages.error(request, "Invalid reCAPTCHA. Try again.")
+
+    #     # ✅ ONLY SAVE IF VALID
+    #     if is_captcha_valid and form.is_valid():
+    #         form.save()
+    #         messages.success(request, "Message sent successfully.")
+
+    #         # redirect ONLY on success
+    #         return redirect(f"{reverse('home')}#contact")
+
+    #        # ✅ RECAPTCHA VALIDATION
+    #     # recaptcha_response = request.POST.get("g-recaptcha-response")
+
+    #     # if not recaptcha_response:
+            
+    #     #     messages.error(request, "Please verify reCAPTCHA.")
+    #     #     return redirect(f"{reverse('home')}#contact")
+
+    #     # data = {
+    #     #     "secret": settings.RECAPTCHA_SECRET_KEY,
+    #     #     "response": recaptcha_response
+    #     # }
+
+    #     # r = requests.post(
+    #     #     "https://www.google.com/recaptcha/api/siteverify",
+    #     #     data=data
+    #     # )
+
+    #     # result = r.json()
+
+    #     # if not result.get("success"):
+    #     #     messages.error(request, "Invalid reCAPTCHA. Try again.")
+    #     #     return redirect(f"{reverse('home')}#contact")
+
+
+    #     if form.is_valid():
+    #         contact_msg = form.save()
+
+    #         context = {
+    #             "name": contact_msg.name,
+    #             "email": contact_msg.email,
+    #             "phone": contact_msg.phone,
+    #             "subject": contact_msg.subject,
+    #             "message": contact_msg.message,
+    #         }
+
+    #         # ---------- ADMIN EMAIL ----------
+    #         admin_html = render_to_string(
+    #             "contact/admin_contact.html", context
+    #         )
+
+    #         admin_email = EmailMultiAlternatives(
+    #             subject=f"New Contact Message: {contact_msg.subject}",
+    #             body="",
+    #             from_email=settings.DEFAULT_FROM_EMAIL,
+    #             to=[settings.ADMIN_EMAIL],
+    #         )
+    #         admin_email.attach_alternative(admin_html, "text/html")
+    #         admin_email.send()
+
+    #         # ---------- USER EMAIL ----------
+    #         user_html = render_to_string(
+    #             "contact/user_contact.html", context
+    #         )
+
+    #         user_email = EmailMultiAlternatives(
+    #             subject="Thank you for contacting Destany Farmhouse",
+    #             body="",
+    #             from_email=settings.DEFAULT_FROM_EMAIL,
+    #             to=[contact_msg.email],
+    #         )
+    #         user_email.attach_alternative(user_html, "text/html")
+    #         user_email.send()
+
+
+    #                         # 🔥 SEND ASYNC (NO BLOCK)
+    #         # import threading
+    #         threading.Thread(
+    #             target=lambda: admin_email.send(fail_silently=True)
+    #         ).start()
+
+    #         messages.success(request, "Thank you! Your message has been sent successfully.")
+
+    #         return redirect("home")  # reload same page
+
+    # else:
+    #     form = ContactForm()
+    
+    
     if request.method == "POST":
         form = ContactForm(request.POST)
-        
+
+        # 🔒 Honeypot field (hidden)
+        if request.POST.get("website"):  
+            return redirect("home")  # bot detected
+
+        # 🔒 reCAPTCHA validation
         recaptcha_response = request.POST.get("g-recaptcha-response")
-        is_captcha_valid = False
 
         if not recaptcha_response:
             messages.error(request, "Please verify reCAPTCHA.")
-        else:
-            data = {
-                "secret": settings.RECAPTCHA_SECRET_KEY,
-                "response": recaptcha_response
-            }
-
-            r = requests.post(
-                "https://www.google.com/recaptcha/api/siteverify",
-                data=data
-            )
-
-            result = r.json()
-            print(result)
-
-            if result.get("success"):
-                is_captcha_valid = True
-            else:
-                messages.error(request, "Invalid reCAPTCHA. Try again.")
-
-        # ✅ ONLY SAVE IF VALID
-        if is_captcha_valid and form.is_valid():
-            form.save()
-            messages.success(request, "Message sent successfully.")
-
-            # redirect ONLY on success
             return redirect(f"{reverse('home')}#contact")
 
-           # ✅ RECAPTCHA VALIDATION
-        # recaptcha_response = request.POST.get("g-recaptcha-response")
+        data = {
+            "secret": settings.RECAPTCHA_SECRET_KEY,
+            "response": recaptcha_response
+        }
 
-        # if not recaptcha_response:
-            
-        #     messages.error(request, "Please verify reCAPTCHA.")
-        #     return redirect(f"{reverse('home')}#contact")
+        r = requests.post(
+            "https://www.google.com/recaptcha/api/siteverify",
+            data=data,
+            timeout=5
+        )
 
-        # data = {
-        #     "secret": settings.RECAPTCHA_SECRET_KEY,
-        #     "response": recaptcha_response
-        # }
+        result = r.json()
 
-        # r = requests.post(
-        #     "https://www.google.com/recaptcha/api/siteverify",
-        #     data=data
-        # )
+        if not result.get("success"):
+            messages.error(request, "Invalid reCAPTCHA.")
+            return redirect(f"{reverse('home')}#contact")
 
-        # result = r.json()
-
-        # if not result.get("success"):
-        #     messages.error(request, "Invalid reCAPTCHA. Try again.")
-        #     return redirect(f"{reverse('home')}#contact")
-
-
+        # ✅ FINAL SAVE (ONLY ONCE)
         if form.is_valid():
+
+
+            email = form.cleaned_data.get("email", "").lower()
+
+            # 🚫 BLOCK SPAM EMAILS
+            if "test" in email or "spam" in email:
+                messages.error(request, "Invalid email.")
+                return redirect(f"{reverse('home')}#contact")
+            # 🚫 Prevent duplicate spam
+            last_msg = ContactMessage.objects.filter(
+                email=form.cleaned_data["email"]
+            ).order_by("-created_at").first()
+
+            if last_msg:
+                diff = datetime.now() - last_msg.created_at.replace(tzinfo=None)
+                if diff.seconds < 60:  # 1 min restriction
+                    messages.error(request, "Please wait before sending again.")
+                    return redirect("home") 
+
             contact_msg = form.save()
 
+            # 🔥 SEND EMAIL ONLY ONCE
             context = {
                 "name": contact_msg.name,
                 "email": contact_msg.email,
@@ -116,44 +228,21 @@ def home(request):
                 "message": contact_msg.message,
             }
 
-            # ---------- ADMIN EMAIL ----------
-            admin_html = render_to_string(
-                "contact/admin_contact.html", context
-            )
+            admin_html = render_to_string("contact/admin_contact.html", context)
 
-            admin_email = EmailMultiAlternatives(
+            email = EmailMultiAlternatives(
                 subject=f"New Contact Message: {contact_msg.subject}",
                 body="",
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=[settings.ADMIN_EMAIL],
             )
-            admin_email.attach_alternative(admin_html, "text/html")
-            admin_email.send()
+            email.attach_alternative(admin_html, "text/html")
 
-            # ---------- USER EMAIL ----------
-            user_html = render_to_string(
-                "contact/user_contact.html", context
-            )
+            # ✅ Async send (safe)
+            threading.Thread(target=email.send, daemon=True).start()
 
-            user_email = EmailMultiAlternatives(
-                subject="Thank you for contacting Destany Farmhouse",
-                body="",
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                to=[contact_msg.email],
-            )
-            user_email.attach_alternative(user_html, "text/html")
-            user_email.send()
-
-
-                            # 🔥 SEND ASYNC (NO BLOCK)
-            # import threading
-            threading.Thread(
-                target=lambda: admin_email.send(fail_silently=True)
-            ).start()
-
-            messages.success(request, "Thank you! Your message has been sent successfully.")
-
-            return redirect("home")  # reload same page
+            messages.success(request, "Message sent successfully.")
+            return redirect("home") 
 
     else:
         form = ContactForm()

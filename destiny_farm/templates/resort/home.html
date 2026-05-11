@@ -501,7 +501,8 @@
       <!-- ✅ POST TO SAME HOME PAGE -->
       <form method="post" action="" class="space-y-5">
         {% csrf_token %}
-
+        <!-- 🔥 HIDDEN FIELD FOR BOTS -->
+        <input type="text" name="website" style="display:none">
         <div class="flex items-center">
           <label class="w-32 font-semibold text-gray-700">
             Your Name
