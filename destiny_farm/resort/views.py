@@ -48,7 +48,6 @@ def home(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         
-        
         recaptcha_response = request.POST.get("g-recaptcha-response")
         is_captcha_valid = False
 
@@ -144,6 +143,13 @@ def home(request):
             )
             user_email.attach_alternative(user_html, "text/html")
             user_email.send()
+
+
+                            # 🔥 SEND ASYNC (NO BLOCK)
+            # import threading
+            threading.Thread(
+                target=lambda: admin_email.send(fail_silently=True)
+            ).start()
 
             messages.success(request, "Thank you! Your message has been sent successfully.")
 
