@@ -47,29 +47,63 @@ def home(request):
       # ================= CONTACT FORM =================
     if request.method == "POST":
         form = ContactForm(request.POST)
-
-           # ✅ RECAPTCHA VALIDATION
+        
+        
         recaptcha_response = request.POST.get("g-recaptcha-response")
+        is_captcha_valid = False
 
         if not recaptcha_response:
             messages.error(request, "Please verify reCAPTCHA.")
-            return redirect("home")
+        else:
+            data = {
+                "secret": settings.RECAPTCHA_SECRET_KEY,
+                "response": recaptcha_response
+            }
 
-        data = {
-            "secret": settings.RECAPTCHA_SECRET_KEY,
-            "response": recaptcha_response
-        }
+            r = requests.post(
+                "https://www.google.com/recaptcha/api/siteverify",
+                data=data
+            )
 
-        r = requests.post(
-            "https://www.google.com/recaptcha/api/siteverify",
-            data=data
-        )
+            result = r.json()
+            print(result)
 
-        result = r.json()
+            if result.get("success"):
+                is_captcha_valid = True
+            else:
+                messages.error(request, "Invalid reCAPTCHA. Try again.")
 
-        if not result.get("success"):
-            messages.error(request, "Invalid reCAPTCHA. Try again.")
-            return redirect("home")
+        # ✅ ONLY SAVE IF VALID
+        if is_captcha_valid and form.is_valid():
+            form.save()
+            messages.success(request, "Message sent successfully.")
+
+            # redirect ONLY on success
+            return redirect(f"{reverse('home')}#contact")
+
+           # ✅ RECAPTCHA VALIDATION
+        # recaptcha_response = request.POST.get("g-recaptcha-response")
+
+        # if not recaptcha_response:
+            
+        #     messages.error(request, "Please verify reCAPTCHA.")
+        #     return redirect(f"{reverse('home')}#contact")
+
+        # data = {
+        #     "secret": settings.RECAPTCHA_SECRET_KEY,
+        #     "response": recaptcha_response
+        # }
+
+        # r = requests.post(
+        #     "https://www.google.com/recaptcha/api/siteverify",
+        #     data=data
+        # )
+
+        # result = r.json()
+
+        # if not result.get("success"):
+        #     messages.error(request, "Invalid reCAPTCHA. Try again.")
+        #     return redirect(f"{reverse('home')}#contact")
 
 
         if form.is_valid():
