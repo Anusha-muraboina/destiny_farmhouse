@@ -228,18 +228,48 @@ def home(request):
                 "message": contact_msg.message,
             }
 
-            admin_html = render_to_string("contact/admin_contact.html", context)
+            # admin_html = render_to_string("contact/admin_contact.html", context)
+            
+            
+            admin_html = render_to_string(
+                "contact/admin_contact.html", context
+            )
 
-            email = EmailMultiAlternatives(
+            admin_email = EmailMultiAlternatives(
                 subject=f"New Contact Message: {contact_msg.subject}",
                 body="",
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=[settings.ADMIN_EMAIL],
             )
-            email.attach_alternative(admin_html, "text/html")
+            admin_email.attach_alternative(admin_html, "text/html")
+
+            # email = EmailMultiAlternatives(
+            #     subject=f"New Contact Message: {contact_msg.subject}",
+            #     body="",
+            #     from_email=settings.DEFAULT_FROM_EMAIL,
+            #     to=[settings.ADMIN_EMAIL],
+            # )
+            # email.attach_alternative(admin_html, "text/html")
+            
+            user_html = render_to_string(
+                "contact/user_contact.html", context
+            )
+
+
+            user_email = EmailMultiAlternatives(
+                subject="Thank you for contacting Vivaan Farmhouse",
+                body="",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[contact_msg.email],
+            )
+            user_email.attach_alternative(user_html, "text/html")
 
             # ✅ Async send (safe)
-            threading.Thread(target=email.send, daemon=True).start()
+            # threading.Thread(target=email.send, daemon=True).start()
+            
+            threading.Thread(target=admin_email.send, daemon=True).start()
+            threading.Thread(target=user_email.send, daemon=True).start()
+
 
             messages.success(request, "Message sent successfully.")
             return redirect("home") 

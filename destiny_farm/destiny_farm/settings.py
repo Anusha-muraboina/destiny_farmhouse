@@ -62,11 +62,11 @@ INSTALLED_APPS = [
     
     'corsheaders',
     
-    'ratelimit',
+    # 'ratelimit',
 ]
 
 
-SITE_ID = 2
+SITE_ID = 1
 
 SITE_URL = "https://destinyfarm4.com"
 
