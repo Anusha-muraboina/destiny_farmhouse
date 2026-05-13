@@ -2475,69 +2475,426 @@ def user_permission_assign(request, user_id):
 
 
 
-
+from django.core.mail import EmailMessage
 from django.core.mail import send_mail
+from django.core.mail import send_mail
+from django.conf import settings
+from django.urls import reverse
+
+
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.urls import reverse
+from django.shortcuts import (
+    get_object_or_404,
+    redirect
+)
+from django.contrib import messages
+from django.contrib.auth.decorators import (
+    login_required,
+    permission_required
+)
+
+from resort.models import (
+    Booking,
+    Coupon
+)
+
 
 @login_required(login_url='destiny_admin:login')
-@permission_required('resort.view_booking', raise_exception=True)
+@permission_required(
+    'resort.view_booking',
+    raise_exception=True
+)
 def send_booking_coupon(request, pk):
-    booking = get_object_or_404(Booking, pk=pk)
+
+    # =========================
+    # GET BOOKING
+    # =========================
+
+    booking = get_object_or_404(
+        Booking,
+        pk=pk
+    )
 
     if request.method == "POST":
-        coupon_id = request.POST.get("coupon_id")
-        coupon = get_object_or_404(Coupon, id=coupon_id)
 
-        # 🔥 EMAIL MESSAGE
-        message = f"""
-🎉 Destiny Farmhouse Coupon
+        # =========================
+        # GET COUPON
+        # =========================
 
-Hello {booking.guest_name},
-
-You have received a special coupon!
-
-Code: {coupon.code}
-Discount: ₹{coupon.discount_amount}
-
-Valid from: {coupon.valid_from}
-Valid until: {coupon.valid_until}
-
-Download your coupon:
-http://127.0.0.1:8000/download-coupon/{coupon.id}/
-
-Thank you!
-"""
-
-        send_mail(
-            subject="Your Farmhouse Coupon 🎁",
-            message=message,
-            from_email="your@email.com",
-            recipient_list=[booking.guest_email],
+        coupon_id = request.POST.get(
+            "coupon_id"
         )
 
-        messages.success(request, "Coupon sent to user email successfully!")
-        return redirect("destiny_admin:booking_detail", pk=booking.id)
+        coupon = get_object_or_404(
+            Coupon,
+            id=coupon_id
+        )
+
+        # =========================
+        # DOWNLOAD URL
+        # =========================
+
+        coupon_url = request.build_absolute_uri(
+
+            reverse(
+                "destiny_admin:download_coupon",
+                args=[coupon.id]
+            )
+        )
+
+        # =========================
+        # RENDER HTML TEMPLATE
+        # =========================
+
+        html_message = render_to_string(
+
+            "emails/coupon_pdf.html",
+
+            {
+                "booking": booking,
+                "coupon": coupon,
+                "coupon_url": coupon_url,
+            }
+        )
+
+        # =========================
+        # CREATE EMAIL
+        # =========================
+
+        email = EmailMessage(
+
+            subject=(
+                "Your Destiny Farmhouse "
+                "Special Coupon"
+            ),
+
+            body=html_message,
+
+            from_email=(
+                f"Destiny Farmhouse "
+                f"<{settings.EMAIL_HOST_USER}>"
+            ),
+
+            to=[
+                booking.guest_email.strip()
+            ],
+        )
+
+        # =========================
+        # SEND AS HTML
+        # =========================
+
+        email.content_subtype = "html"
+
+        # =========================
+        # SEND EMAIL
+        # =========================
+
+        email.send(
+            fail_silently=False
+        )
+
+        print(
+            "EMAIL SENT SUCCESSFULLY"
+        )
+
+        # =========================
+        # SUCCESS MESSAGE
+        # =========================
+
+        messages.success(
+            request,
+            "Coupon sent successfully!"
+        )
+
+        return redirect(
+            "destiny_admin:booking_detail",
+            pk=booking.id
+        )
+
+# @login_required(login_url='destiny_admin:login')
+# @permission_required('resort.view_booking', raise_exception=True)
+# def send_booking_coupon(request, pk):
+
+#     booking = get_object_or_404(Booking, pk=pk)
+
+#     if request.method == "POST":
+
+#         coupon_id = request.POST.get("coupon_id")
+
+#         coupon = get_object_or_404(Coupon, id=coupon_id)
+
+#         # ✅ REAL URL
+#         coupon_url = request.build_absolute_uri(
+#             # reverse("download_coupon", args=[coupon.id])
+#             reverse("destiny_admin:download_coupon", args=[coupon.id])
+#         )
+
+#         message = f"""
+#         Hello {booking.guest_name},
+
+#         You received a special coupon.
+
+#         Coupon Code: {coupon.code}
+
+#         Discount: ₹{coupon.discount_amount}
+
+#         Valid Until: {coupon.valid_until}
+#         Download Your Coupon PDF:
+#         {coupon_url}
+
+#         Thank you.
+#         """
+
+#         email = EmailMessage(
+#             subject="Destiny Farmhouse Coupon",
+#             body=message,
+#             from_email=settings.EMAIL_HOST_USER,
+#             to=[booking.guest_email],
+#         )
+
+#         email.send(fail_silently=False)
+
+#         print("EMAIL SENT SUCCESSFULLY")
+
+
+
+#         messages.success(request, "Coupon sent successfully!")
+
+#         return redirect("destiny_admin:booking_detail", pk=booking.id)
     
-    
-    
-    
-    
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer,
+    Table,
+    TableStyle
+)
+
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet
+
+from resort.models import Coupon
+
+
+@login_required(login_url='destiny_admin:login')
 def download_coupon(request, pk):
-    coupon = get_object_or_404(Coupon, pk=pk)
 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="coupon_{coupon.code}.pdf"'
+    # ✅ Get Coupon
+    coupon = get_object_or_404(
+        Coupon,
+        pk=pk
+    )
 
-    doc = SimpleDocTemplate(response)
-    content = []
+    # ✅ PDF Response
+    response = HttpResponse(
+        content_type='application/pdf'
+    )
 
-    content.append(Paragraph("DESTINY FARMHOUSE COUPON", getSampleStyleSheet()['Title']))
-    content.append(Spacer(1, 20))
-    content.append(Paragraph(f"Code: {coupon.code}", getSampleStyleSheet()['Normal']))
-    content.append(Paragraph(f"Discount: ₹{coupon.discount_amount}", getSampleStyleSheet()['Normal']))
-    content.append(Paragraph(f"Valid: {coupon.valid_from} to {coupon.valid_until}", getSampleStyleSheet()['Normal']))
+    response['Content-Disposition'] = (
+        f'attachment; filename="coupon_{coupon.code}.pdf"'
+    )
 
-    doc.build(content)
+    # ✅ Create PDF Document
+    doc = SimpleDocTemplate(
+        response,
+        pagesize=A4,
+        rightMargin=40,
+        leftMargin=40,
+        topMargin=40,
+        bottomMargin=30,
+    )
+
+    styles = getSampleStyleSheet()
+
+    elements = []
+
+    # ====================================================
+    # TITLE
+    # ====================================================
+
+    title = Paragraph(
+
+        """
+        <font size="30" color="#8B5E3C">
+        <b>DESTINY FARMHOUSE</b>
+        </font>
+        """,
+
+        styles['Title']
+    )
+
+    elements.append(title)
+
+    elements.append(Spacer(1, 15))
+
+    # ====================================================
+    # SUBTITLE
+    # ====================================================
+
+    subtitle = Paragraph(
+
+        """
+        <font size="16" color="#8B5E3C">
+        Exclusive Coupon Offer
+        </font>
+        """,
+
+        styles['Heading2']
+    )
+
+    elements.append(subtitle)
+
+    elements.append(Spacer(1, 40))
+
+    # ====================================================
+    # COUPON CODE BOX
+    # ====================================================
+
+    code_table = Table(
+
+        [[
+            Paragraph(
+
+                f"""
+                <font size="26" color="white">
+                <b>{coupon.code}</b>
+                </font>
+                """,
+
+                styles['BodyText']
+            )
+        ]],
+
+        colWidths=[500]
+    )
+
+    code_table.setStyle(
+
+        TableStyle([
+
+            ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#8B5E3C")),
+
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 22),
+
+            ('TOPPADDING', (0, 0), (-1, -1), 22),
+
+            ('BOX', (0, 0), (-1, -1), 2, colors.HexColor("#8B5E3C")),
+
+        ])
+    )
+
+    elements.append(code_table)
+
+    elements.append(Spacer(1, 35))
+
+    # ====================================================
+    # DETAILS TABLE
+    # ====================================================
+
+    details = [
+
+        ["Discount Amount", f"₹ {coupon.discount_amount}"],
+
+        ["Valid From", str(coupon.valid_from)],
+
+        ["Valid Until", str(coupon.valid_until)],
+
+    ]
+
+    details_table = Table(
+        details,
+        colWidths=[220, 280]
+    )
+
+    details_table.setStyle(
+
+        TableStyle([
+
+            ('BACKGROUND', (0, 0), (0, -1), colors.HexColor("#CC9063")),
+
+            ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
+
+            ('FONTNAME', (0, 0), (-1, -1), 'Helvetica-Bold'),
+
+            ('FONTSIZE', (0, 0), (-1, -1), 13),
+
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 15),
+
+            ('TOPPADDING', (0, 0), (-1, -1), 15),
+
+            ('GRID', (0, 0), (-1, -1), 1, colors.HexColor("#CBD5E1")),
+
+            ('BOX', (0, 0), (-1, -1), 2, colors.HexColor("#8B5E3C")),
+
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+
+        ])
+    )
+
+    elements.append(details_table)
+
+    elements.append(Spacer(1, 45))
+
+    # ====================================================
+    # MESSAGE
+    # ====================================================
+
+    message = Paragraph(
+
+        """
+        <font size="13" color="#4B5563">
+
+        Thank you for choosing
+        <b>Destiny Farmhouse</b>.
+
+        Enjoy your special offer and create unforgettable
+        memories with your family and friends.
+
+        </font>
+        """,
+
+        styles['BodyText']
+    )
+
+    elements.append(message)
+
+    elements.append(Spacer(1, 60))
+
+    # ====================================================
+    # FOOTER
+    # ====================================================
+
+    footer = Paragraph(
+
+        """
+        <font size="11" color="#8B5E3C">
+        https://destinyfarm4.com/
+        </font>
+        """,
+
+        styles['BodyText']
+    )
+
+    elements.append(footer)
+
+    # ====================================================
+    # BUILD PDF
+    # ====================================================
+
+    doc.build(elements)
+
     return response

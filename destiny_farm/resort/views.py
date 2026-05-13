@@ -262,6 +262,7 @@ def home(request):
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=[contact_msg.email],
             )
+            
             user_email.attach_alternative(user_html, "text/html")
 
             # ✅ Async send (safe)
