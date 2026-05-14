@@ -766,22 +766,34 @@
              {% endif %}
 
 
-            {% if perms.resort.view_blog %}
+            {% if perms.blog.view_blog %}
                     <a href="{% url 'destiny_admin:blog_list' %}" class="menu-item">
                 <i class="fa-solid fa-blog"></i>
                 <span class="menu-text">Blogs</span>
             </a>
- {% endif %}
+            {% endif %}
 
-{% comment %} <a href="{% url 'destiny_admin:blog_category_list' %}" class="menu-item">
-    <i class="fa-solid fa-folder"></i>
-    <span class="menu-text">Blog Categories</span>
-</a> {% endcomment %}
 
-{% comment %} <a href="{% url 'destiny_admin:blog_comment_list' %}" class="menu-item">
-    <i class="fa-solid fa-comments"></i>
-    <span class="menu-text">Blog Comments</span>
-</a> {% endcomment %}
+        {% if perms.blog.view_blogcategory %}
+        <a href="{% url 'destiny_admin:blog_category_list' %}" class="menu-item">
+            <i class="fa-solid fa-folder"></i>
+            <span class="menu-text">Blog Categories</span>
+        </a> 
+        {% endif %}
+
+
+        {% if perms.blog.view_blogcomment %}
+        <a href="{% url 'destiny_admin:blog_comment_list' %}" class="menu-item">
+            <i class="fa-solid fa-comments"></i>
+            <span class="menu-text">Blog Comments</span>
+        </a> 
+        {% endif %}
+
+
+
+
+
+
 
         </nav>
         <div class="sidebar-footer">
