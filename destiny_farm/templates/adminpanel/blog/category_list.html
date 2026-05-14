@@ -162,7 +162,7 @@
                 <i class="fa-solid fa-folder-tree"></i>
                 Blog Categories
             </h4>
-             {% if perms.resort.add_blogcategory %}
+             {% if perms.blog.add_blogcategory %}
             <a href="{% url 'destiny_admin:blog_category_add' %}" class="btn btn-add">
                 <i class="fa fa-plus"></i> Category
             </a>
@@ -194,14 +194,14 @@
                         </td>
 
                         <td class="action-btns">
-                             {% if perms.resort.change_blogcategory %}
+                             {% if perms.blog.change_blogcategory %}
                             <a href="{% url 'destiny_admin:blog_category_edit' cat.id %}"
                                class="btn-edit">
                                 <i class="fa fa-pen"></i> Edit
                             </a>
                             {% endif %}
 
-                           {% if perms.resort.delete_blogcategory %}
+                           {% if perms.blog.delete_blogcategory %}
                             <a href="{% url 'destiny_admin:blog_category_delete' cat.id %}"
                                onclick="return confirm('Delete this category?')"
                                class="btn-delete">

@@ -97,7 +97,7 @@
 <!-- HEADER -->
 <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
     <h4><i class="fa-solid fa-blog me-2"></i> Blog Management</h4>
-       {% if perms.resort.add_blog %}
+       {% if perms.blog.add_blog %}
     <a href="{% url 'destiny_admin:blog_add' %}" class="btn btn-light fw-semibold">
         <i class="fa-solid fa-plus"></i> Add Blog
     </a>
@@ -155,13 +155,13 @@
                 <td>{{ blog.created_at|date:"d M Y" }}</td>
 
                 <td>
-                     {% if perms.resort.change_blog %}
+                     {% if perms.blog.change_blog %}
                     <a href="{% url 'destiny_admin:blog_edit' blog.id %}"
                        class="btn text-white me-2 btn-sm action-btn btn-view">
                         <i class="fa-solid fa-pen"></i> Edit
                     </a>
                      {% endif %}
-                     {% if perms.resort.delete_blog %}
+                     {% if perms.blog.delete_blog %}
                     <a href="{% url 'destiny_admin:blog_delete' blog.id %}"
                        onclick="return confirm('Delete this blog?')"
                        class="btn text-white btn-sm action-btn btn-delete">
