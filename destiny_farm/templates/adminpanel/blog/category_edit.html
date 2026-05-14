@@ -15,8 +15,10 @@
         <label>Description</label>
         <textarea name="description" class="form-control">{{ category.description }}</textarea>
     </div>
-
+ {% if perms.resort.change_blogcategory %}
     <button class="btn btn-success">Update</button>
+
+    {% endif %}
 </form>
 
 {% endblock %}
