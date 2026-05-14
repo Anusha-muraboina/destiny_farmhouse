@@ -66,7 +66,7 @@ INSTALLED_APPS = [
 ]
 
 
-SITE_ID = 1
+SITE_ID = 2
 
 SITE_URL = "https://destinyfarm4.com"
 
@@ -117,7 +117,7 @@ DATABASES = {
         'NAME': 'destiny_farmhouse',
         'USER': 'destiny_user',
         'PASSWORD': 'destiny@123',
-        'HOST': '127.0.0.1',
+        'HOST': '3.6.87.103',
         'PORT': '3306',
     }
 }
@@ -223,6 +223,7 @@ CC_EMAIL = [
 ]
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True
+
 
 
 
