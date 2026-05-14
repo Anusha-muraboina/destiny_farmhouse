@@ -476,7 +476,20 @@ def calculate_booking_cost(check_in, check_out, guest_count, extra_guest_count):
 def terms_view(request):
     return render(request, "resort/terms.html")
 
+# def terms_view(request, slug):
 
+#     room = get_object_or_404(
+#         RoomCategory,
+#         slug=slug
+#     )
+
+#     return render(
+#         request,
+#         "resort/terms.html",
+#         {
+#             "room": room
+#         }
+#     )
 
 # utils/razorpay.py (recommended)
 

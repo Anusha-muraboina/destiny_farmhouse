@@ -813,27 +813,19 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
 
 <!-- ================= NON REFUNDABLE BOX ================= -->
 
-<div class="mt-6 bg-gray-100 rounded-xl p-4 text-center border">
 
-    <p class="text-green-700 font-semibold mb-2">
-        Last step remaining, book your stay now!
-    </p>
 
-    <p class="text-gray-700 font-semibold mb-2">
-        Non-Refundable
-    </p>
-
-    <label class="flex items-center justify-center gap-2 text-sm text-gray-600 cursor-pointer">
+     <label class="flex items-center justify-center gap-2 text-sm text-gray-600 cursor-pointer">
         <input type="checkbox" id="termsCheckbox" class="h-4 w-4">
        
         <span>
             By completing this reservation you are accepting our
-            <a href="{% url 'terms' %}" onclick="setScroll('room_detail')" 
+            <a href="{% url 'terms'  %}" onclick="setScroll('room_detail')" 
                class="text-yellow-900 font-semibold underline">
                 Terms & Conditions
             </a>
         </span>
-    </label>
+    </label> 
 
  <p id="termsError" class="text-red-600 text-sm mt-2 hidden block">
     Please accept Terms & Conditions to continue

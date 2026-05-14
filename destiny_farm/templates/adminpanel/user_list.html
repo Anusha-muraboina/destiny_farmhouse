@@ -67,7 +67,7 @@
                 <td>
 
                     {% if perms.auth.change_user %}
-                    <a  ref="{% url 'destiny_admin:user_edit' u.id %}" class="btn-sm btn-view">Edit</a>
+                    <a  href="{% url 'destiny_admin:user_edit' u.id %}" class="btn-sm btn-view">Edit</a>
                     {% endif %}
 
 

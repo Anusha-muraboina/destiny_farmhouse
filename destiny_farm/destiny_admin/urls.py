@@ -87,8 +87,6 @@ urlpatterns = [
     path('users/edit/<int:pk>/', views.user_edit, name='user_edit'),
     path('users/delete/<int:pk>/', views.user_delete, name='user_delete'),
 
-
-
     # BLOG
     path('blog/', views.blog_list, name='blog_list'),
     path('blog/add/', views.blog_add, name='blog_add'),
