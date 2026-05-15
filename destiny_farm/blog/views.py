@@ -12,7 +12,7 @@ from .models import Blog, BlogCategory
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q, F
 from .models import Blog, BlogCategory, BlogTag, BlogComment
-
+from blog.models import PageSEO
 
 def blog_list(request):
 
@@ -27,7 +27,8 @@ def blog_list(request):
             Q(content__icontains=q)
         )
  # ✅ SEO BLOG (special hidden blog)
-    seo_blog = Blog.objects.filter(slug="blog-page-seo").first()
+    # seo_blog = Blog.objects.filter(slug="blog-page-seo").first()
+    seo = PageSEO.objects.filter(page="blog").first()
 
     context = {
         "blogs": blogs,
@@ -38,10 +39,28 @@ def blog_list(request):
         
         
         # optional
-        "seo_title": seo_blog.meta_title if seo_blog else "best farm house in shadnagar latest listings",
-        "seo_description": seo_blog.meta_description if seo_blog else "Discover the charm of rural living with our latest listings for the best farmhouse in Shadnagar. Nestled in a serene environment, these properties offer spacious layouts, modern amenities",
-        "seo_keywords": seo_blog.meta_keywords if seo_blog else "",
+        # "seo_title": seo_blog.meta_title if seo_blog else "best farm house in shadnagar latest listings",
+        # "seo_description": seo_blog.meta_description if seo_blog else "Discover the charm of rural living with our latest listings for the best farmhouse in Shadnagar. Nestled in a serene environment, these properties offer spacious layouts, modern amenities",
+        # "seo_keywords": seo_blog.meta_keywords if seo_blog else "",
         
+        
+        # SEO
+        "seo_title":
+            seo.meta_title
+            if seo else
+            "Best Farmhouses Blogs in Hyderabad",
+
+        "seo_description":
+            seo.meta_description
+            if seo else
+            "Explore the latest farmhouse blogs, staycation ideas, luxury villas, party farmhouses, and weekend getaway tips in Hyderabad.",
+
+        "seo_keywords":
+            seo.meta_keywords
+            
+            if seo else
+            "farmhouse blogs Hyderabad, luxury farmhouse, weekend getaway, villas Hyderabad",
+
         "recent_comments": BlogComment.objects.filter(
             is_approved=True
         ).order_by("-created_at")[:5],

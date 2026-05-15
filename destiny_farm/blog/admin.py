@@ -16,3 +16,7 @@ class BlogAdmin(admin.ModelAdmin):
     
 # admin.site.register(BlogCategory)
 # admin.site.register(BlogTag)
+
+admin.site.register(PageSEO)
+
+

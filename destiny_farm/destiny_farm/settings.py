@@ -31,7 +31,7 @@ ALLOWED_HOSTS = [
     "destinyfarm4.com",
     "www.destinyfarm4.com",
     "3.6.87.103",
-    
+
     "127.0.0.1",
     "https://36ad-103-5-135-107.ngrok-free.app",
 ]

@@ -1,6 +1,12 @@
 {% extends "resort/base.html" %}
 {% comment %} {% block title %}{{ blog.meta_title|default:blog.title }}{% endblock %} {% endcomment %}
+<title>{{ seo_title }}</title>
 
+<meta name="description"
+      content="{{ seo_description }}">
+
+<meta name="keywords"
+      content="{{ seo_keywords }}">
 {% block content %}
 <section class="bg-white  mx-auto md:px-16 px-2 md:py-12 py-2 grid lg:grid-cols-4 gap-8">
 

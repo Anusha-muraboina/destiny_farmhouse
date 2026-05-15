@@ -42,6 +42,8 @@ from django.http import JsonResponse, HttpResponse
 # from django.views.decorators.csrf import csrf_exempt
 # from decimal import Decimal
 from django.db import transaction
+
+from blog.models import PageSEO
 try:
     from ratelimit.decorators import ratelimit
 except ImportError:
@@ -49,6 +51,8 @@ except ImportError:
         def decorator(func):
             return func
         return decorator
+    
+    
 def home(request):
       # ================= CONTACT FORM =================
     # if request.method == "POST":
@@ -284,6 +288,10 @@ def home(request):
     """Homepage view"""
     banners = MainBanner.objects.filter(active=True).order_by("slot_position")
     seo_banner = banners.first()
+    
+    home_seo = PageSEO.objects.filter(
+        page="home"
+    ).first()
     featured_rooms = RoomCategory.objects.all()[:3]
     amenities = Amenity.objects.filter(is_featured=True)
     offers = Offer.objects.filter(
@@ -312,9 +320,25 @@ def home(request):
         'gallery_images': gallery_images,
         
                 # ✅ SEO DATA
-        "seo_title": seo_banner.page_title if seo_banner and seo_banner.page_title else "Destany Farmhouse –  Hyderabad",
-        "seo_description": seo_banner.meta_description if seo_banner else "",
-        "seo_keywords": seo_banner.meta_keyword if seo_banner else "",
+        # "seo_title": seo_banner.page_title if seo_banner and seo_banner.page_title else "Destany Farmhouse –  Hyderabad",
+        # "seo_description": seo_banner.meta_description if seo_banner else "",
+        # "seo_keywords": seo_banner.meta_keyword if seo_banner else "",
+        
+        
+        "seo_title":
+        home_seo.meta_title
+        if home_seo else
+        "Best Farmhouses in Hyderabad",
+
+        "seo_description":
+            home_seo.meta_description
+            if home_seo else
+            "Experience luxury farmhouses, private pool villas, weekend getaways, resorts, and staycations in Hyderabad.",
+
+        "seo_keywords":
+            home_seo.meta_keywords
+            if home_seo else
+            "farmhouse Hyderabad, villas, resorts, private pool farmhouse",
     }
     return render(request, 'resort/home.html', context)
 
