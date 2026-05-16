@@ -125,6 +125,15 @@ urlpatterns = [
     path("booking/<int:pk>/send-coupon/", views.send_booking_coupon, name="send_booking_coupon"),
     
     path("download-coupon/<int:pk>/", views.download_coupon, name="download_coupon"),
+    
+    
+    path(  "seo/",views.seo_list,name="seo-list" ),
+
+    path( "seo/create/", views.seo_create, name="seo-create" ),
+
+    path( "seo/update/<int:pk>/",views.seo_update,name="seo-update"),
+
+    path("seo/delete/<int:pk>/",views.seo_delete,name="seo-delete"),
 
 ]
 

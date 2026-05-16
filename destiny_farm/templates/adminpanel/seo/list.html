@@ -1,0 +1,88 @@
+<!-- templates/adminpanel/seo/seo_list.html -->
+
+{% extends "adminpanel/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between flex-between align-items-center mb-4">
+        <h3 class="fw-bold">
+            SEO Management
+        </h3>
+
+         {% if perms.blog.add_pageseo %}
+        <a href="{% url 'destiny_admin:seo-create' %}"
+           class="btn btn-dark bg-[#78350f] text-white p-1  md:p-2 rounded">
+            Add SEO
+        </a>
+        {% endif %}
+
+    </div>
+
+    <div class="card shadow border-0">
+        <div class="card-body table-responsive">
+            <table class="table align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Page</th>
+                        <th>Meta Title</th>
+                        <th>Actions</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+
+                    {% for seo in seo_pages %}
+
+                    <tr>
+                        <td>
+                            {{ seo.id }}
+                        </td>
+                        <td>
+                            {{ seo.page }}
+                        </td>
+                        <td>
+                            {{ seo.meta_title }}
+                        </td>
+                        <td>
+
+                              {% if perms.blog.change_pageseo %}
+                            <a href="{% url 'destiny_admin:seo-update' seo.id %}"
+                               class="btn btn-sm btn-warning btn-action btn-view">
+                                Edit
+                            </a>
+                               {% endif %}
+
+                              {% if perms.blog.delete_pageseo %}
+                            <a href="{% url 'destiny_admin:seo-delete' seo.id %}"
+                               class="btn btn-sm btn-action btn-delete"
+                               onclick="return confirm('Delete SEO?')">
+                                Delete
+                            </a>
+
+                               {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            No SEO found
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

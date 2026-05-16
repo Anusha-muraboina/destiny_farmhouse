@@ -330,3 +330,40 @@ class OfferForm(forms.ModelForm):
             raise forms.ValidationError("End date must be after start date")
 
         return cleaned_data
+    
+    
+    
+# adminpanel/forms/page_seo_forms.py
+
+from django import forms
+from blog.models import PageSEO
+
+
+class PageSEOForm(forms.ModelForm):
+
+    class Meta:
+        model = PageSEO
+        fields = "__all__"
+        widgets = {
+
+            "page": forms.Select(attrs={
+                "class": "form-select"
+            }),
+
+            "meta_title": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Enter meta title"
+            }),
+
+            "meta_description": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 5,
+                "placeholder": "Enter meta description"
+            }),
+
+            "meta_keywords": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 3,
+                "placeholder": "keyword1, keyword2, keyword3"
+            }),
+        }

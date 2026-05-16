@@ -2900,3 +2900,136 @@ destanyfarm4@gmail.com</b>
     doc.build(elements)
 
     return response
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# adminpanel/views/page_seo_views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+
+from blog.models import PageSEO
+from destiny_admin.forms import PageSEOForm
+
+
+##################################################
+# LIST
+##################################################
+
+def seo_list(request):
+
+    seo_pages = PageSEO.objects.all().order_by("page")
+
+    context = {
+        "seo_pages": seo_pages
+    }
+
+    return render(
+        request,
+        "adminpanel/seo/list.html",
+        context
+    )
+
+
+##################################################
+# CREATE
+##################################################
+
+def seo_create(request):
+
+    form = PageSEOForm(
+        request.POST or None
+    )
+
+    if form.is_valid():
+
+        form.save()
+
+        messages.success(
+            request,
+            "SEO created successfully"
+        )
+
+        return redirect("seo-list")
+
+    context = {
+        "form": form
+    }
+
+    return render(
+        request,
+        "adminpanel/seo/form.html",
+        context
+    )
+
+
+##################################################
+# UPDATE
+##################################################
+
+def seo_update(request, pk):
+
+    seo = get_object_or_404(
+        PageSEO,
+        pk=pk
+    )
+
+    form = PageSEOForm(
+        request.POST or None,
+        instance=seo
+    )
+
+    if form.is_valid():
+
+        form.save()
+
+        messages.success(
+            request,
+            "SEO updated successfully"
+        )
+
+        return redirect("seo-list")
+
+    context = {
+        "form": form
+    }
+
+    return render(
+        request,
+        "adminpanel/seo/form.html",
+        context
+    )
+
+
+##################################################
+# DELETE
+##################################################
+
+def seo_delete(request, pk):
+
+    seo = get_object_or_404(
+        PageSEO,
+        pk=pk
+    )
+
+    seo.delete()
+
+    messages.success(
+        request,
+        "SEO deleted successfully"
+    )
+
+    return redirect("seo-list")

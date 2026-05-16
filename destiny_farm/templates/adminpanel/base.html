@@ -670,7 +670,6 @@
 <body>
     <!-- Overlay for mobile closing -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <a href="{% url 'destiny_admin:dashboard' %}" class="sidebar-brand">
@@ -679,8 +678,6 @@
             </a>
         </div>
         <nav class="sidebar-menu">
-
-
             <a href="{% url 'destiny_admin:dashboard' %}"
                 class="menu-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
                 <i class="fa-solid fa-gauge-high"></i> <span class="menu-text">Dashboard</span>
@@ -724,13 +721,11 @@
                     class="menu-text">Coupons</span></a>
             {% endif %}
 
-
             {% if perms.resort.view_gallery %}
             <a href="{% url 'destiny_admin:gallery_list' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
                 <span class="menu-text">Gallery</span></a>
 
             {% endif %}
-
 
             {% if perms.resort.view_offer %}
             <a href="{% url 'destiny_admin:offerlist' %}" class="menu-item"><i class="fa-solid fa-photo-film"></i>
@@ -758,13 +753,11 @@
             <a href="{% url 'destiny_admin:user_list' %}" class="menu-item"><i class="fa-solid fa-users-gear"></i> <span
                     class="menu-text">Users</span></a>
              {% endif %}
-
             
             {% if perms.resort.view_contactmessage %}
             <a href="{% url 'destiny_admin:message_list' %}" class="menu-item"><i class="fa-solid fa-envelope"></i> <span
                     class="menu-text">Messages</span></a>
              {% endif %}
-
 
             {% if perms.blog.view_blog %}
                     <a href="{% url 'destiny_admin:blog_list' %}" class="menu-item">
@@ -781,18 +774,19 @@
         </a> 
         {% endif %}
 
-
+       {% if perms.blog.view_pageseo %}
+        <a href="{% url 'destiny_admin:seo-list' %}" class="menu-item">
+            <i class="fa-solid fa-folder"></i>
+            <span class="menu-text">SEO Settings</span>
+        </a> 
+        {% endif %}
+        
         {% if perms.blog.view_blogcomment %}
         <a href="{% url 'destiny_admin:blog_comment_list' %}" class="menu-item">
             <i class="fa-solid fa-comments"></i>
             <span class="menu-text">Blog Comments</span>
         </a> 
         {% endif %}
-
-
-
-
-
 
 
         </nav>

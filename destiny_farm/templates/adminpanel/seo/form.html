@@ -1,0 +1,325 @@
+<!-- templates/adminpanel/seo/seo_form.html -->
+
+{% extends "adminpanel/base.html" %}
+
+{% block content %}
+
+<div class="min-h-screen bg-white-900 p-4 md:p-8">
+
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+
+        <div>
+
+            <h1 class="text-3xl font-bold text-yellow-900">
+                SEO Management
+            </h1>
+
+            <p class="text-yellow-500 mt-1">
+                Manage SEO title, description and keywords
+            </p>
+
+        </div>
+
+        <a href="{% url 'destiny_admin:seo-list' %}"
+           class="
+                inline-flex
+                items-center
+                gap-2
+                px-5
+                py-3
+                rounded-2xl
+                bg-white
+                border
+                border-yellow-200
+                text-yellow-700
+                font-semibold
+                shadow-sm
+                hover:shadow-md
+                transition
+           ">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back
+
+        </a>
+
+    </div>
+
+    <!-- CARD -->
+    <div class="max-w-5xl mx-auto">
+
+        <div class="
+            bg-white
+            rounded-[30px]
+            shadow-xl
+            overflow-hidden
+            border
+            border-yellow-200
+        ">
+
+            <!-- TOP -->
+            <div class="
+                bg-gradient-to-r
+                from-yellow-900
+                to-yellow-800
+                px-6
+                md:px-10
+                py-8
+            ">
+
+                <div class="flex items-center gap-4">
+
+                    <div class="
+                        w-16
+                        h-16
+                        rounded-2xl
+                        bg-white/10
+                        backdrop-blur-md
+                        flex
+                        items-center
+                        justify-center
+                        text-white
+                        text-2xl
+                    ">
+
+                        <i class="bi bi-search"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2 class="text-2xl font-bold text-white">
+                            SEO Form
+                        </h2>
+
+                        <p class="text-yellow-300 mt-1">
+                            Add or update SEO details
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- FORM -->
+            <div class="p-6 md:p-10">
+
+                <form method="POST"
+                      class="space-y-7">
+
+                    {% csrf_token %}
+
+                    <!-- PAGE -->
+                    <div>
+
+                        <label class="
+                            block
+                            text-sm
+                            font-semibold
+                            text-yellow-800
+                            mb-2
+                        ">
+
+                            Select Page
+
+                        </label>
+
+                        {{ form.page }}
+
+                    </div>
+
+                    <!-- META TITLE -->
+                    <div>
+
+                        <label class="
+                            block
+                            text-sm
+                            font-semibold
+                            text-yellow-800
+                            mb-2
+                        ">
+
+                            Meta Title
+
+                        </label>
+
+                        {{ form.meta_title }}
+
+                        <p class="
+                            text-xs
+                            text-yellow-500
+                            mt-2
+                        ">
+
+                            Recommended: 50 - 60 characters
+
+                        </p>
+
+                    </div>
+
+                    <!-- META DESCRIPTION -->
+                    <div>
+
+                        <label class="
+                            block
+                            text-sm
+                            font-semibold
+                            text-yellow-800
+                            mb-2
+                        ">
+
+                            Meta Description
+
+                        </label>
+
+                        {{ form.meta_description }}
+
+                        <p class="
+                            text-xs
+                            text-yellow-500
+                            mt-2
+                        ">
+
+                            Recommended: 150 - 160 characters
+
+                        </p>
+
+                    </div>
+
+                    <!-- META KEYWORDS -->
+                    <div>
+
+                        <label class="
+                            block
+                            text-sm
+                            font-semibold
+                            text-yellow-800
+                            mb-2
+                        ">
+
+                            Meta Keywords
+
+                        </label>
+
+                        {{ form.meta_keywords }}
+
+                        <p class="
+                            text-xs
+                            text-yellow-500
+                            mt-2
+                        ">
+
+                            Separate keywords using commas
+
+                        </p>
+
+                    </div>
+
+                    <!-- BUTTONS -->
+                    <div class="
+                        flex
+                        flex-wrap
+                        gap-4
+                        pt-4
+                    ">
+
+                        <button type="submit"
+                                class="
+                                    inline-flex
+                                    items-center
+                                    gap-2
+                                    px-7
+                                    py-3.5
+                                    rounded-2xl
+                                    bg-yellow-900
+                                    text-white
+                                    font-semibold
+                                    shadow-lg
+                                    hover:bg-yellow-800
+                                    transition
+                                ">
+
+                            <i class="bi bi-check-circle-fill"></i>
+
+                            Save SEO
+
+                        </button>
+
+                        <a href="{% url 'destiny_admin:seo-list' %}"
+                           class="
+                                inline-flex
+                                items-center
+                                justify-center
+                                px-7
+                                py-3.5
+                                rounded-2xl
+                                border
+                                border-yellow-300
+                                bg-white
+                                text-yellow-700
+                                font-semibold
+                                hover:bg-yellow-100
+                                transition
+                           ">
+
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- TAILWIND INPUT DESIGN -->
+<style>
+
+.form-control,
+.form-select{
+
+    width:100%;
+
+    border-radius:18px !important;
+
+    border:1px solid #dbe1ea !important;
+
+    background:#fff !important;
+
+    padding:14px 18px !important;
+
+    font-size:15px !important;
+
+    transition:all .2s ease !important;
+
+    box-shadow:none !important;
+}
+
+.form-control:focus,
+.form-select:focus{
+
+    border-color:#0f172a !important;
+
+    box-shadow:
+        0 0 0 4px rgba(15,23,42,.06) !important;
+}
+
+textarea.form-control{
+
+    min-height:160px !important;
+
+    resize:none !important;
+}
+
+</style>
+
+{% endblock %}
