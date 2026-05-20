@@ -2860,8 +2860,8 @@ def download_coupon(request, pk):
 
         Thank you for choosing
         <b>Destiny Farmhouse</b>.
-        <b>Hayat Nagar, Rajendranagar mandal, Hyderabad, Telangana 501218 ,India <br>
-          for Enquiry : +91 96668 58675  <br>
+        <b>Hayat Nagar, Rajendranagar mandal, Hyderabad, Telangana 501218 ,India <br/>
+          for Enquiry : +91 96668 58675  <br/>
 destanyfarm4@gmail.com</b>
         Enjoy your special offer and create unforgettable
         memories with your family and friends.
