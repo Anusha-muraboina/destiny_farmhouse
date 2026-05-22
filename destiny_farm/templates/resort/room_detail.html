@@ -843,21 +843,19 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
                 ← Previous
             </button>
 
+
+
+
 </div>
-</div>
 
-</div>
+    <button type="submit"
+        class="w-full bg-yellow-900 text-white py-4 mt-2  rounded-lg font-bold text-lg transition duration-300 hover:bg-yellow-800">
+        <i class="fas fa-calendar-check mr-2"></i>Book Farmhouse
+    </button>
 
 
 
-                        <button type="submit"
-                            class="w-full bg-yellow-900 text-white py-4 rounded-lg font-bold text-lg transition duration-300 hover:bg-yellow-800">
-                            <i class="fas fa-calendar-check mr-2"></i>Book Farmhouse
-                        </button>
-
-                    </form>
-
-                    <div class="mt-6 pt-6 border-t border-gray-200">
+                        <div class="mt-2 pt-2 ">
                         <div class="flex items-start text-sm text-gray-600">
                             <i class="fas fa-info-circle text-red-600 mr-2 mt-1"></i>
                             <p>Free cancellation up to 24 hours before check-in</p>
@@ -872,6 +870,33 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
                         </div>
                         {% endif %}
                     </div>
+
+
+</div>
+
+</div>
+
+
+
+                    
+
+                    </form>
+
+                    {% comment %} <div class="mt-6 pt-6 border-t border-gray-200">
+                        <div class="flex items-start text-sm text-gray-600">
+                            <i class="fas fa-info-circle text-red-600 mr-2 mt-1"></i>
+                            <p>Free cancellation up to 24 hours before check-in</p>
+                        </div>
+                        {% if booked_dates %}
+                        <div class="mt-4 bg-amber-50 border border-amber-300 rounded-lg p-3">
+                            <p class="text-xs text-amber-800">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>
+                                <strong>{{ booked_dates|length }} dates</strong> are currently booked. Please avoid
+                                selecting these dates.
+                            </p>
+                        </div>
+                        {% endif %}
+                    </div> {% endcomment %}
                 </div>
             <!-- </div> -->
 
