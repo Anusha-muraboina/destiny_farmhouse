@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-Disallow: /vivvan_admin/
+Disallow: /destiny_admin/
 Disallow: /admin/
 Disallow: /booking/
 Disallow: /invoice/
