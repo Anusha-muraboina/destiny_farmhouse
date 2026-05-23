@@ -830,11 +830,6 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
  <p id="termsError" class="text-red-600 text-sm mt-2 hidden block">
     Please accept Terms & Conditions to continue
 </p>
-</div>
-
-
-
-
 
         <div class="flex justify-between pt-4">
             <button type="button"
@@ -842,11 +837,7 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
                 class="border border-yellow-900 text-yellow-900 px-6 py-2 rounded-lg">
                 ← Previous
             </button>
-
-
-
-
-</div>
+      </div>
 
     <button type="submit"
         class="w-full bg-yellow-900 text-white py-4 mt-2  rounded-lg font-bold text-lg transition duration-300 hover:bg-yellow-800">
@@ -870,6 +861,15 @@ Book {{ room_category.name }} at Vivaan Farmhouse. Enjoy comfortable stay, premi
                         </div>
                         {% endif %}
                     </div>
+
+
+
+</div>
+
+
+
+
+
 
 
 </div>
@@ -1009,6 +1009,12 @@ function toggleCollapse(id) {
 </script> {% endcomment %}
 
 <script>
+
+
+
+
+
+    
 function setScroll(section) {
     sessionStorage.setItem("scrollTo", section);
 }
