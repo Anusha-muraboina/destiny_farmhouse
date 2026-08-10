@@ -123,16 +123,57 @@ WSGI_APPLICATION = 'destiny_farm.wsgi.application'
 
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'destinyfarmhouse',
-        'USER': 'destinyuser',
-        'PASSWORD': 'destiny@123',
-        'HOST': 'localhost',
-        'PORT': '3306',
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'destinyfarmhouse',
+#         'USER': 'destinyuser',
+#         'PASSWORD': 'destiny@123',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
+
+
+
+ENVIRONMENT = os.getenv("DJANGO_ENV", "local")
+
+if ENVIRONMENT == "production":
+
+    # ==============================
+    # HOSTINGER
+    # ==============================
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": "destinyfarmhouse",
+            "USER": "destinyuser",
+            "PASSWORD": "destiny@123",
+            "HOST": "localhost",
+            "PORT": "3306",
+        }
     }
-}
+
+else:
+
+    # ==============================
+    # LOCAL
+    # ==============================
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": "destiny_farmhouse",
+            "USER": "destiny_user",
+            "PASSWORD": "destiny@123",
+            "HOST": "localhost",
+            "PORT": "3306",
+        }
+    }
+    
+    
+    
 
 
 # Password validation
